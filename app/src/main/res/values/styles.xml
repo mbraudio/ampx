@@ -1,0 +1,20 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <declare-styleable name="GaugeView">
+        <attr name="numberOfDivisions" format="integer" />
+        <attr name="divisionValue" format="integer" />
+        <attr name="divisionValueMultiplier" format="integer" />
+        <attr name="valueTextHeight" format="dimension" />
+        <attr name="unit" format="string" />
+        <attr name="valueTextBold" format="boolean" />
+    </declare-styleable>
+    
+</resources>

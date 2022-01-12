@@ -1,3 +1,48 @@
 <resources>
     <string name="app_name">AmpX</string>
+
+    <string name="unknown">UNKNOWN</string>
+
+    <string name="settings">SETTINGS</string>
+    <string name="connect">CONNECT</string>
+    <string name="disconnect">DISCONNECT</string>
+    <string name="power_on">POWER ON</string>
+    <string name="powering_on">POWERING ON</string>
+    <string name="powering_off">POWERING OFF</string>
+    <string name="standby">STANDBY</string>
+
+    <string name="cd">SACD/CD</string>
+    <string name="network">NETWORK</string>
+    <string name="phono">PHONO</string>
+    <string name="tuner">TUNER</string>
+    <string name="aux">AUX</string>
+    <string name="recorder">RECORDER</string>
+
+    <string name="speakers">SPEAKERS</string>
+    <string name="a">A</string>
+    <string name="b">B</string>
+    <string name="direct">DIRECT</string>
+    <string name="loudness">LOUDNESS</string>
+    <string name="power_amp_direct">P.AMP DIRECT</string>
+    <string name="calibration">CALIBRATION</string>
+
+    <string name="brightness">BRIGHTNESS</string>
+    <string name="volume">VOLUME</string>
+    <string name="red">RED</string>
+    <string name="green">GREEN</string>
+    <string name="blue">BLUE</string>
+
+    <string name="devices">DEVICES</string>
+    <string name="percentage">%</string>
+
+    <string name="scan">SCAN</string>
+    <string name="stop">STOP</string>
+    <string name="close">CLOSE</string>
+
+
+    <string name="connected">CONNECTED</string>
+    <string name="connecting_dots">CONNECTING&#8230;</string>
+    <string name="disconnecting_dots">DISCONNECTING&#8230;</string>
+    <string name="disconnected">DISCONNECTED</string>
+
 </resources>
