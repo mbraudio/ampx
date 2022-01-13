@@ -23,5 +23,8 @@ class MainActivity : AppCompatActivity() {
         binding.viewModel = viewModel
 
         Utilities.resources = resources
+
+        binding.gvex.setCurrentValue(100, 1)
+        binding.gv.setCurrentValue(100, 1)
     }
 }

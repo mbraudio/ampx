@@ -17,4 +17,10 @@
     <color name="colorScaleOverlayArc">#F79002</color>
     <color name="colorScaleSelectedArc">#2290F2</color>
     <color name="colorScaleInnerCircle">#49616e</color>
+
+    <!-- GAUGE VIEW EX -->
+    <color name="colorOuterArc">#806853</color>
+    <color name="colorValueUnderlayArc">#453727</color>
+    <color name="colorValueCurrentArc">#F79002</color>
+    <color name="colorValueTargetArc">#2290F2</color>
 </resources>

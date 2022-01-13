@@ -213,7 +213,7 @@ class GaugeView : View, AnimatorUpdateListener, GestureDetector.OnGestureListene
         distance = lineStrokeOverlayArc / 2f + lineStrokeInnerCircle / 2f + distanceArcToInnerCircle
         diameterInnerCircle = diameterScaleArc - distance - innerArc2ToInnerCircle
         calculateValue(0f)
-        valueText!!.updatePosition(centerX, centerY + (diameter - centerValueTextHeight) / 2f, textBounds!!)
+        valueText!!.updatePosition(centerX, centerY + (diameter - centerValueTextHeight) / 2f, textBounds)
     }
 
     private fun calculateScaleValues() {
