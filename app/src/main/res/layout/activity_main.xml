@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.MainActivity"
-    android:background="@android:color/black">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.mbr.ampx.view.GaugeView
-        android:layout_width="340dp"
-        android:layout_height="340dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="80dp"
-        app:numberOfDivisions="10"
-        app:divisionValue="10"/>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.mbr.ampx.activity.MainViewModel" />
+    </data>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.MainActivity"
+        android:background="@android:color/black">
+
+        <com.mbr.ampx.view.GaugeView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="40dp"
+            app:numberOfDivisions="10"
+            app:divisionValue="10"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

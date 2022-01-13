@@ -12,6 +12,7 @@ import android.view.View
 import com.mbr.ampx.R
 import com.mbr.ampx.utilities.Constants
 import java.util.ArrayList
+import kotlin.math.sqrt
 
 class GaugeView : View, AnimatorUpdateListener, GestureDetector.OnGestureListener {
 
@@ -95,7 +96,6 @@ class GaugeView : View, AnimatorUpdateListener, GestureDetector.OnGestureListene
         loadAttributes(context, attrs, defStyle)
 
         bounds = RectF(0f, 0f, 0f, 0f)
-        textBounds = Rect()
 
         val lineStrokeScaleLine = 8.0f
         paintScaleLine = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -187,6 +187,7 @@ class GaugeView : View, AnimatorUpdateListener, GestureDetector.OnGestureListene
         centerX = (bounds.left + bounds.right) / 2f
         centerY = (bounds.top + bounds.bottom) / 2f
         diameter = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
+
         val distanceFromEdgeForText = 58.0f
 
         // Outer Arc
@@ -357,10 +358,10 @@ class GaugeView : View, AnimatorUpdateListener, GestureDetector.OnGestureListene
         valueText!!.setText("" + targetValue + unit)
     }
 
-    fun getAngleForPoint(x: Float, y: Float): Float {
+    private fun getAngleForPoint(x: Float, y: Float): Float {
         val tx = (x - centerX).toDouble()
         val ty = (y - centerY).toDouble()
-        val length = Math.sqrt(tx * tx + ty * ty)
+        val length = sqrt(tx * tx + ty * ty)
         val r = Math.acos(ty / length)
         var angle = Math.toDegrees(r).toFloat()
         if (x > centerX) {
