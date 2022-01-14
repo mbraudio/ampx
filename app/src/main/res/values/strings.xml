@@ -44,5 +44,7 @@
     <string name="connecting_dots">CONNECTING&#8230;</string>
     <string name="disconnecting_dots">DISCONNECTING&#8230;</string>
     <string name="disconnected">DISCONNECTED</string>
+    <string name="min">MIN</string>
+    <string name="max">MAX</string>
 
 </resources>

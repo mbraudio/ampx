@@ -8,11 +8,35 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.mbr.ampx.R
 import com.mbr.ampx.utilities.Constants
 import kotlin.math.sqrt
 
 class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListener {
+
+    companion object {
+        //private val TAG = GaugeView::class.java.simpleName
+
+        // DEFAULT VALUES
+        private const val DEFAULT_NUMBER_OF_DIVISIONS = 6
+        private const val DEFAULT_DIVISION_VALUE = 50
+        private const val DEFAULT_DIVISION_VALUE_MULTIPLIER = 1
+        private const val DEFAULT_VALUE_TEXT_HEIGHT = 78.0f
+
+        // ADJUSTMENTS
+        private const val DISTANCE_FROM_EDGE_FOR_TEXT = 16f //78.0f
+        private const val OUTER_ARC_STROKE_WIDTH = 10.0f
+        private const val VALUE_ARC_STROKE_WIDTH = 56.0f
+        private const val SCALE_LINE_LENGTH = 40.0f
+        private const val OUTER_ARC_DISTANCE_TO_VALUE_ARC = 16.0f
+        private const val VALUE_ARC_DISTANCE_TO_SCALE = 24.0f
+        private const val SCALE_ARC_DISTANCE_TO_UNDERLAY_CIRCLE = 68.0f
+        private const val UNDERLAY_CIRCLE_WIDTH = 62.0f
+        private const val COLORED_CIRCLE_WIDTH = 10.0f
+        private const val SMALL_TEXT_HEIGHT = 40.0f
+    }
 
     // TYPED VARIABLES
     private val touchEnabled = true
@@ -31,10 +55,11 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
     private var diameter = 0f
     private var unit: String? = null
 
+    private var scaleDiameter: Float = 0f
+
     // CENTER TEXT
     private var centerValueTextHeight = 0f
     private var valueTextBold = false
-
 
     private var bounds = RectF()
     private var centerX = 0f
@@ -45,13 +70,23 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
     // Outer arc
     private lateinit var boundsOuterArc: RectF
     private lateinit var paintOuterArc: Paint
-    private var strokeWidthOuterArc: Float = 0f
     // Value arc(s)
     private lateinit var boundsValueArc: RectF
     private lateinit var paintValueUnderlayArc: Paint
     private lateinit var paintValueCurrentArc: Paint
     private lateinit var paintValueTargetArc: Paint
-    private var strokeWidthValueArc: Float = 0f
+    // Scale lines
+    private var scaleLines = ArrayList<GaugeScaleLine>()
+    private lateinit var paintScaleLine: Paint
+    // Inner circles
+    private lateinit var paintUnderlayCircle: Paint
+    private var underlayCircleRadius: Float = 0f
+    private lateinit var paintColoredCircle: Paint
+    private var coloredCircleRadius: Float = 0f
+
+    private lateinit var scaleTextPaint: Paint
+
+    private var texts = ArrayList<GaugeText>()
 
     // Gestures and Touches
     private lateinit var gestureDetector: GestureDetector
@@ -79,30 +114,61 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
 
         // XXX1
         // Outer Arc
-        strokeWidthOuterArc = 16f
         boundsOuterArc = RectF(0f, 0f, 0f, 0f)
         paintOuterArc = Paint(Paint.ANTI_ALIAS_FLAG)
         paintOuterArc.style = Paint.Style.STROKE
         paintOuterArc.color = context.getColor(R.color.colorOuterArc)
-        paintOuterArc.strokeWidth = strokeWidthOuterArc
+        paintOuterArc.strokeWidth = OUTER_ARC_STROKE_WIDTH
+        paintOuterArc.strokeCap = Paint.Cap.ROUND
 
         // Value arc(s)
-        strokeWidthValueArc = 58f
         boundsValueArc = RectF(0f, 0f, 0f, 0f)
         paintValueUnderlayArc = Paint(Paint.ANTI_ALIAS_FLAG)
         paintValueUnderlayArc.style = Paint.Style.STROKE
-        paintValueUnderlayArc.color = context.getColor(R.color.colorValueUnderlayArc)
-        paintValueUnderlayArc.strokeWidth = strokeWidthValueArc
+        paintValueUnderlayArc.color = context.getColor(R.color.colorUnderlayArc)
+        paintValueUnderlayArc.strokeWidth = VALUE_ARC_STROKE_WIDTH
+        paintValueUnderlayArc.strokeCap = Paint.Cap.ROUND
 
         paintValueCurrentArc = Paint(Paint.ANTI_ALIAS_FLAG)
         paintValueCurrentArc.style = Paint.Style.STROKE
-        paintValueCurrentArc.color = context.getColor(R.color.colorValueCurrentArc)
-        paintValueCurrentArc.strokeWidth = strokeWidthValueArc
+        //paintValueCurrentArc.color = context.getColor(R.color.colorCurrentArc)
+        paintValueCurrentArc.strokeWidth = VALUE_ARC_STROKE_WIDTH
+        paintValueCurrentArc.strokeCap = Paint.Cap.ROUND
+
 
         paintValueTargetArc = Paint(Paint.ANTI_ALIAS_FLAG)
         paintValueTargetArc.style = Paint.Style.STROKE
-        paintValueTargetArc.color = context.getColor(R.color.colorValueTargetArc)
-        paintValueTargetArc.strokeWidth = strokeWidthValueArc
+        paintValueTargetArc.color = context.getColor(R.color.colorTargetArc)
+        paintValueTargetArc.strokeWidth = VALUE_ARC_STROKE_WIDTH
+        paintValueTargetArc.strokeCap = Paint.Cap.ROUND
+
+        // Scale lines
+        val scaleLineStrokeWidth = 4f
+        paintScaleLine = Paint(Paint.ANTI_ALIAS_FLAG)
+        paintScaleLine.style = Paint.Style.STROKE
+        paintScaleLine.color = context.getColor(R.color.colorGradientEnd)
+        paintScaleLine.strokeWidth = scaleLineStrokeWidth
+
+        // Inner circles
+        // Underlay
+        paintUnderlayCircle = Paint(Paint.ANTI_ALIAS_FLAG)
+        paintUnderlayCircle.style = Paint.Style.STROKE
+        paintUnderlayCircle.color = context.getColor(R.color.colorUnderlayCircle)
+        paintUnderlayCircle.strokeWidth = UNDERLAY_CIRCLE_WIDTH
+
+        // Colored
+        paintColoredCircle = Paint(Paint.ANTI_ALIAS_FLAG)
+        paintColoredCircle.style = Paint.Style.STROKE
+        paintColoredCircle.color = context.getColor(R.color.colorGradientEnd)
+        paintColoredCircle.strokeWidth = COLORED_CIRCLE_WIDTH
+
+        scaleTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
+        scaleTextPaint.color = context.getColor(R.color.colorText)
+        scaleTextPaint.style = Paint.Style.FILL_AND_STROKE
+        scaleTextPaint.textSize = 38.0f
+        scaleTextPaint.textAlign = Paint.Align.LEFT
+        scaleTextPaint.isElegantTextHeight = true
+        scaleTextPaint.typeface = Typeface.SERIF //ResourcesCompat.getFont(context, R.font.orbitron)
     }
 
     private fun loadAttributes(context: Context, attrs: AttributeSet?, defStyle: Int) {
@@ -138,30 +204,92 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
         centerY = (bounds.top + bounds.bottom) / 2f
         diameter = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
 
-        val distanceFromEdgeForText = 58.0f
-
         // Outer Arc
-        val distance = strokeWidthOuterArc / 2f
-        boundsOuterArc.left = bounds.left + distance + distanceFromEdgeForText
-        boundsOuterArc.top = bounds.top + distance + distanceFromEdgeForText
-        boundsOuterArc.right = bounds.right - distance - distanceFromEdgeForText
-        boundsOuterArc.bottom = bounds.bottom - distance - distanceFromEdgeForText
+        val distance = OUTER_ARC_STROKE_WIDTH / 2f
+        boundsOuterArc.left = bounds.left + distance + DISTANCE_FROM_EDGE_FOR_TEXT
+        boundsOuterArc.top = bounds.top + distance + DISTANCE_FROM_EDGE_FOR_TEXT
+        boundsOuterArc.right = bounds.right - distance - DISTANCE_FROM_EDGE_FOR_TEXT
+        boundsOuterArc.bottom = bounds.bottom - distance - DISTANCE_FROM_EDGE_FOR_TEXT
 
-        val distanceOuterArcToValueArc = 32f
+        val positions = floatArrayOf(0.0f, 1.0f)
+        val colors = intArrayOf(ContextCompat.getColor(context, R.color.colorGradientStart), ContextCompat.getColor(context, R.color.colorGradientEnd))
+        val gradient = SweepGradient(centerX, centerY, colors, positions)
+        val gradientMatrix = Matrix()
+        gradientMatrix.preRotate(startAngle - (VALUE_ARC_STROKE_WIDTH / 2f), centerX, centerY)
+        gradient.setLocalMatrix(gradientMatrix)
+        paintValueCurrentArc.shader = gradient
 
         // Value arc(s)
-        var strokeHalf = strokeWidthValueArc / 2f
-        boundsValueArc.left = bounds.left + strokeWidthOuterArc + distanceFromEdgeForText + strokeHalf + distanceOuterArcToValueArc
-        boundsValueArc.top = bounds.top + strokeWidthOuterArc + distanceFromEdgeForText + strokeHalf + distanceOuterArcToValueArc
-        boundsValueArc.right = bounds.right - strokeWidthOuterArc - distanceFromEdgeForText - strokeHalf - distanceOuterArcToValueArc
-        boundsValueArc.bottom = bounds.bottom - strokeWidthOuterArc - distanceFromEdgeForText - strokeHalf - distanceOuterArcToValueArc
-        val diameterScaleArc = diameter - distance - distanceFromEdgeForText - distanceOuterArcToValueArc
-        touchDistanceMin = diameterScaleArc - strokeWidthValueArc * 4f
-        touchDistanceMax = diameterScaleArc + strokeWidthValueArc * 3f
+        val strokeHalf = VALUE_ARC_STROKE_WIDTH / 2f
+        boundsValueArc.left = bounds.left + OUTER_ARC_STROKE_WIDTH + DISTANCE_FROM_EDGE_FOR_TEXT + strokeHalf + OUTER_ARC_DISTANCE_TO_VALUE_ARC
+        boundsValueArc.top = bounds.top + OUTER_ARC_STROKE_WIDTH + DISTANCE_FROM_EDGE_FOR_TEXT + strokeHalf + OUTER_ARC_DISTANCE_TO_VALUE_ARC
+        boundsValueArc.right = bounds.right - OUTER_ARC_STROKE_WIDTH - DISTANCE_FROM_EDGE_FOR_TEXT - strokeHalf - OUTER_ARC_DISTANCE_TO_VALUE_ARC
+        boundsValueArc.bottom = bounds.bottom - OUTER_ARC_STROKE_WIDTH - DISTANCE_FROM_EDGE_FOR_TEXT - strokeHalf - OUTER_ARC_DISTANCE_TO_VALUE_ARC
+        val diameterScaleArc = diameter - DISTANCE_FROM_EDGE_FOR_TEXT - OUTER_ARC_DISTANCE_TO_VALUE_ARC - OUTER_ARC_STROKE_WIDTH
+        touchDistanceMin = diameterScaleArc - VALUE_ARC_STROKE_WIDTH * 4f
+        touchDistanceMax = diameterScaleArc + VALUE_ARC_STROKE_WIDTH * 3f
+        scaleDiameter = diameterScaleArc - VALUE_ARC_STROKE_WIDTH - VALUE_ARC_DISTANCE_TO_SCALE
+
+        // Inner circles
+        underlayCircleRadius = scaleDiameter - SCALE_LINE_LENGTH - SCALE_ARC_DISTANCE_TO_UNDERLAY_CIRCLE
+        coloredCircleRadius = underlayCircleRadius - (UNDERLAY_CIRCLE_WIDTH / 2f)
     }
 
     private fun calculateScaleValues() {
+        scaleLines.clear()
+        val numberOfLines = numberOfDivisions + 1
+        scaleLines = ArrayList(numberOfLines)
+        val totalAngle = endAngle - startAngle
+        val divisionAngle = totalAngle / numberOfDivisions
+        val lineStart = scaleDiameter
+        val lineEnd = scaleDiameter - SCALE_LINE_LENGTH
+        val dia = diameter + 5.0f
+        val textBounds = Rect()
+        var info: GaugeScaleLine
+        val textOffset = -28.0f
+        for (i in 0 until numberOfLines) {
+            val currentAngle = (startAngle + i * divisionAngle).toDouble()
+            val angleRadians = Math.toRadians(currentAngle)
+            val cosA = Math.cos(angleRadians)
+            val sinA = Math.sin(angleRadians)
+            val startX = (centerX + lineStart * cosA).toFloat()
+            val startY = (centerY + lineStart * sinA).toFloat()
+            val stopX = (centerX + lineEnd * cosA).toFloat()
+            val stopY = (centerY + lineEnd * sinA).toFloat()
+            info = GaugeScaleLine(startX, startY, stopX, stopY)
+            info.text = "${i * divisionValue}"
 
+            val textWidth = scaleTextPaint.measureText(info.text) / 2f
+            scaleTextPaint.getTextBounds(info.text, 0, info.text.length, textBounds)
+            val textHeight = Math.abs(textBounds.top + textBounds.bottom) / 2f
+            info.textX = (centerX + (dia + textOffset) * cosA).toFloat() - textWidth
+            info.textY = (centerY + (dia + textOffset) * sinA).toFloat() + textHeight
+
+            scaleLines.add(info)
+        }
+
+        // Scale lines don't have text here, so add text for min and max
+        addText(startAngle, context.getString(R.string.min))
+        addText(endAngle, context.getString(R.string.max))
+    }
+
+    private fun addText(angle: Float, text: String) {
+        val textBounds = Rect()
+        val textOffset = -32.0f
+        val textXoffset = -224f
+        val angleRadians = Math.toRadians(angle.toDouble())
+        val cosA = Math.cos(angleRadians)
+        val sinA = Math.sin(angleRadians)
+        scaleTextPaint.getTextBounds(text, 0, text.length, textBounds)
+        val textHeight = Math.abs(textBounds.top + textBounds.bottom) / 2f
+        val x = (centerX + (diameter + textOffset + textXoffset) * cosA).toFloat()
+        val y = (centerY + (diameter + textOffset) * sinA).toFloat() + (textHeight / 2.0f)
+
+        val gaugeText = GaugeText(context.getColor(android.R.color.white), SMALL_TEXT_HEIGHT, false)
+        gaugeText.setText(text)
+        gaugeText.updatePosition(x, y)
+
+        texts.add(gaugeText)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -172,12 +300,25 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        // XXX2
         canvas.drawArc(boundsOuterArc, startAngle, totalAngle, false, paintOuterArc)
         canvas.drawArc(boundsValueArc, startAngle, totalAngle, false, paintValueUnderlayArc)
         canvas.drawArc(boundsValueArc, startAngle, valueAngle, false, paintValueCurrentArc)
         canvas.drawArc(boundsValueArc, startAngle + valueAngle, targetAngle - valueAngle, false, paintValueTargetArc)
 
+        for (i in scaleLines.indices) {
+            val info = scaleLines[i]
+            if (info.drawText) {
+                canvas.drawText(info.text, info.textX, info.textY, scaleTextPaint)
+            }
+            canvas.drawLine(info.startX, info.startY, info.endX, info.endY, paintScaleLine)
+        }
+
+        canvas.drawCircle(centerX, centerY, underlayCircleRadius, paintUnderlayCircle)
+        canvas.drawCircle(centerX, centerY, coloredCircleRadius, paintColoredCircle)
+
+        for (text in texts) {
+            text.draw(canvas)
+        }
     }
 
     private fun calculateValue(angle: Float) {
@@ -249,7 +390,7 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
         if (angle < startAngle) {
             targetAngle += 360f
         }
-        val targetValue = ((targetAngle * maximumValue) / totalAngle).toInt()
+        //val targetValue = ((targetAngle * maximumValue) / totalAngle).toInt()
         //valueText!!.setText("" + targetValue + unit)
     }
 
@@ -298,15 +439,5 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
     interface Listener {
         fun onGaugeViewValueUpdate(value: Float, max: Float)
         fun onGaugeViewValueSelection(value: Float, max: Float)
-    }
-
-    companion object {
-        //private val TAG = GaugeView::class.java.simpleName
-
-        // DEFAULT VALUES
-        private const val DEFAULT_NUMBER_OF_DIVISIONS = 6
-        private const val DEFAULT_DIVISION_VALUE = 50
-        private const val DEFAULT_DIVISION_VALUE_MULTIPLIER = 1
-        private const val DEFAULT_VALUE_TEXT_HEIGHT = 78.0f
     }
 }
