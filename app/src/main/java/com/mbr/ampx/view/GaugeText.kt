@@ -7,8 +7,8 @@ import android.graphics.Typeface
 
 class GaugeText(color: Int, height: Float, bold: Boolean) {
 
-    private var paint: Paint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
-    private lateinit var text: String
+    var paint: Paint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
+    var text: String = ""
     private var x: Float = 0f
     private var y: Float = 0f
 
@@ -24,8 +24,6 @@ class GaugeText(color: Int, height: Float, bold: Boolean) {
             paint.typeface = Typeface.SANS_SERIF
         }
     }
-
-    fun setText(text: String) { this.text = text }
 
     fun updatePosition(x: Float, y: Float) {
         this.x = x

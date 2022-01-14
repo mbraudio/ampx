@@ -9,9 +9,9 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.mbr.ampx.R
 import com.mbr.ampx.utilities.Constants
+import kotlin.math.ceil
 import kotlin.math.sqrt
 
 class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListener {
@@ -22,7 +22,7 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
         // DEFAULT VALUES
         private const val DEFAULT_NUMBER_OF_DIVISIONS = 6
         private const val DEFAULT_DIVISION_VALUE = 50
-        private const val DEFAULT_DIVISION_VALUE_MULTIPLIER = 1
+        private const val DEFAULT_DIVISION_VALUE_MULTIPLIER = 1.0f
         private const val DEFAULT_VALUE_TEXT_HEIGHT = 78.0f
 
         // ADJUSTMENTS
@@ -49,7 +49,7 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
     private var touchDistanceMax = 0f
     private var numberOfDivisions = 0
     private var divisionValue = 0
-    private var divisionValueMultiplier = 0
+    private var divisionValueMultiplier = 0f
     private var value = 0
     private var maximumValue = 0
     private var diameter = 0f
@@ -88,6 +88,8 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
 
     private var texts = ArrayList<GaugeText>()
 
+    private lateinit var valueText: GaugeText
+
     // Gestures and Touches
     private lateinit var gestureDetector: GestureDetector
     private var listener: GaugeView.Listener? = null
@@ -109,10 +111,8 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
         loadAttributes(context, attrs, defStyle)
 
         gestureDetector = GestureDetector(context, this)
-
         bounds = RectF(0f, 0f, 0f, 0f)
 
-        // XXX1
         // Outer Arc
         boundsOuterArc = RectF(0f, 0f, 0f, 0f)
         paintOuterArc = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -131,10 +131,8 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
 
         paintValueCurrentArc = Paint(Paint.ANTI_ALIAS_FLAG)
         paintValueCurrentArc.style = Paint.Style.STROKE
-        //paintValueCurrentArc.color = context.getColor(R.color.colorCurrentArc)
         paintValueCurrentArc.strokeWidth = VALUE_ARC_STROKE_WIDTH
         paintValueCurrentArc.strokeCap = Paint.Cap.ROUND
-
 
         paintValueTargetArc = Paint(Paint.ANTI_ALIAS_FLAG)
         paintValueTargetArc.style = Paint.Style.STROKE
@@ -169,6 +167,8 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
         scaleTextPaint.textAlign = Paint.Align.LEFT
         scaleTextPaint.isElegantTextHeight = true
         scaleTextPaint.typeface = Typeface.SERIF //ResourcesCompat.getFont(context, R.font.orbitron)
+
+        valueText = GaugeText(context.getColor(android.R.color.white), centerValueTextHeight, valueTextBold)
     }
 
     private fun loadAttributes(context: Context, attrs: AttributeSet?, defStyle: Int) {
@@ -176,14 +176,14 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
         val a = context.obtainStyledAttributes(attrs, R.styleable.GaugeViewEx, defStyle, 0)
         numberOfDivisions = a.getInt(R.styleable.GaugeViewEx_numberOfDivisionsEx, DEFAULT_NUMBER_OF_DIVISIONS)
         divisionValue = a.getInt(R.styleable.GaugeViewEx_divisionValueEx, DEFAULT_DIVISION_VALUE)
-        divisionValueMultiplier = a.getInt(R.styleable.GaugeViewEx_divisionValueMultiplierEx, DEFAULT_DIVISION_VALUE_MULTIPLIER)
+        divisionValueMultiplier = a.getFloat(R.styleable.GaugeViewEx_divisionValueMultiplierEx, DEFAULT_DIVISION_VALUE_MULTIPLIER)
         centerValueTextHeight = a.getDimension(R.styleable.GaugeViewEx_valueTextHeightEx, DEFAULT_VALUE_TEXT_HEIGHT)
         unit = a.getString(R.styleable.GaugeViewEx_unitEx)
         if (unit == null) {
             unit = resources.getString(R.string.percentage)
         }
         valueTextBold = a.getBoolean(R.styleable.GaugeViewEx_valueTextBoldEx, false)
-        maximumValue = numberOfDivisions * divisionValue * divisionValueMultiplier
+        maximumValue = (numberOfDivisions * divisionValue * divisionValueMultiplier + 1.0f).toInt()
         a.recycle()
     }
 
@@ -214,9 +214,9 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
         val positions = floatArrayOf(0.0f, 1.0f)
         val colors = intArrayOf(ContextCompat.getColor(context, R.color.colorGradientStart), ContextCompat.getColor(context, R.color.colorGradientEnd))
         val gradient = SweepGradient(centerX, centerY, colors, positions)
-        val gradientMatrix = Matrix()
-        gradientMatrix.preRotate(startAngle - (VALUE_ARC_STROKE_WIDTH / 2f), centerX, centerY)
-        gradient.setLocalMatrix(gradientMatrix)
+        val matrix = Matrix()
+        matrix.preRotate(startAngle - (VALUE_ARC_STROKE_WIDTH / 2f), centerX, centerY)
+        gradient.setLocalMatrix(matrix)
         paintValueCurrentArc.shader = gradient
 
         // Value arc(s)
@@ -231,8 +231,16 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
         scaleDiameter = diameterScaleArc - VALUE_ARC_STROKE_WIDTH - VALUE_ARC_DISTANCE_TO_SCALE
 
         // Inner circles
+        // Underlay
         underlayCircleRadius = scaleDiameter - SCALE_LINE_LENGTH - SCALE_ARC_DISTANCE_TO_UNDERLAY_CIRCLE
+        // Colored
         coloredCircleRadius = underlayCircleRadius - (UNDERLAY_CIRCLE_WIDTH / 2f)
+
+        // Value text
+        val textBounds = Rect()
+        valueText.paint.getTextBounds(valueText.text, 0, valueText.text.length, textBounds)
+        val textHeight = Math.abs(textBounds.top + textBounds.bottom) / 2f
+        valueText.updatePosition(centerX, centerY + textHeight)
     }
 
     private fun calculateScaleValues() {
@@ -286,7 +294,7 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
         val y = (centerY + (diameter + textOffset) * sinA).toFloat() + (textHeight / 2.0f)
 
         val gaugeText = GaugeText(context.getColor(android.R.color.white), SMALL_TEXT_HEIGHT, false)
-        gaugeText.setText(text)
+        gaugeText.text = text
         gaugeText.updatePosition(x, y)
 
         texts.add(gaugeText)
@@ -319,11 +327,13 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
         for (text in texts) {
             text.draw(canvas)
         }
+
+        valueText.draw(canvas)
     }
 
     private fun calculateValue(angle: Float) {
         value = (angle * maximumValue / totalAngle).toInt()
-        //valueText!!.setText("" + value + unit)
+        valueText.text = "$value" + unit
     }
 
     fun setCurrentValue(current: Int, active: Int) {
@@ -390,8 +400,8 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
         if (angle < startAngle) {
             targetAngle += 360f
         }
-        //val targetValue = ((targetAngle * maximumValue) / totalAngle).toInt()
-        //valueText!!.setText("" + targetValue + unit)
+        val targetValue = ((targetAngle * maximumValue) / totalAngle).toInt()
+        valueText.text = "$targetValue" + unit
     }
 
     private fun getAngleForPoint(x: Float, y: Float): Float {

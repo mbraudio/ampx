@@ -277,7 +277,7 @@ class GaugeView : View, AnimatorUpdateListener, GestureDetector.OnGestureListene
 
     private fun calculateValue(angle: Float) {
         value = (angle * maximumValue / totalAngle).toInt()
-        valueText!!.setText("" + value + unit)
+        valueText!!.text = "$value" + unit
     }
 
     fun setCurrentValue(current: Int, active: Int) {
@@ -355,7 +355,7 @@ class GaugeView : View, AnimatorUpdateListener, GestureDetector.OnGestureListene
             targetAngle += 360f
         }
         val targetValue = ((targetAngle * maximumValue) / totalAngle).toInt()
-        valueText!!.setText("" + targetValue + unit)
+        valueText!!.text = "$targetValue" + unit
     }
 
     private fun getAngleForPoint(x: Float, y: Float): Float {
