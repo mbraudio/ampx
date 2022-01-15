@@ -44,20 +44,20 @@ class ModernButton : View, View.OnClickListener, View.OnLongClickListener {
     var listener: IModernButtonListener? = null
 
     constructor(context: Context) : super(context) {
-        initialize(context, null, 0)
+        initialize(context, null)
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        initialize(context, attrs, 0)
+        initialize(context, attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
-        initialize(context, attrs, defStyle)
+        initialize(context, attrs)
     }
 
-    private fun initialize(context: Context, attrs: AttributeSet?, defStyle: Int) {
+    private fun initialize(context: Context, attrs: AttributeSet?) {
 
-        loadAttributes(context, attrs, defStyle)
+        loadAttributes(context, attrs)
 
         setOnClickListener(this)
         setOnLongClickListener(this)
@@ -91,7 +91,7 @@ class ModernButton : View, View.OnClickListener, View.OnLongClickListener {
         adjustActive()
     }
 
-    private fun loadAttributes(context: Context, attrs: AttributeSet?, defStyle: Int) {
+    private fun loadAttributes(context: Context, attrs: AttributeSet?) {
         attrs?.let {
             val a = context.obtainStyledAttributes(it, R.styleable.ModernButton, 0, 0)
 

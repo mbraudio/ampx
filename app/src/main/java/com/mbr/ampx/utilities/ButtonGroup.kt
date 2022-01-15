@@ -1,16 +1,15 @@
 package com.mbr.ampx.utilities
 
-
-import com.mbr.ampx.view.CustomButton
-import com.mbr.ampx.view.ICustomButtonListener
+import com.mbr.ampx.view.IModernButtonListener
+import com.mbr.ampx.view.ModernButton
 
 class ButtonGroup(count: Int) {
 
-    private val buttons = ArrayList<CustomButton>(count)
+    private val buttons = ArrayList<ModernButton>(count)
 
-    fun addButton(button: CustomButton) { buttons.add(button) }
+    fun addButton(button: ModernButton) { buttons.add(button) }
 
-    fun select(button: CustomButton): Int {
+    fun select(button: ModernButton): Int {
         for (current in buttons) {
             current.setActive(false)
         }
@@ -29,7 +28,7 @@ class ButtonGroup(count: Int) {
         button.setActive(true)
     }
 
-    fun setGroupListener(listener: ICustomButtonListener) {
+    fun setGroupListener(listener: IModernButtonListener) {
         for (current in buttons) {
             current.listener = listener
         }
