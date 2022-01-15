@@ -25,42 +25,45 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="24dp">
 
-            <com.mbr.ampx.view.CustomButton
+            <com.mbr.ampx.view.ModernButton
                 android:id="@+id/buttonConnection"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:buttonImageActive="@drawable/baseline_bluetooth_white_48dp"
-                app:buttonImageBackground="@drawable/bluetooth_button_background_black"
-                app:buttonText="@string/connect"
-                app:buttonTextViewTopPadding="-2dp"
-                app:buttonTintActiveImage="false"
-                android:layout_weight="1"/>
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                app:modernButtonActive="true"
+                app:modernButtonNormalText="@string/connect"
+                app:modernButtonActiveText="@string/disconnect"
+                app:modernButtonTextSize="8sp"
+                app:modernButtonNormalImage="@drawable/outline_bluetooth_white_24"/>
 
-            <com.mbr.ampx.view.CustomButton
+            <com.mbr.ampx.view.ModernButton
                 android:id="@+id/buttonPower"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:buttonImageBackground="@drawable/power_button_background_black"
-                app:buttonImageActive="@drawable/power_button_active"
-                app:buttonText="@string/power_on"
-                android:layout_weight="2"/>
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="2"
+                app:modernButtonActive="false"
+                app:modernButtonNormalText="@string/power_on"
+                app:modernButtonActiveText="@string/standby"
+                app:modernButtonTextSize="8sp"
+                app:modernButtonNormalImage="@drawable/outline_power_settings_new_white_48"/>
 
-            <com.mbr.ampx.view.CustomButton
+            <com.mbr.ampx.view.ModernButton
                 android:id="@+id/buttonSettings"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:buttonImageBackground="@drawable/bluetooth_button_background_black"
-                app:buttonImageActive="@drawable/outline_settings_applications_white_custom_48dp"
-                app:buttonText="@string/settings"
-                app:buttonTextViewTopPadding="-2dp"
-                app:buttonTintActiveImage="false"
-                android:layout_weight="1"/>
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                app:modernButtonActive="false"
+                app:modernButtonNormalText="@string/settings"
+                app:modernButtonActiveText="@string/settings"
+                app:modernButtonTextSize="8sp"
+                app:modernButtonNormalImage="@drawable/outline_settings_white_24"/>/>
+
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <com.mbr.ampx.view.GaugeViewEx
@@ -82,66 +85,81 @@
             android:id="@+id/linearLayoutInputs"
             android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
             android:orientation="horizontal"
             android:weightSum="5"
             app:layout_constraintTop_toBottomOf="@id/gaugeViewVolume"
             android:layout_marginTop="16dp">
 
-            <com.mbr.ampx.view.CustomButton
+            <com.mbr.ampx.view.ModernButton
                 android:id="@+id/inputButtonCd"
-                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                app:buttonImageBackground="@drawable/input_background_black"
-                app:buttonImageActive="@drawable/input_active"
-                app:buttonText="@string/cd"
-                app:buttonTextViewTopPadding="@dimen/input_button_text_margin"/>
+                android:layout_weight="1"
+                app:modernButtonActive="false"
+                app:modernButtonNormalText="@string/cd"
+                app:modernButtonActiveText="@string/cd"
+                app:modernButtonTextSize="8sp"
+                app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
+                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"/>
 
-            <com.mbr.ampx.view.CustomButton
+            <com.mbr.ampx.view.ModernButton
                 android:id="@+id/inputButtonNetwork"
-                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                app:buttonImageBackground="@drawable/input_background_black"
-                app:buttonImageActive="@drawable/input_active"
-                app:buttonText="@string/network"
-                app:buttonTextViewTopPadding="@dimen/input_button_text_margin"/>
+                android:layout_weight="1"
+                app:modernButtonActive="true"
+                app:modernButtonNormalText="@string/network"
+                app:modernButtonActiveText="@string/network"
+                app:modernButtonTextSize="8sp"
+                app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
+                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"/>
 
-            <com.mbr.ampx.view.CustomButton
+            <com.mbr.ampx.view.ModernButton
                 android:id="@+id/inputButtonTuner"
-                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                app:buttonImageBackground="@drawable/input_background_black"
-                app:buttonImageActive="@drawable/input_active"
-                app:buttonText="@string/tuner"
-                app:buttonTextViewTopPadding="@dimen/input_button_text_margin"/>
+                android:layout_weight="1"
+                app:modernButtonActive="false"
+                app:modernButtonNormalText="@string/tuner"
+                app:modernButtonActiveText="@string/tuner"
+                app:modernButtonTextSize="8sp"
+                app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
+                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"/>
 
-            <com.mbr.ampx.view.CustomButton
+            <com.mbr.ampx.view.ModernButton
                 android:id="@+id/inputButtonAux"
-                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                app:buttonImageBackground="@drawable/input_background_black"
-                app:buttonImageActive="@drawable/input_active"
-                app:buttonText="@string/aux"
-                app:buttonTextViewTopPadding="@dimen/input_button_text_margin"/>
+                android:layout_weight="1"
+                app:modernButtonActive="false"
+                app:modernButtonNormalText="@string/aux"
+                app:modernButtonActiveText="@string/aux"
+                app:modernButtonTextSize="8sp"
+                app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
+                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"/>
 
-            <com.mbr.ampx.view.CustomButton
+            <com.mbr.ampx.view.ModernButton
                 android:id="@+id/inputButtonRecorder"
-                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                app:buttonImageBackground="@drawable/input_background_black"
-                app:buttonImageActive="@drawable/input_active"
-                app:buttonText="@string/recorder"
-                app:buttonTextViewTopPadding="@dimen/input_button_text_margin"/>
+                android:layout_weight="1"
+                app:modernButtonActive="false"
+                app:modernButtonNormalText="@string/recorder"
+                app:modernButtonActiveText="@string/recorder"
+                app:modernButtonTextSize="8sp"
+                app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
+                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"/>
 
         </LinearLayout>
 

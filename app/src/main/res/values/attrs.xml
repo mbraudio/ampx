@@ -19,12 +19,12 @@
     </declare-styleable>
 
     <declare-styleable name="ModernButton">
-        <attr name="modernImageBackground" format="reference" />
-        <attr name="modernImageActive" format="reference" />
-        <attr name="modernText" format="string" localization="suggested" />
-        <attr name="modernTextViewTopPadding" format="dimension" />
-        <attr name="modernTintActiveImage" format="boolean" />
-        <attr name="modernImageAlwaysVisible" format="boolean" />
+        <attr name="modernButtonActive" format="boolean" />
+        <attr name="modernButtonNormalText" format="string" />
+        <attr name="modernButtonActiveText" format="string" />
+        <attr name="modernButtonTextSize" format="dimension" />
+        <attr name="modernButtonNormalImage" format="reference" />
+        <attr name="modernButtonActiveImage" format="reference" />
     </declare-styleable>
 
 </resources>
