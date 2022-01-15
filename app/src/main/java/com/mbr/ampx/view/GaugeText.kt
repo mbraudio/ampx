@@ -19,9 +19,9 @@ class GaugeText(color: Int, height: Float, bold: Boolean) {
         paint.textAlign = Paint.Align.CENTER
         paint.isElegantTextHeight = true
         if (bold) {
-            paint.typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD)
+            paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         } else {
-            paint.typeface = Typeface.SANS_SERIF
+            paint.typeface = Typeface.DEFAULT
         }
     }
 
