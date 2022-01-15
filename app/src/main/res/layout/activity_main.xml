@@ -16,18 +16,246 @@
         tools:context=".activity.MainActivity"
         android:background="@android:color/black">
 
+        <RelativeLayout
+            android:id="@+id/linearLayoutTopButtons"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="16dp">
+
+            <com.mbr.ampx.view.CustomButton
+                android:id="@+id/buttonPower"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                app:buttonImageBackground="@drawable/power_button_background_black"
+                app:buttonImageActive="@drawable/power_button_active"
+                app:buttonText="@string/power_on"
+                app:buttonTextViewTopPadding="-2dp"/>
+
+            <com.mbr.ampx.view.CustomButton
+                android:id="@+id/buttonConnection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                app:buttonImageActive="@drawable/baseline_bluetooth_white_48dp"
+                app:buttonImageBackground="@drawable/bluetooth_button_background_black"
+                app:buttonText="@string/connect"
+                app:buttonTextViewTopPadding="-2dp"
+                app:buttonTintActiveImage="false" />
+        </RelativeLayout>
+
         <com.mbr.ampx.view.GaugeViewEx
-            android:id="@+id/gvex"
+            android:id="@+id/gaugeViewVolume"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="70dp"
             app:numberOfDivisionsEx="50"
             app:divisionValueEx="4"
             app:divisionValueMultiplierEx="0.5"/>
+
+        <com.mbr.ampx.view.CustomButton
+            android:id="@+id/buttonSettings"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayoutInputs"
+            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="16dp"
+            app:buttonImageBackground="@drawable/bluetooth_button_background_black"
+            app:buttonImageActive="@drawable/outline_settings_applications_white_custom_48dp"
+            app:buttonText="@string/settings"
+            app:buttonTextViewTopPadding="-2dp"
+            app:buttonTintActiveImage="false"
+            app:buttonImageAlwaysVisible="false"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutInputs"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            app:layout_constraintTop_toBottomOf="@id/gaugeViewVolume">
+
+            <com.mbr.ampx.view.CustomButton
+                android:id="@+id/inputButtonCd"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                app:buttonImageBackground="@drawable/input_background_black"
+                app:buttonImageActive="@drawable/input_active"
+                app:buttonText="@string/cd"
+                app:buttonTextViewTopPadding="@dimen/input_button_text_margin"/>
+
+            <com.mbr.ampx.view.CustomButton
+                android:id="@+id/inputButtonNetwork"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                app:buttonImageBackground="@drawable/input_background_black"
+                app:buttonImageActive="@drawable/input_active"
+                app:buttonText="@string/network"
+                app:buttonTextViewTopPadding="@dimen/input_button_text_margin"/>
+
+            <com.mbr.ampx.view.CustomButton
+                android:id="@+id/inputButtonTuner"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                app:buttonImageBackground="@drawable/input_background_black"
+                app:buttonImageActive="@drawable/input_active"
+                app:buttonText="@string/tuner"
+                app:buttonTextViewTopPadding="@dimen/input_button_text_margin"/>
+
+            <com.mbr.ampx.view.CustomButton
+                android:id="@+id/inputButtonAux"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                app:buttonImageBackground="@drawable/input_background_black"
+                app:buttonImageActive="@drawable/input_active"
+                app:buttonText="@string/aux"
+                app:buttonTextViewTopPadding="@dimen/input_button_text_margin"/>
+
+            <com.mbr.ampx.view.CustomButton
+                android:id="@+id/inputButtonRecorder"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                app:buttonImageBackground="@drawable/input_background_black"
+                app:buttonImageActive="@drawable/input_active"
+                app:buttonText="@string/recorder"
+                app:buttonTextViewTopPadding="@dimen/input_button_text_margin"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutOptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:gravity="center"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/linearLayoutInputs"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <com.mbr.ampx.view.CustomButton
+                    android:id="@+id/buttonDirect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:buttonImageBackground="@drawable/regular_button_background_black"
+                    app:buttonImageActive="@drawable/regular_button_active"
+                    app:buttonText="@string/direct"
+                    app:buttonTextViewTopPadding="@dimen/regular_button_text_margin"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.mbr.ampx.view.CustomButton
+                        android:id="@+id/buttonSpeakersA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:buttonImageBackground="@drawable/regular_button_background_black"
+                        app:buttonImageActive="@drawable/regular_button_active"
+                        app:buttonText="@string/a"
+                        app:buttonTextViewTopPadding="@dimen/regular_button_text_margin"/>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_gravity="bottom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/speakers"
+                            android:paddingBottom="13dp"
+                            android:layout_marginBottom="6dp"
+                            android:textSize="8sp"
+                            android:textColor="@android:color/white"
+                            android:fontFamily="@font/orbitron_regular"/>
+
+                        <ImageView
+                            android:layout_gravity="center_horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icon_speakers"/>
+                    </LinearLayout>
+
+                    <com.mbr.ampx.view.CustomButton
+                        android:id="@+id/buttonSpeakersB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:buttonImageBackground="@drawable/regular_button_background_black"
+                        app:buttonImageActive="@drawable/regular_button_active"
+                        app:buttonText="@string/b"
+                        app:buttonTextViewTopPadding="@dimen/regular_button_text_margin"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <com.mbr.ampx.view.CustomButton
+                    android:id="@+id/buttonLoudness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:buttonImageBackground="@drawable/regular_button_background_black"
+                    app:buttonImageActive="@drawable/regular_button_active"
+                    app:buttonText="@string/loudness"
+                    android:layout_marginEnd="22dp"
+                    app:buttonTextViewTopPadding="@dimen/regular_button_text_margin"/>
+
+                <com.mbr.ampx.view.CustomButton
+                    android:id="@+id/buttonPowerAmpDirect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:buttonImageBackground="@drawable/regular_button_background_black"
+                    app:buttonImageActive="@drawable/regular_button_active"
+                    app:buttonText="@string/power_amp_direct"
+                    app:buttonTextViewTopPadding="@dimen/regular_button_text_margin"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
