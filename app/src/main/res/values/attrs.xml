@@ -18,4 +18,13 @@
         <attr name="buttonImageAlwaysVisible" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="ModernButton">
+        <attr name="modernImageBackground" format="reference" />
+        <attr name="modernImageActive" format="reference" />
+        <attr name="modernText" format="string" localization="suggested" />
+        <attr name="modernTextViewTopPadding" format="dimension" />
+        <attr name="modernTintActiveImage" format="boolean" />
+        <attr name="modernImageAlwaysVisible" format="boolean" />
+    </declare-styleable>
+
 </resources>
