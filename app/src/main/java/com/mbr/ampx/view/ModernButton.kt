@@ -127,16 +127,13 @@ class ModernButton : View, View.OnClickListener, View.OnLongClickListener {
         if (active) {
             bitmapPaint.colorFilter = PorterDuffColorFilter(context.getColor(R.color.colorGradientEnd), PorterDuff.Mode.MULTIPLY)
             text = textActive
-            bitmap = if (activeBitmap != null) {
-                activeBitmap
-            } else {
-                normalBitmap
-            }
+            bitmap = if (activeBitmap != null) { activeBitmap } else { normalBitmap }
         } else {
             bitmapPaint.colorFilter = PorterDuffColorFilter(context.getColor(android.R.color.white), PorterDuff.Mode.MULTIPLY)
             text = textNormal
             bitmap = normalBitmap
         }
+        invalidate()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

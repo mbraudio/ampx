@@ -1,14 +1,15 @@
 package com.mbr.ampx.utilities
 
 import java.io.ByteArrayOutputStream
+import kotlin.experimental.and
 import kotlin.math.sin
 
 object COBS {
 
-    fun Encode(src: ByteArray): ByteArray {
+    fun encode(src: ByteArray): ByteArray {
         val srcLen = src.size
-        var code: Int = 1
-        var currentIndex: Int = 0
+        var code = 1
+        var currentIndex = 0
 
         val maxEncodingLen = src.size + ((src.size + 1) / 254) + 1
         val sink = ByteArrayOutputStream(maxEncodingLen)
@@ -47,7 +48,7 @@ object COBS {
         return 0x01
     }
 
-    fun Decode(src: ByteArray): ByteArray {
+    fun decode(src: ByteArray): ByteArray {
         val srcLen = src.size
         var currentIndex = 0
         var code: Int
@@ -55,12 +56,12 @@ object COBS {
         val sink = ByteArrayOutputStream()
 
         while (currentIndex < srcLen) {
-            code = (src[currentIndex++].toInt()) and 0xFF
-            for (i in 1..code) {
+            code = src[currentIndex++].toInt()
+            for (i in 1 until code) {
                 sink.write(src[currentIndex++].toInt())
-                if ((currentIndex < srcLen) && (code < 0xFF)) {
-                    sink.write(0)
-                }
+            }
+            if ((currentIndex < srcLen) && (code < 0xFF)) {
+                sink.write(0)
             }
         }
 

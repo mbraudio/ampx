@@ -6,8 +6,6 @@ import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.Window
@@ -92,7 +90,7 @@ class ScanDialogFragment : DialogFragment(), View.OnClickListener, IRecyclerClic
 
         model.deviceStateChanged.observe( this, {
             if (it) {
-                recyclerViewAdapter.notifyDataSetChanged()  
+                recyclerViewAdapter.notifyDataSetChanged()
             }
         })
     }
@@ -149,7 +147,19 @@ class ScanDialogFragment : DialogFragment(), View.OnClickListener, IRecyclerClic
 
     // IRecyclerClickListener
     override fun onRecyclerItemClick(position: Int) {
-        val device = binding.viewModel!!.getDevice(position)
+        val model = binding.viewModel!!
+        val device = model.getDevice(position)
+        val active = model.active
+
+        active?.let { a ->
+            if (a.isConnected() && device == a) {
+                context?.let { device.connectOrDisconnect(it) }
+                return
+            } else if (a.isConnected()) {
+                return
+            }
+        }
+
         context?.let { device.connectOrDisconnect(it) }
     }
 

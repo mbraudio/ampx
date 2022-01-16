@@ -15,6 +15,8 @@ import com.mbr.ampx.bluetooth.IBlueDeviceListener
 
 class GlobalViewModel : ViewModel(), IBlueDeviceListener {
 
+    private val DEVICE_NAME = "AmpX"
+
     // LIVE DATA
     private val _isScanning = MutableLiveData<Boolean>()
     val isScanning : LiveData<Boolean>
@@ -23,21 +25,23 @@ class GlobalViewModel : ViewModel(), IBlueDeviceListener {
     private val _newDeviceAdded = MutableLiveData<Boolean>()
     val newDeviceAdded : LiveData<Boolean>
         get() = _newDeviceAdded
-    fun disableNewDeviceAdded() { _newDeviceAdded.value = false }
+    //fun disableNewDeviceAdded() { _newDeviceAdded.value = false }
 
     private val _deviceStateChanged = MutableLiveData<Boolean>()
     val deviceStateChanged : LiveData<Boolean>
         get() = _deviceStateChanged
-    fun disableDeviceStateChanged() { _deviceStateChanged.value = false }
+    //fun disableDeviceStateChanged() { _deviceStateChanged.value = false }
+
+    private val _deviceDataReceived = MutableLiveData<ByteArray>()
+    val deviceDataReceived : LiveData<ByteArray>
+        get() = _deviceDataReceived
 
 
     // VARIABLES
     var devices = ArrayList<BlueDevice>()
     fun getDevice(index: Int): BlueDevice = devices[index]
 
-
-
-    //var active: BlueDevice? = null
+    var active: BlueDevice? = null
 
     init {
         _isScanning.value = false
@@ -64,6 +68,11 @@ class GlobalViewModel : ViewModel(), IBlueDeviceListener {
     }
 
     fun addDevice(device: BluetoothDevice) {
+        device.name?.let {
+            if (it != DEVICE_NAME) {
+                return
+            }
+        }
         var blueDevice = doesExist(device)
         if (blueDevice != null) {
             blueDevice.update(device)
@@ -118,6 +127,7 @@ class GlobalViewModel : ViewModel(), IBlueDeviceListener {
         bluetoothAdapter?.bluetoothLeScanner?.stopScan(scanCallback)
     }
 
+    // Bluetooth Scan Callback
     private val scanCallback = object : ScanCallback() {
 
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
@@ -135,16 +145,16 @@ class GlobalViewModel : ViewModel(), IBlueDeviceListener {
             super.onScanFailed(errorCode)
         }
 */
-
     }
 
     // IBlueDeviceListener
     override fun onConnectionStateChange(device: BlueDevice) {
+        active = if (device.isConnected()) { device } else { null }
         _deviceStateChanged.value = true
     }
 
     override fun onDataReceived(device: BlueDevice) {
-
+        _deviceDataReceived.value = device.data
     }
 
 }

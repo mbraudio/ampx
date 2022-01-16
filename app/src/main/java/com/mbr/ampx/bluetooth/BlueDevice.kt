@@ -256,84 +256,84 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
     // SEND / RECEIVE
     private fun requestSystemData() {
         val data = byteArrayOf(Commands.COMMAND_SYSTEM_DATA, Commands.COMMAND_SYSTEM_DATA)
-        val buffer = COBS.Encode(data)
+        val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
     fun togglePower() {
         val data = byteArrayOf(Commands.COMMAND_TOGGLE_POWER, Commands.COMMAND_TOGGLE_POWER)
-        val buffer = COBS.Encode(data)
+        val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
     fun toggleMute() {
         val data = byteArrayOf(Commands.COMMAND_TOGGLE_MUTE, Commands.COMMAND_TOGGLE_MUTE)
-        val buffer = COBS.Encode(data)
+        val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
     fun changeInput(index: Byte) {
         val crc = (Commands.COMMAND_CHANGE_INPUT + index).toByte()
         val data = byteArrayOf(Commands.COMMAND_CHANGE_INPUT, index, crc)
-        val buffer = COBS.Encode(data)
+        val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
     fun toggleDirect() {
         val data = byteArrayOf(Commands.COMMAND_TOGGLE_DIRECT, Commands.COMMAND_TOGGLE_DIRECT)
-        val buffer = COBS.Encode(data)
+        val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
     fun toggleSpeakerA() {
         val data = byteArrayOf(Commands.COMMAND_TOGGLE_SPEAKER_A, Commands.COMMAND_TOGGLE_SPEAKER_A)
-        val buffer = COBS.Encode(data)
+        val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
     fun toggleSpeakerB() {
         val data = byteArrayOf(Commands.COMMAND_TOGGLE_SPEAKER_B, Commands.COMMAND_TOGGLE_SPEAKER_B)
-        val buffer = COBS.Encode(data)
+        val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
     fun toggleLoudness() {
         val data = byteArrayOf(Commands.COMMAND_TOGGLE_LOUDNESS, Commands.COMMAND_TOGGLE_LOUDNESS)
-        val buffer = COBS.Encode(data)
+        val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
     fun togglePowerAmpDirect() {
         val data = byteArrayOf(Commands.COMMAND_TOGGLE_PAMP_DIRECT, Commands.COMMAND_TOGGLE_PAMP_DIRECT)
-        val buffer = COBS.Encode(data)
+        val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
     fun requestCalibration(channel: Byte, delay: Byte) {
         val crc = (Commands.COMMAND_CALIBRATION + channel + delay).toByte()
         val data = byteArrayOf(Commands.COMMAND_CALIBRATION, channel, delay, crc)
-        val buffer = COBS.Encode(data)
+        val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
     fun setVolume(volume: Byte) {
         val crc = (Commands.COMMAND_UPDATE_VOLUME_VALUE + volume).toByte()
         val data = byteArrayOf(Commands.COMMAND_UPDATE_VOLUME_VALUE, volume, crc)
-        val buffer = COBS.Encode(data)
+        val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
     fun sendBrightnessIndex(index: Byte) {
         val crc = (Commands.COMMAND_BRIGHTNESS_INDEX + index).toByte()
         val data = byteArrayOf(Commands.COMMAND_BRIGHTNESS_INDEX, index, crc)
-        val buffer = COBS.Encode(data)
+        val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
     fun sendVolumeLedValues(red: Byte, green: Byte, blue: Byte) {
         val crc = (Commands.COMMAND_VOLUME_LED_VALUES + red + green + blue).toByte()
         val data = byteArrayOf(Commands.COMMAND_VOLUME_LED_VALUES, red, green, blue, crc)
-        val buffer = COBS.Encode(data)
+        val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 

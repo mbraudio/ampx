@@ -32,7 +32,7 @@
                 android:layout_width="0dp"
                 android:layout_height="52dp"
                 android:layout_weight="1"
-                app:modernButtonActive="true"
+                app:modernButtonActive="false"
                 app:modernButtonNormalText="@string/connect"
                 app:modernButtonActiveText="@string/disconnect"
                 app:modernButtonTextSize="8sp"
