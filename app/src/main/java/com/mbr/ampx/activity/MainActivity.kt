@@ -19,12 +19,13 @@ import com.mbr.ampx.utilities.COBS
 import com.mbr.ampx.utilities.Constants
 import com.mbr.ampx.utilities.Utilities
 import com.mbr.ampx.utilities.Utilities.printSystemData
+import com.mbr.ampx.view.GaugeViewEx
 import com.mbr.ampx.view.IModernButtonListener
 import com.mbr.ampx.view.ModernButton
 import com.mbr.ampx.viewmodel.GlobalViewModel
 import java.lang.Exception
 
-class MainActivity : AppCompatActivity(), IModernButtonListener {
+class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.IListener {
 
     private val tag = this.javaClass.simpleName
 
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener {
 
         Utilities.resources = resources
 
-        //binding.gaugeViewVolume.setCurrentValue(100, 1)
+        binding.gaugeViewVolume.setListener(this)
 
         // Buttons
         binding.buttonConnection.listener = object : IModernButtonListener {
@@ -322,5 +323,16 @@ class MainActivity : AppCompatActivity(), IModernButtonListener {
 
     override fun onButtonLongClick(button: ModernButton) {
 
+    }
+
+    // GAUGE VIEW LISTENER
+    override fun onGaugeViewValueUpdate(value: Float, max: Float) {
+
+    }
+
+    override fun onGaugeViewValueSelection(value: Float, max: Float) {
+        val index = (value * Constants.NUMBER_OF_STEPS) / max
+        Log.e(tag, "Index: $index")
+        binding.viewModel!!.active?.setVolume(index.toInt().toByte())
     }
 }

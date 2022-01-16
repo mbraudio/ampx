@@ -72,9 +72,6 @@ class GaugeView : View, AnimatorUpdateListener, GestureDetector.OnGestureListene
     private var valueText: GaugeText? = null
     private var unit: String? = null
 
-    // VALUE
-    private var textBounds = Rect()
-
     // Gestures and Touches
     private lateinit var gestureDetector: GestureDetector
     private var listener: Listener? = null

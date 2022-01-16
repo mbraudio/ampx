@@ -92,8 +92,8 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
 
     // Gestures and Touches
     private lateinit var gestureDetector: GestureDetector
-    private var listener: GaugeView.Listener? = null
-    fun setListener(listener: GaugeView.Listener) { this.listener = listener }
+    private var listener: IListener? = null
+    fun setListener(listener: IListener) { this.listener = listener }
 
     constructor(context: Context) : super(context) {
         initialize(context, null, 0)
@@ -446,7 +446,7 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
     }
 
     // Listener
-    interface Listener {
+    interface IListener {
         fun onGaugeViewValueUpdate(value: Float, max: Float)
         fun onGaugeViewValueSelection(value: Float, max: Float)
     }
