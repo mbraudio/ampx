@@ -2,7 +2,6 @@ package com.mbr.ampx.bluetooth
 
 import android.bluetooth.*
 import android.content.Context
-import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -11,11 +10,12 @@ import com.mbr.ampx.utilities.COBS
 import com.mbr.ampx.utilities.Constants
 import java.util.*
 
-class BlueData() {
-
+interface IBlueDeviceListener {
+    fun onConnectionStateChange(device: BlueDevice)
+    fun onDataReceived(device: BlueDevice)
 }
 
-class BlueDevice(var device: BluetoothDevice?) {
+class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener) {
     val tag = this.javaClass.simpleName
 
     companion object {
@@ -33,6 +33,7 @@ class BlueDevice(var device: BluetoothDevice?) {
     private var service: BluetoothGattService? = null
     private var rxCharacteristic: BluetoothGattCharacteristic? = null
     private var txCharacteristic: BluetoothGattCharacteristic? = null
+    lateinit var data: ByteArray
 
     private val actions: ArrayDeque<BluetoothAction> = ArrayDeque(ACTION_DEQUE_SIZE)
     private var actionActive = false
@@ -59,11 +60,11 @@ class BlueDevice(var device: BluetoothDevice?) {
             return if (device == null) {
                 R.drawable.baseline_report_problem_white_48dp
             } else {
-                if (device!!.name == null) R.drawable.baseline_report_problem_white_48dp else R.drawable.outline_bluetooth_white_24
+                if (device!!.name == null) R.drawable.baseline_report_problem_white_48dp else R.drawable.baseline_speaker_white_48dp
             }
         }
 
-    val stateStringResource: Int
+    val stateName: Int
         get() {
             when (connectionState) {
                 BluetoothGatt.STATE_DISCONNECTED -> return R.string.disconnected
@@ -78,15 +79,15 @@ class BlueDevice(var device: BluetoothDevice?) {
         get() {
             when (connectionState) {
                 BluetoothGatt.STATE_DISCONNECTED -> return android.R.color.white
-                BluetoothGatt.STATE_CONNECTING -> return R.color.colorGradientEnd
-                BluetoothGatt.STATE_CONNECTED -> return android.R.color.white
+                BluetoothGatt.STATE_CONNECTING -> return android.R.color.white
+                BluetoothGatt.STATE_CONNECTED -> return R.color.colorGradientEnd
                 BluetoothGatt.STATE_DISCONNECTING -> return android.R.color.white
             }
             return android.R.color.white
         }
 
     fun connectOrDisconnect(context: Context) {
-        val runnable = Runnable {
+        handler.post {
             if (connectionState == BluetoothGatt.STATE_DISCONNECTED) {
                 connect(context)
             } else if (connectionState == BluetoothGatt.STATE_CONNECTED) {
@@ -95,18 +96,17 @@ class BlueDevice(var device: BluetoothDevice?) {
                 Log.e(tag, "Connection: BUSY")
             }
         }
-        handler.post(runnable)
     }
 
     private fun connect(context: Context) {
         connectionState = BluetoothGatt.STATE_CONNECTING
-        sendConnectionState()
+        notifyConnectionState()
         gatt = device?.connectGatt(context, false, gattCallback)
     }
 
     private fun disconnect() {
         connectionState = BluetoothGatt.STATE_DISCONNECTING
-        sendConnectionState()
+        notifyConnectionState()
         gatt?.disconnect()
     }
 
@@ -119,12 +119,12 @@ class BlueDevice(var device: BluetoothDevice?) {
 
     private fun configureServiceAndCharacteristics(gatt: BluetoothGatt?): Boolean {
         service = gatt?.getService(BLUETOOTH_UUID_SERVICE)
-        if (service == null) {
-            return false
+        service?.let {
+            rxCharacteristic = it.getCharacteristic(BLUETOOTH_UUID_RX_CHARACTERISTIC)
+            txCharacteristic = it.getCharacteristic(BLUETOOTH_UUID_TX_CHARACTERISTIC)
+            return rxCharacteristic != null && txCharacteristic != null
         }
-        rxCharacteristic = service!!.getCharacteristic(BLUETOOTH_UUID_RX_CHARACTERISTIC)
-        txCharacteristic = service!!.getCharacteristic(BLUETOOTH_UUID_TX_CHARACTERISTIC)
-        return rxCharacteristic != null && txCharacteristic != null
+        return false
     }
 
     private fun addAction(action: BluetoothAction) {
@@ -146,105 +146,109 @@ class BlueDevice(var device: BluetoothDevice?) {
         startAction()
     }
 
-    private fun sendConnectionState() {
-
+    private fun notifyConnectionState() {
+        listener.onConnectionStateChange(this)
     }
 
-    private fun handleData(data: ByteArray) {
-
+    private fun notifyDataChanged(data: ByteArray) {
+        this.data = data
+        listener.onDataReceived(this)
     }
 
     // BLUETOOTH GATT CALLBACK
     private val gattCallback: BluetoothGattCallback = object : BluetoothGattCallback() {
 
         override fun onPhyUpdate(gatt: BluetoothGatt?, txPhy: Int, rxPhy: Int, status: Int) {
-            super.onPhyUpdate(gatt, txPhy, rxPhy, status)
+            //super.onPhyUpdate(gatt, txPhy, rxPhy, status)
         }
 
         override fun onPhyRead(gatt: BluetoothGatt?, txPhy: Int, rxPhy: Int, status: Int) {
-            super.onPhyRead(gatt, txPhy, rxPhy, status)
+            //super.onPhyRead(gatt, txPhy, rxPhy, status)
         }
 
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
-            super.onConnectionStateChange(gatt, status, newState)
+            handler.post {
 
-            Log.e(tag, "Connection state: $newState")
-            if (status != 0) {
-                Log.e(tag, "---> ERROR !!!")
-            }
-
-            connectionState = newState
-
-            when (connectionState) {
-                BluetoothGatt.STATE_CONNECTED -> {
-                    clearActions()
-                    gatt?.discoverServices()
+                Log.e(tag, "Connection state: $newState")
+                if (status != 0) {
+                    Log.e(tag, "---> ERROR !!!")
                 }
 
-                BluetoothGatt.STATE_DISCONNECTED -> {
-                    clearActions()
-                    closeGatt()
-                }
-            }
+                connectionState = newState
 
-            sendConnectionState()
+                when (connectionState) {
+                    BluetoothGatt.STATE_CONNECTED -> {
+                        clearActions()
+                        gatt?.discoverServices()
+                    }
+
+                    BluetoothGatt.STATE_DISCONNECTED -> {
+                        clearActions()
+                        closeGatt()
+                    }
+                }
+
+                notifyConnectionState()
+            }
         }
 
         override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
-            super.onServicesDiscovered(gatt, status)
+            handler.post {
+                Log.e(tag, "Services discovered!")
 
-            Log.e(tag, "Services discovered!")
-
-            val ok = configureServiceAndCharacteristics(gatt)
-            if (ok) {
-                Log.e(tag, "Service and Characteristics found!")
-                addAction(DescriptorAction(rxCharacteristic!!))
-                addAction(DescriptorAction(txCharacteristic!!))
-                requestSystemData()
-            } else {
-                Log.e(tag, "ERROR: Service and Characteristics not found!")
-                disconnect()
+                val ok = configureServiceAndCharacteristics(gatt)
+                if (ok) {
+                    Log.e(tag, "SUCCESS: Service and Characteristics found!")
+                    addAction(DescriptorAction(rxCharacteristic!!))
+                    addAction(DescriptorAction(txCharacteristic!!))
+                    requestSystemData()
+                } else {
+                    Log.e(tag, "ERROR: Service and Characteristics not found!")
+                    disconnect()
+                }
             }
         }
 
         override fun onCharacteristicRead(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int) {
-            super.onCharacteristicRead(gatt, characteristic, status)
+
         }
 
         override fun onCharacteristicWrite(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int) {
-            super.onCharacteristicWrite(gatt, characteristic, status)
-            nextAction()
+            handler.post {
+                nextAction()
+            }
         }
 
         override fun onCharacteristicChanged(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?) {
-            super.onCharacteristicChanged(gatt, characteristic)
-            characteristic?.let { handleData(it.value) }
+            handler.post {
+                characteristic?.let { notifyDataChanged(it.value) }
+            }
         }
 
         override fun onDescriptorRead(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {
-            super.onDescriptorRead(gatt, descriptor, status)
+
         }
 
         override fun onDescriptorWrite(gatt: BluetoothGatt?, descriptor: BluetoothGattDescriptor?, status: Int) {
-            super.onDescriptorWrite(gatt, descriptor, status)
-            nextAction()
+            handler.post {
+                nextAction()
+            }
         }
 
         override fun onReliableWriteCompleted(gatt: BluetoothGatt?, status: Int) {
-            super.onReliableWriteCompleted(gatt, status)
+
         }
 
         override fun onReadRemoteRssi(gatt: BluetoothGatt?, rssi: Int, status: Int) {
-            super.onReadRemoteRssi(gatt, rssi, status)
+
         }
 
         override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
-            super.onMtuChanged(gatt, mtu, status)
             Log.e(tag, "on Mtu Changed")
         }
 
         override fun onServiceChanged(gatt: BluetoothGatt) {
-            //super.onServiceChanged(gatt)
+
         }
 
     }

@@ -29,7 +29,7 @@ class DeviceAdapter(private val resources: Resources) : RecyclerView.Adapter<Dev
             val device: BlueDevice = it[position]
             holder.textViewName.text = device.name
             holder.textViewName.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(device.icon), null, null, null)
-            holder.textViewState.text = resources.getString(device.stateStringResource)
+            holder.textViewState.text = resources.getString(device.stateName)
             holder.textViewState.setTextColor(resources.getColor(device.stateColor))
         }
     }

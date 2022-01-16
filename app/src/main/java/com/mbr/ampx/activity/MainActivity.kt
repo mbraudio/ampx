@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener {
 
         Utilities.resources = resources
 
-        binding.gaugeViewVolume.setCurrentValue(100, 1)
+        //binding.gaugeViewVolume.setCurrentValue(100, 1)
 
         // Buttons
         binding.buttonConnection.listener = object : IModernButtonListener {

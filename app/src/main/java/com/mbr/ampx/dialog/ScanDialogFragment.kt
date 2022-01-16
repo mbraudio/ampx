@@ -83,9 +83,17 @@ class ScanDialogFragment : DialogFragment(), View.OnClickListener, IRecyclerClic
         })
 
         model.newDeviceAdded.observe(this, {
-            recyclerViewAdapter.setDevices(null)
-            recyclerViewAdapter.setDevices(model.devices)
-            recyclerViewAdapter.notifyDataSetChanged()
+            if (it) {
+                recyclerViewAdapter.setDevices(null)
+                recyclerViewAdapter.setDevices(model.devices)
+                recyclerViewAdapter.notifyDataSetChanged()
+            }
+        })
+
+        model.deviceStateChanged.observe( this, {
+            if (it) {
+                recyclerViewAdapter.notifyDataSetChanged()  
+            }
         })
     }
 
@@ -149,12 +157,4 @@ class ScanDialogFragment : DialogFragment(), View.OnClickListener, IRecyclerClic
 
     }
 
-    /*
-    // IScanListener
-    override fun onScanResult() {
-        handler.post {
-            recyclerViewAdapter.notifyDataSetChanged()
-        }
-    }
-    */
 }

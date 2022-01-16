@@ -11,8 +11,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mbr.ampx.bluetooth.BlueDevice
+import com.mbr.ampx.bluetooth.IBlueDeviceListener
 
-class GlobalViewModel : ViewModel() {
+class GlobalViewModel : ViewModel(), IBlueDeviceListener {
 
     // LIVE DATA
     private val _isScanning = MutableLiveData<Boolean>()
@@ -23,6 +24,11 @@ class GlobalViewModel : ViewModel() {
     val newDeviceAdded : LiveData<Boolean>
         get() = _newDeviceAdded
     fun disableNewDeviceAdded() { _newDeviceAdded.value = false }
+
+    private val _deviceStateChanged = MutableLiveData<Boolean>()
+    val deviceStateChanged : LiveData<Boolean>
+        get() = _deviceStateChanged
+    fun disableDeviceStateChanged() { _deviceStateChanged.value = false }
 
 
     // VARIABLES
@@ -36,6 +42,7 @@ class GlobalViewModel : ViewModel() {
     init {
         _isScanning.value = false
         _newDeviceAdded.value = false
+        _deviceStateChanged.value = false
     }
 
     private var bluetoothAdapter: BluetoothAdapter? = null
@@ -61,7 +68,7 @@ class GlobalViewModel : ViewModel() {
         if (blueDevice != null) {
             blueDevice.update(device)
         } else {
-            blueDevice = BlueDevice(device)
+            blueDevice = BlueDevice(device, this)
             devices.add(blueDevice)
         }
         _newDeviceAdded.value = true
@@ -93,8 +100,8 @@ class GlobalViewModel : ViewModel() {
     }
 
     private fun startScan() {
-        _isScanning.value = true
         clearDisconnectedDevices()
+        _isScanning.value = true
         val builder = ScanSettings.Builder()
         builder.setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
         builder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
@@ -128,6 +135,15 @@ class GlobalViewModel : ViewModel() {
             super.onScanFailed(errorCode)
         }
 */
+
+    }
+
+    // IBlueDeviceListener
+    override fun onConnectionStateChange(device: BlueDevice) {
+        _deviceStateChanged.value = true
+    }
+
+    override fun onDataReceived(device: BlueDevice) {
 
     }
 

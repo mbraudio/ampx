@@ -29,7 +29,7 @@ object Utilities {
         Log.e("SYSTEM", "MUTE: " + if (data[Constants.SYSTEM_INDEX_STATE_MUTE] == one) "ON" else "OFF")
     }
 
-    fun getInputString(input: Int): String {
+    private fun getInputString(input: Int): String {
         when (input) {
             0 -> return resources.getString(R.string.cd)
             1 -> return resources.getString(R.string.network)
@@ -41,7 +41,7 @@ object Utilities {
         return resources.getString(R.string.unknown)
     }
 
-    fun getPowerString(power: Byte): String {
+    private fun getPowerString(power: Byte): String {
         when (power) {
             Constants.POWER_STATE_OFF -> return resources.getString(R.string.standby)
             Constants.POWER_STATE_POWERING_OFF -> return resources.getString(R.string.powering_off)
