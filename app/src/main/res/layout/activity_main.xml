@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.mbr.ampx.activity.MainViewModel" />
+            type="com.mbr.ampx.viewmodel.GlobalViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +23,7 @@
             android:orientation="horizontal"
             android:weightSum="4"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="32dp">
 
             <com.mbr.ampx.view.ModernButton
                 android:id="@+id/buttonConnection"
@@ -36,7 +36,8 @@
                 app:modernButtonNormalText="@string/connect"
                 app:modernButtonActiveText="@string/disconnect"
                 app:modernButtonTextSize="8sp"
-                app:modernButtonNormalImage="@drawable/outline_bluetooth_white_24"/>
+                app:modernButtonNormalImage="@drawable/outline_bluetooth_white_24"
+                app:modernButtonActiveImage="@drawable/outline_bluetooth_connected_white_24"/>
 
             <com.mbr.ampx.view.ModernButton
                 android:id="@+id/buttonPower"
@@ -76,7 +77,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             app:numberOfDivisionsEx="50"
             app:divisionValueEx="4"
             app:divisionValueMultiplierEx="0.5"/>
@@ -89,7 +90,7 @@
             android:orientation="horizontal"
             android:weightSum="5"
             app:layout_constraintTop_toBottomOf="@id/gaugeViewVolume"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="24dp">
 
             <com.mbr.ampx.view.ModernButton
                 android:id="@+id/inputButtonCd"

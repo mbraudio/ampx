@@ -11,15 +11,19 @@ import com.mbr.ampx.utilities.COBS
 import com.mbr.ampx.utilities.Constants
 import java.util.*
 
+class BlueData() {
+
+}
+
 class BlueDevice(var device: BluetoothDevice?) {
     val tag = this.javaClass.simpleName
 
     companion object {
         const val ACTION_DEQUE_SIZE = 32
-        val BLUETOOTH_UUID_SERVICE = UUID.fromString("cbba86f5-ec03-0eb0-3b45-1ce4498b1942")
-        val BLUETOOTH_UUID_RX_CHARACTERISTIC = UUID.fromString("cbba88f7-ec03-0eb0-3b45-1ce4498b1942")
-        val BLUETOOTH_UUID_TX_CHARACTERISTIC = UUID.fromString("cbba87f6-ec03-0eb0-3b45-1ce4498b1942")
-        val BLUETOOTH_UUID_CHARACTERISTIC_DESCRIPTOR = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
+        val BLUETOOTH_UUID_SERVICE: UUID = UUID.fromString("cbba86f5-ec03-0eb0-3b45-1ce4498b1942")
+        val BLUETOOTH_UUID_RX_CHARACTERISTIC: UUID = UUID.fromString("cbba88f7-ec03-0eb0-3b45-1ce4498b1942")
+        val BLUETOOTH_UUID_TX_CHARACTERISTIC: UUID = UUID.fromString("cbba87f6-ec03-0eb0-3b45-1ce4498b1942")
+        val BLUETOOTH_UUID_CHARACTERISTIC_DESCRIPTOR: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
     }
 
     private val handler = Handler(Looper.getMainLooper())
@@ -30,7 +34,7 @@ class BlueDevice(var device: BluetoothDevice?) {
     private var rxCharacteristic: BluetoothGattCharacteristic? = null
     private var txCharacteristic: BluetoothGattCharacteristic? = null
 
-    private val actions: ArrayDeque<BluetoothAction> = ArrayDeque()
+    private val actions: ArrayDeque<BluetoothAction> = ArrayDeque(ACTION_DEQUE_SIZE)
     private var actionActive = false
 
     fun update(device: BluetoothDevice) { this.device = device }
@@ -42,26 +46,44 @@ class BlueDevice(var device: BluetoothDevice?) {
 
     fun isConnected(): Boolean = connectionState == BluetoothGatt.STATE_CONNECTED
 
-    fun getIcon(): Int {
-        device?.let {
-            return if (it.name == null) {
+    val name: String
+        get() = if (device == null) {
+            "Unknown"
+        } else {
+            val name = device!!.name ?: "Unknown"
+            name
+        }
+
+    val icon: Int
+        get() {
+            return if (device == null) {
                 R.drawable.baseline_report_problem_white_48dp
             } else {
-                R.drawable.baseline_speaker_white_48dp
+                if (device!!.name == null) R.drawable.baseline_report_problem_white_48dp else R.drawable.outline_bluetooth_white_24
             }
         }
-        return R.drawable.baseline_report_problem_white_48dp
-    }
 
-    fun getStateStringResource(): Int {
-        when (connectionState) {
-            BluetoothGatt.STATE_DISCONNECTED -> return R.string.disconnected
-            BluetoothGatt.STATE_CONNECTING -> return R.string.connecting_dots
-            BluetoothGatt.STATE_CONNECTED -> return R.string.connected
-            BluetoothGatt.STATE_DISCONNECTING -> return R.string.disconnecting_dots
+    val stateStringResource: Int
+        get() {
+            when (connectionState) {
+                BluetoothGatt.STATE_DISCONNECTED -> return R.string.disconnected
+                BluetoothGatt.STATE_CONNECTING -> return R.string.connecting_dots
+                BluetoothGatt.STATE_CONNECTED -> return R.string.connected
+                BluetoothGatt.STATE_DISCONNECTING -> return R.string.disconnecting_dots
+            }
+            return R.string.disconnected
         }
-        return R.string.disconnected
-    }
+
+    val stateColor: Int
+        get() {
+            when (connectionState) {
+                BluetoothGatt.STATE_DISCONNECTED -> return android.R.color.white
+                BluetoothGatt.STATE_CONNECTING -> return R.color.colorGradientEnd
+                BluetoothGatt.STATE_CONNECTED -> return android.R.color.white
+                BluetoothGatt.STATE_DISCONNECTING -> return android.R.color.white
+            }
+            return android.R.color.white
+        }
 
     fun connectOrDisconnect(context: Context) {
         val runnable = Runnable {
@@ -83,7 +105,9 @@ class BlueDevice(var device: BluetoothDevice?) {
     }
 
     private fun disconnect() {
-
+        connectionState = BluetoothGatt.STATE_DISCONNECTING
+        sendConnectionState()
+        gatt?.disconnect()
     }
 
     private fun closeGatt() {
