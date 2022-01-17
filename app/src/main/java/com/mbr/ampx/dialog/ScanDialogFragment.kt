@@ -64,12 +64,12 @@ class ScanDialogFragment : DialogFragment(), View.OnClickListener, IRecyclerClic
         // Observers
         addObservers()
 
+        // Permissions
+        checkForPermissions(activity.applicationContext)
+
         // Dialog
         val dialog = builder.create()
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-
-        checkForPermissions(activity.applicationContext)
-
         return dialog
     }
 

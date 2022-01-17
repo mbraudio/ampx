@@ -7,11 +7,13 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
+import android.media.audiofx.Equalizer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mbr.ampx.bluetooth.BlueDevice
 import com.mbr.ampx.bluetooth.IBlueDeviceListener
+import com.mbr.ampx.utilities.SettingsData
 
 class GlobalViewModel : ViewModel(), IBlueDeviceListener {
 
@@ -36,6 +38,7 @@ class GlobalViewModel : ViewModel(), IBlueDeviceListener {
     val deviceDataReceived : LiveData<ByteArray>
         get() = _deviceDataReceived
 
+    val settingsData = SettingsData()
 
     // VARIABLES
     var devices = ArrayList<BlueDevice>()

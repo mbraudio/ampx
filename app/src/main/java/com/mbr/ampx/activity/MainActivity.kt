@@ -14,6 +14,7 @@ import com.mbr.ampx.R
 import com.mbr.ampx.bluetooth.Commands
 import com.mbr.ampx.databinding.ActivityMainBinding
 import com.mbr.ampx.dialog.ScanDialogFragment
+import com.mbr.ampx.dialog.SettingsDialogFragment
 import com.mbr.ampx.utilities.ButtonGroup
 import com.mbr.ampx.utilities.COBS
 import com.mbr.ampx.utilities.Constants
@@ -69,7 +70,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
 
         binding.buttonSettings.listener = object : IModernButtonListener {
             override fun onButtonClick(button: ModernButton) {
-                //SettingsDialogFragment().show(supportFragmentManager, "scan")
+                SettingsDialogFragment().show(supportFragmentManager, "settings")
             }
 
             override fun onButtonLongClick(button: ModernButton) {
