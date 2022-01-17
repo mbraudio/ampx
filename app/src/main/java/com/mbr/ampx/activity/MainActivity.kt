@@ -30,8 +30,8 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
 
     private val tag = this.javaClass.simpleName
 
-    private val zero = 0.toByte()
-    private val one = 1.toByte()
+    private val zero = 0.toUByte()
+    private val one = 1.toUByte()
 
     private var text: String = ""
 
@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
         Utilities.resources = resources
 
         binding.gaugeViewVolume.setListener(this)
+        //binding.gaugeViewVolume.setCurrentValue(100, 1)
 
         // Buttons
         binding.buttonConnection.listener = object : IModernButtonListener {
@@ -143,7 +144,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
             return;
         }*/
         val command = data[0]
-        val data0 = data[1]
+        val data0 = data[1].toUByte()
         val enabled = data0 == one
 
         when (command) {
@@ -327,13 +328,13 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
     }
 
     // GAUGE VIEW LISTENER
-    override fun onGaugeViewValueUpdate(value: Float, max: Float) {
+    override fun onGaugeViewValueUpdate(value: Int, max: Int) {
 
     }
 
-    override fun onGaugeViewValueSelection(value: Float, max: Float) {
+    override fun onGaugeViewValueSelection(value: Int, max: Int) {
         val index = (value * Constants.NUMBER_OF_STEPS) / max
         Log.e(tag, "Index: $index")
-        binding.viewModel!!.active?.setVolume(index.toInt().toByte())
+        binding.viewModel!!.active?.setVolume(index.toByte())
     }
 }
