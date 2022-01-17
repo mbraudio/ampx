@@ -343,5 +343,6 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
     override fun onSingleTapUp(value: Boolean) {
         Log.e(tag, "Mute: $value")
         binding.viewModel!!.active?.setMute(value)
+        // TODO: Need to add this functionality to STM32 project!!!
     }
 }

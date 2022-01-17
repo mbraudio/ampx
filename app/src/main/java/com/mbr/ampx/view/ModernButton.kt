@@ -71,7 +71,7 @@ class ModernButton : View, View.OnClickListener, View.OnLongClickListener {
 
         paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Paint.Style.FILL_AND_STROKE
-        paint.color = context.getColor(R.color.colorUnderlayCircle)
+        paint.color = context.getColor(R.color.colorUnderlayArc)
         paint.strokeWidth = 4f
         paint.strokeCap = Paint.Cap.ROUND
 

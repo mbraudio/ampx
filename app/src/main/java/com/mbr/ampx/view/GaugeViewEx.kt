@@ -233,7 +233,6 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
             distanceY = 12f
         }
 
-        valueText.text = "60%"
         // Value text
         val textBounds = Rect()
         valueText.paint.getTextBounds(valueText.text, 0, valueText.text.length, textBounds)
