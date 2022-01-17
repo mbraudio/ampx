@@ -31,7 +31,8 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
     private val tag = this.javaClass.simpleName
 
     private val zero = 0.toUByte()
-    private val one = 1.toUByte()
+    private val one = 1.toByte()
+    private val oneU = 1.toUByte()
 
     private var text: String = ""
 
@@ -145,7 +146,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
         }*/
         val command = data[0]
         val data0 = data[1].toUByte()
-        val enabled = data0 == one
+        val enabled = data0 == oneU
 
         when (command) {
             Commands.COMMAND_SYSTEM_DATA -> {
@@ -157,7 +158,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
             }
 
             Commands.COMMAND_TOGGLE_MUTE -> {
-                //buttonMute.setImageResource(if (enabled) R.drawable.mute_button else 0)
+                binding.gaugeViewVolume.setActive(enabled)
             }
 
             Commands.COMMAND_TOGGLE_DIRECT -> {
@@ -252,8 +253,8 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
 
         // States
         binding.buttonPower.setActive(true)
-        //active = data[Constants.SYSTEM_INDEX_STATE_MUTE] == one
-        //buttonMute.setImageResource(if (active) R.drawable.mute_button else 0)
+        val active = data[Constants.SYSTEM_INDEX_STATE_MUTE] == one
+        binding.gaugeViewVolume.setActive(active)
 
         // System
         //active = data[Constants.SYSTEM_INDEX_DIRECT] == one
@@ -274,6 +275,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
         binding.buttonPower.setActive(false)
         //buttonMute.setImageResource(0)
         binding.gaugeViewVolume.setCurrentValue(0, 0)
+        binding.gaugeViewVolume.setActive(false)
         //gaugeViewVolume.setValueTextVisibility(false)
         //buttonDirect.setActive(false)
         //buttonLoudness.setActive(false)
@@ -336,5 +338,10 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
         val index = (value * Constants.NUMBER_OF_STEPS) / max
         Log.e(tag, "Index: $index")
         binding.viewModel!!.active?.setVolume(index.toByte())
+    }
+
+    override fun onSingleTapUp(value: Boolean) {
+        Log.e(tag, "Mute: $value")
+        binding.viewModel!!.active?.setMute(value)
     }
 }

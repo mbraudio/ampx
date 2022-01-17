@@ -266,8 +266,9 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
-    fun toggleMute() {
-        val data = byteArrayOf(Commands.COMMAND_TOGGLE_MUTE, Commands.COMMAND_TOGGLE_MUTE)
+    fun setMute(mute: Boolean) {
+        val value = if (mute) 1 else 0
+        val data = byteArrayOf(Commands.COMMAND_TOGGLE_MUTE, value.toByte())
         val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }

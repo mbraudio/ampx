@@ -19,8 +19,8 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
         //private val TAG = GaugeView::class.java.simpleName
 
         // DEFAULT VALUES
-        private const val DEFAULT_NUMBER_OF_DIVISIONS = 6
-        private const val DEFAULT_DIVISION_VALUE = 50
+        private const val DEFAULT_NUMBER_OF_DIVISIONS = 50
+        private const val DEFAULT_DIVISION_VALUE = 2
         private const val DEFAULT_MAXIMUM_VALUE = 100
         private const val DEFAULT_CENTER_VALUE_TEXT_HEIGHT = 60.0f
 
@@ -233,7 +233,7 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
             distanceY = 12f
         }
 
-        valueText.text = "38%"
+        valueText.text = "60%"
         // Value text
         val textBounds = Rect()
         valueText.paint.getTextBounds(valueText.text, 0, valueText.text.length, textBounds)
@@ -448,7 +448,7 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
 
     // Gesture Detector Listener
     override fun onDown(e: MotionEvent): Boolean {
-        return false
+        return true
     }
 
     override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
@@ -468,6 +468,8 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
     }
 
     override fun onSingleTapUp(motionEvent: MotionEvent): Boolean {
+        toggleActive()
+        listener?.onSingleTapUp(active)
         return false
     }
 
@@ -475,5 +477,6 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
     interface IListener {
         fun onGaugeViewValueUpdate(value: Int, max: Int)
         fun onGaugeViewValueSelection(value: Int, max: Int)
+        fun onSingleTapUp(value: Boolean)
     }
 }

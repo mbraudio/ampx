@@ -25,5 +25,6 @@
     <color name="colorUnderlayCircle">#D0202020</color>
 
     <color name="colorGradientStart">#0B4BC8</color>
-    <color name="colorGradientEnd">#1E76DD</color>
+    <color name="colorGradientEndOld">#1E76DD</color>
+    <color name="colorGradientEnd">#2288ff</color>
 </resources>

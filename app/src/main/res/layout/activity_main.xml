@@ -71,17 +71,16 @@
             android:id="@+id/gaugeViewVolume"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayoutButtons"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
-            app:numberOfDivisionsEx="50"
-            app:gaugeActive="false"
-            app:gaugeActiveImage="@drawable/outline_volume_up_white_36_mod"
-            app:gaugeNormalImage="@drawable/outline_volume_off_white_36_mod"/>
+            android:layout_marginEnd="8dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutButtons"
+            app:gaugeNormalImage="@drawable/outline_volume_up_white_36_mod"
+            app:gaugeActiveImage="@drawable/outline_volume_off_white_36_mod" />
 
         <LinearLayout
             android:id="@+id/linearLayoutInputs"
