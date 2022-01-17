@@ -17,16 +17,16 @@ object Utilities {
         return crc == data[size]
     }
 
-    fun printSystemData(data: ByteArray) {
+    fun printSystemData(data: IntArray) {
         val one = 1.toByte()
-        Log.e("SYSTEM", "APD: " + if (data[Constants.SYSTEM_INDEX_APD] == one) "ON" else "OFF")
-        Log.e("SYSTEM", "DIRECT: " + if (data[Constants.SYSTEM_INDEX_DIRECT] == one) "ON" else "OFF")
-        Log.e("SYSTEM", "LOUDNESS: " + if (data[Constants.SYSTEM_INDEX_LOUDNESS] == one) "ON" else "OFF")
-        Log.e("SYSTEM", "SPEAKERS_A: " + if (data[Constants.SYSTEM_INDEX_SPEAKERS_A] == one) "ON" else "OFF")
-        Log.e("SYSTEM", "SPEAKERS_B: " + if (data[Constants.SYSTEM_INDEX_SPEAKERS_B] == one) "ON" else "OFF")
-        Log.e("SYSTEM", "INPUT: " + getInputString(data[Constants.SYSTEM_INDEX_INPUT].toInt()))
+        Log.e("SYSTEM", "APD: " + if (data[Constants.SYSTEM_INDEX_APD] == 1) "ON" else "OFF")
+        Log.e("SYSTEM", "DIRECT: " + if (data[Constants.SYSTEM_INDEX_DIRECT] == 1) "ON" else "OFF")
+        Log.e("SYSTEM", "LOUDNESS: " + if (data[Constants.SYSTEM_INDEX_LOUDNESS] == 1) "ON" else "OFF")
+        Log.e("SYSTEM", "SPEAKERS_A: " + if (data[Constants.SYSTEM_INDEX_SPEAKERS_A] == 1) "ON" else "OFF")
+        Log.e("SYSTEM", "SPEAKERS_B: " + if (data[Constants.SYSTEM_INDEX_SPEAKERS_B] == 1) "ON" else "OFF")
+        Log.e("SYSTEM", "INPUT: " + getInputString(data[Constants.SYSTEM_INDEX_INPUT]))
         Log.e("SYSTEM", "POWER: " + getPowerString(data[Constants.SYSTEM_INDEX_STATE_POWER]))
-        Log.e("SYSTEM", "MUTE: " + if (data[Constants.SYSTEM_INDEX_STATE_MUTE] == one) "ON" else "OFF")
+        Log.e("SYSTEM", "MUTE: " + if (data[Constants.SYSTEM_INDEX_STATE_MUTE] == 1) "ON" else "OFF")
     }
 
     private fun getInputString(input: Int): String {
@@ -41,7 +41,7 @@ object Utilities {
         return resources.getString(R.string.unknown)
     }
 
-    private fun getPowerString(power: Byte): String {
+    private fun getPowerString(power: Int): String {
         when (power) {
             Constants.POWER_STATE_OFF -> return resources.getString(R.string.standby)
             Constants.POWER_STATE_POWERING_OFF -> return resources.getString(R.string.powering_off)

@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".activity.MainActivity"
-        android:background="@color/my_background">
+        android:background="@color/myBackground">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/linearLayoutButtons"

@@ -19,11 +19,9 @@
     <color name="colorScaleInnerCircle">#49616e</color>
 
     <!-- GAUGE VIEW EX -->
-    <color name="my_background">#131620</color>
+    <color name="myBackground">#131620</color>
     <color name="colorUnderlayArc">#D0222737</color>
     <color name="colorTargetArc">#F79002</color>
-
     <color name="colorGradientStart">#0B4BC8</color>
-    <color name="colorGradientEndOld">#1E76DD</color>
     <color name="colorGradientEnd">#2288ff</color>
 </resources>

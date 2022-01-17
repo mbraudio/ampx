@@ -3,7 +3,6 @@ package com.mbr.ampx.view
 import android.animation.ValueAnimator
 import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.content.Context
-import android.content.res.TypedArray
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.GestureDetector
@@ -278,7 +277,7 @@ class GaugeView : View, AnimatorUpdateListener, GestureDetector.OnGestureListene
     }
 
     fun setCurrentValue(current: Int, active: Int) {
-        val percentage = current.toFloat() / Constants.NUMBER_OF_STEPS
+        val percentage = current.toFloat() / Constants.NUMBER_OF_VOLUME_STEPS
         val newAngle = totalAngle * percentage
         valueAngle = newAngle
         if (active == 0) {

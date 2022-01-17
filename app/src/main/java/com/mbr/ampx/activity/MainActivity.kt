@@ -30,10 +30,6 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
 
     private val tag = this.javaClass.simpleName
 
-    private val zero = 0.toUByte()
-    private val one = 1.toByte()
-    private val oneU = 1.toUByte()
-
     private var text: String = ""
 
     private lateinit var binding: ActivityMainBinding
@@ -126,9 +122,18 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
     }
     */
 
+    private fun byteArrayToIntArray(array: ByteArray): IntArray {
+        val ints = IntArray(array.size)
+        for (i in array.indices) {
+            ints[i] = array[i].toUByte().toInt()
+        }
+        return ints
+    }
+
     private fun processData(buffer: ByteArray) {
-        val data: ByteArray = try {
-            COBS.decode(buffer)
+        val data: IntArray = try {
+            val temp = COBS.decode(buffer)
+            byteArrayToIntArray(temp)
         } catch (ex: Exception) {
             Log.e(tag, "ERROR: Received data has failed to decode!")
             ex.printStackTrace()
@@ -145,8 +150,8 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
             return;
         }*/
         val command = data[0]
-        val data0 = data[1].toUByte()
-        val enabled = data0 == oneU
+        val data0 = data[1]
+        val enabled = data0 == 1
 
         when (command) {
             Commands.COMMAND_SYSTEM_DATA -> {
@@ -186,7 +191,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
             }
 
             Commands.COMMAND_UPDATE_VOLUME_VALUE -> {
-                binding.gaugeViewVolume.setCurrentValue(data0.toInt(), data[2].toInt())
+                binding.gaugeViewVolume.setCurrentValue(data0, data[2])
                 Log.e(tag, "VOLUME: $data0")
             }
 
@@ -204,7 +209,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
             }
 
             Commands.COMMAND_CALIBRATION_DATA_1 -> {
-                if (data0 == zero) {
+                if (data0 == 0) {
                     text = "const uint8_t calibration[256] = { "
                 }
                 var i = 2
@@ -228,7 +233,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
         }
     }
 
-    private fun setSystemData(data: ByteArray?) {
+    private fun setSystemData(data: IntArray?) {
         if (data != null) {
             ready = true
             printSystemData(data)
@@ -245,7 +250,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
         }
     }
 
-    private fun select(data: ByteArray) {
+    private fun select(data: IntArray) {
         //var active = false
         //val manager: BlueManager = BlueManager.getInstance()
         //manager.setBrightnessIndex(data[Constants.SYSTEM_INDEX_BRIGHTNESS_INDEX])
@@ -253,7 +258,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
 
         // States
         binding.buttonPower.setActive(true)
-        val active = data[Constants.SYSTEM_INDEX_STATE_MUTE] == one
+        val active = data[Constants.SYSTEM_INDEX_STATE_MUTE] == 1
         binding.gaugeViewVolume.setActive(active)
 
         // System
@@ -265,7 +270,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
         //buttonSpeakersA.setActive(active)
         //active = data[Constants.SYSTEM_INDEX_SPEAKERS_B] == one
         //buttonSpeakersB.setActive(active)
-        val index = data[Constants.SYSTEM_INDEX_INPUT].toInt()
+        val index = data[Constants.SYSTEM_INDEX_INPUT]
         inputGroup.select(index)
         //binding.gaugeViewVolume.setValueTextVisibility(true)
         binding.buttonSettings.setActive(true)
@@ -335,7 +340,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
     }
 
     override fun onGaugeViewValueSelection(value: Int, max: Int) {
-        val index = (value * Constants.NUMBER_OF_STEPS) / max
+        val index = (value * Constants.NUMBER_OF_VOLUME_STEPS) / max
         Log.e(tag, "Index: $index")
         binding.viewModel!!.active?.setVolume(index.toByte())
     }

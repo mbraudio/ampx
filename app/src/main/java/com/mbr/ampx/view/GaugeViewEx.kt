@@ -363,7 +363,7 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
     }
 
     fun setCurrentValue(current: Int, active: Int) {
-        val newAngle = (current.toFloat() * totalAngle) / Constants.NUMBER_OF_STEPS.toFloat()
+        val newAngle = (current.toFloat() * totalAngle) / Constants.NUMBER_OF_VOLUME_STEPS.toFloat()
         valueAngle = newAngle
         if (active == 0) {
             targetAngle = newAngle

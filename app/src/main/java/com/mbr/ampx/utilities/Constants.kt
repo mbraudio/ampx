@@ -6,13 +6,7 @@ class Constants {
         const val MODE_WRITE = 0
         const val MODE_READ = 1
 
-        const val NUMBER_OF_STEPS = 150
-
-        // Bluetooth device broadcast
-        const val BLUETOOTH_DEVICE_STATE = "bt.dev.sta"
-        const val BLUETOOTH_DEVICE_DATA = "bt.dev.dat"
-        const val BLUETOOTH_DEVICE_VALUE = "value"
-
+        const val NUMBER_OF_VOLUME_STEPS = 150
 
         // SYSTEM INDEXES
         const val SYSTEM_INDEX_APD = 1
@@ -30,9 +24,9 @@ class Constants {
 
         // POWER
         // STATES
-        const val POWER_STATE_OFF: Byte = 0
-        const val POWER_STATE_POWERING_OFF: Byte = 1
-        const val POWER_STATE_POWERING_ON: Byte = 2
-        const val POWER_STATE_ON: Byte = 3
+        const val POWER_STATE_OFF = 0
+        const val POWER_STATE_POWERING_OFF = 1
+        const val POWER_STATE_POWERING_ON = 2
+        const val POWER_STATE_ON = 3
     }
 }
