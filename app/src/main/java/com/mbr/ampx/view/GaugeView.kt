@@ -176,7 +176,7 @@ class GaugeView : View, GestureDetector.OnGestureListener {
     }
 
     private fun calculateDimensionValues(w: Int, h: Int) {
-        bounds.left = paddingLeft.toFloat()
+        bounds.left = paddingStart.toFloat()
         bounds.top = paddingTop.toFloat()
         bounds.bottom = h.toFloat() - paddingBottom
         bounds.right = w.toFloat() - paddingEnd

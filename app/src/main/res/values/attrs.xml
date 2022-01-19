@@ -50,6 +50,7 @@
 
     <declare-styleable name="ModernSeekBar">
         <attr name="modernGaugeWidth" format="dimension" />
+        <attr name="modernMaxValue" format="float" />
     </declare-styleable>
 
 </resources>

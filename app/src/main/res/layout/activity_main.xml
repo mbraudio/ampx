@@ -82,11 +82,11 @@
             app:gaugeActiveImage="@drawable/outline_volume_off_white_36_mod" />
 
         <com.mbr.ampx.view.ModernSeekBar
-            android:id="@+id/modernSeekBarBalance"
+            android:id="@+id/seekBarBalance"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
             app:layout_constraintTop_toBottomOf="@+id/gaugeViewVolume" />
 
         <LinearLayout
@@ -96,7 +96,7 @@
             android:layout_height="52dp"
             android:orientation="horizontal"
             android:weightSum="5"
-            app:layout_constraintTop_toBottomOf="@id/modernSeekBarBalance"
+            app:layout_constraintTop_toBottomOf="@id/seekBarBalance"
             android:layout_marginTop="24dp">
 
             <com.mbr.ampx.view.ModernButton

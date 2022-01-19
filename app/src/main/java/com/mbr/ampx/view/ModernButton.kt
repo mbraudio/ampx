@@ -163,7 +163,7 @@ class ModernButton : View, View.OnClickListener, View.OnLongClickListener {
         textWidthHalf = textWidth / 2f
         textHeightHalf = textHeight / 2f
 
-        bounds.left = paddingLeft.toFloat()
+        bounds.left = paddingStart.toFloat()
         bounds.top = paddingTop.toFloat()
         bounds.bottom = h.toFloat() - paddingBottom
         bounds.right = w.toFloat() - paddingEnd

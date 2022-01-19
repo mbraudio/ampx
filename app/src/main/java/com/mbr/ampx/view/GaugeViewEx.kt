@@ -1,7 +1,5 @@
 package com.mbr.ampx.view
 
-import android.animation.ValueAnimator
-import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -75,8 +73,8 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     // Value arc(s)
     private lateinit var boundsValueArc: RectF
     private lateinit var paintUnderlayArc: Paint
-    private lateinit var paintCurrentValueArc: Paint
-    private lateinit var paintTargetValueArc: Paint
+    private lateinit var paintValueArc: Paint
+    private lateinit var paintTargetArc: Paint
     // Scale lines
     private var scaleLines = ArrayList<GaugeScaleLine>()
     private lateinit var paintScaleLine: Paint
@@ -121,16 +119,16 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         paintUnderlayArc.strokeWidth = VALUE_ARC_STROKE_WIDTH
         paintUnderlayArc.strokeCap = Paint.Cap.ROUND
 
-        paintCurrentValueArc = Paint(Paint.ANTI_ALIAS_FLAG)
-        paintCurrentValueArc.style = Paint.Style.STROKE
-        paintCurrentValueArc.strokeWidth = VALUE_ARC_STROKE_WIDTH
-        paintCurrentValueArc.strokeCap = Paint.Cap.ROUND
+        paintValueArc = Paint(Paint.ANTI_ALIAS_FLAG)
+        paintValueArc.style = Paint.Style.STROKE
+        paintValueArc.strokeWidth = VALUE_ARC_STROKE_WIDTH
+        paintValueArc.strokeCap = Paint.Cap.ROUND
 
-        paintTargetValueArc = Paint(Paint.ANTI_ALIAS_FLAG)
-        paintTargetValueArc.style = Paint.Style.STROKE
-        paintTargetValueArc.color = context.getColor(R.color.colorTargetArc)
-        paintTargetValueArc.strokeWidth = VALUE_ARC_STROKE_WIDTH
-        paintTargetValueArc.strokeCap = Paint.Cap.ROUND
+        paintTargetArc = Paint(Paint.ANTI_ALIAS_FLAG)
+        paintTargetArc.style = Paint.Style.STROKE
+        paintTargetArc.color = context.getColor(R.color.colorTargetArc)
+        paintTargetArc.strokeWidth = VALUE_ARC_STROKE_WIDTH
+        paintTargetArc.strokeCap = Paint.Cap.ROUND
 
         // Scale lines
         val scaleLineStrokeWidth = 4f
@@ -196,7 +194,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     }
 
     private fun calculateDimensionValues(w: Int, h: Int) {
-        bounds.left = paddingLeft.toFloat()
+        bounds.left = paddingStart.toFloat()
         bounds.top = paddingTop.toFloat()
         bounds.bottom = h.toFloat() - paddingBottom
         bounds.right = w.toFloat() - paddingEnd
@@ -210,7 +208,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         val matrix = Matrix()
         matrix.preRotate(startAngle - (VALUE_ARC_STROKE_WIDTH / 2f), centerX, centerY)
         gradient.setLocalMatrix(matrix)
-        paintCurrentValueArc.shader = gradient
+        paintValueArc.shader = gradient
 
         // Value arc(s)
         val strokeHalf = VALUE_ARC_STROKE_WIDTH / 2f
@@ -330,8 +328,8 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     override fun onDraw(canvas: Canvas) {
 
         canvas.drawArc(boundsValueArc, startAngle, totalAngle, false, paintUnderlayArc)
-        canvas.drawArc(boundsValueArc, startAngle, valueAngle, false, paintCurrentValueArc)
-        canvas.drawArc(boundsValueArc, startAngle + valueAngle, targetAngle - valueAngle, false, paintTargetValueArc)
+        canvas.drawArc(boundsValueArc, startAngle, valueAngle, false, paintValueArc)
+        canvas.drawArc(boundsValueArc, startAngle + valueAngle, targetAngle - valueAngle, false, paintTargetArc)
 
         for (i in scaleLines.indices) {
             val info = scaleLines[i]

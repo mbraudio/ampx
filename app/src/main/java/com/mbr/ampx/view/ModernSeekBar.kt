@@ -1,7 +1,5 @@
 package com.mbr.ampx.view
 
-import android.animation.ValueAnimator
-import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -14,7 +12,8 @@ import com.mbr.ampx.R
 class ModernSeekBar : View, GestureDetector.OnGestureListener {
 
     companion object {
-        private const val DEFAULT_LINE_WIDTH = 56.0f
+        private const val DEFAULT_LINE_WIDTH = 46.0f
+        private const val DEFAULT_MAX_VALUE = 100.0f
     }
 
     private var centerX = 0f
@@ -23,14 +22,17 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
     private var centerY = 0f
     private var startY = 0f
     private var endY = 0f
-    private var fromCenterX = 0f
+    private var targetX = 0f
+    private var valueX = 0f
     private lateinit var bounds: RectF
 
     private var width = 0f
+    private var maximumValue = 0f
 
     private lateinit var paintRect: Paint
     private lateinit var paintUnderlayLine: Paint
-    private lateinit var paintLine: Paint
+    private lateinit var paintValueLine: Paint
+    private lateinit var paintTargetLine: Paint
 
     // Gestures and Touches
     private lateinit var gestureDetector: GestureDetector
@@ -66,19 +68,24 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
         paintUnderlayLine.strokeWidth = width
         paintUnderlayLine.strokeCap = Paint.Cap.ROUND
 
-        paintLine = Paint(Paint.ANTI_ALIAS_FLAG)
-        paintLine.style = Paint.Style.STROKE
-        paintLine.color = context.getColor(R.color.colorGradientEnd)
-        paintLine.strokeWidth = width
-        paintLine.strokeCap = Paint.Cap.ROUND
+        paintValueLine = Paint(Paint.ANTI_ALIAS_FLAG)
+        paintValueLine.style = Paint.Style.STROKE
+        paintValueLine.color = context.getColor(R.color.colorGradientStart)
+        paintValueLine.strokeWidth = width
+        paintValueLine.strokeCap = Paint.Cap.ROUND
+
+        paintTargetLine = Paint(Paint.ANTI_ALIAS_FLAG)
+        paintTargetLine.style = Paint.Style.STROKE
+        paintTargetLine.color = context.getColor(R.color.colorTargetArc)
+        paintTargetLine.strokeWidth = width
+        paintTargetLine.strokeCap = Paint.Cap.ROUND
     }
 
     private fun loadAttributes(context: Context, attrs: AttributeSet?, defStyle: Int) {
         // Load attributes
         val a = context.obtainStyledAttributes(attrs, R.styleable.ModernSeekBar, defStyle, 0)
-
         width = a.getDimension(R.styleable.ModernSeekBar_modernGaugeWidth, DEFAULT_LINE_WIDTH)
-
+        maximumValue = a.getFloat(R.styleable.ModernSeekBar_modernMaxValue, DEFAULT_MAX_VALUE)
         a.recycle()
     }
 
@@ -91,7 +98,7 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        bounds.left = paddingLeft.toFloat()
+        bounds.left = paddingStart.toFloat()
         bounds.top = paddingTop.toFloat()
         bounds.bottom = h.toFloat() - paddingBottom
         bounds.right = w.toFloat() - paddingEnd
@@ -104,7 +111,7 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
         startY = centerY
         endY = centerY
 
-        fromCenterX = 0.25f
+        setCurrentValue(-20, 0)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -112,7 +119,8 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
         canvas.drawRect(bounds, paintRect)
 
         canvas.drawLine(startX, startY, endX, endY, paintUnderlayLine)
-        canvas.drawLine(centerX - fromCenterX, startY, centerX, endY, paintLine)
+        canvas.drawLine(centerX, startY, centerX + valueX, endY, paintValueLine)
+        canvas.drawLine(centerX + valueX, startY, targetX, endY, paintTargetLine)
 
     }
 
@@ -121,11 +129,9 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
             return true
         }
 
-        var x = event.x
-        if (x < startY) { x = startX }
-        if (x > endX) { x = endX }
-
-        fromCenterX = centerX - x
+        targetX = event.x
+        if (targetX < startY) { targetX = startX }
+        if (targetX > endX) { targetX = endX }
 
         if (event.action == MotionEvent.ACTION_UP) {
             val target = updateTargetValue()
@@ -133,17 +139,20 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
             listener?.onValueSelection(target)
         }
 
-        // Add a bit so value line always draw in the middle a bit
-        if (fromCenterX == 0f) {
-            fromCenterX = 0.25f
-        }
-
         invalidate()
         return true
     }
 
     private fun updateTargetValue(): Int {
-        return ((fromCenterX * 100f) / (centerX - startX)).toInt()
+        return (((targetX - startX) * maximumValue) / (endX - startX)).toInt()
+    }
+
+    fun setCurrentValue(current: Int, active: Int) {
+        valueX = ((current * (endX - startX)) / maximumValue) + startX
+        if (active == 0) {
+            targetX = centerX + valueX
+        }
+        invalidate()
     }
 
     // Gesture Detector Listener
