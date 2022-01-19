@@ -48,4 +48,8 @@
         <attr name="gaugeActiveImage" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="ModernSeekBar">
+        <attr name="modernGaugeWidth" format="dimension" />
+    </declare-styleable>
+
 </resources>

@@ -165,8 +165,8 @@ class ModernButton : View, View.OnClickListener, View.OnLongClickListener {
 
         bounds.left = paddingLeft.toFloat()
         bounds.top = paddingTop.toFloat()
-        bounds.bottom = h.toFloat() - paddingEnd
-        bounds.right = w.toFloat() - paddingBottom
+        bounds.bottom = h.toFloat() - paddingBottom
+        bounds.right = w.toFloat() - paddingEnd
         centerX = (bounds.left + bounds.right) / 2f
         if (text == null || text == "") {
             centerY = (bounds.top + bounds.bottom) / 2f

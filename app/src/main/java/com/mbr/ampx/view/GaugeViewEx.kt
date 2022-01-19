@@ -13,7 +13,7 @@ import com.mbr.ampx.R
 import com.mbr.ampx.utilities.Constants
 import kotlin.math.sqrt
 
-class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListener {
+class GaugeViewEx : View, GestureDetector.OnGestureListener {
 
     companion object {
         //private val TAG = GaugeView::class.java.simpleName
@@ -198,8 +198,8 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
     private fun calculateDimensionValues(w: Int, h: Int) {
         bounds.left = paddingLeft.toFloat()
         bounds.top = paddingTop.toFloat()
-        bounds.bottom = h.toFloat() - paddingEnd
-        bounds.right = w.toFloat() - paddingBottom
+        bounds.bottom = h.toFloat() - paddingBottom
+        bounds.right = w.toFloat() - paddingEnd
         centerX = (bounds.left + bounds.right) / 2f
         centerY = (bounds.top + bounds.bottom) / 2f
         diameter = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
@@ -368,14 +368,6 @@ class GaugeViewEx : View, AnimatorUpdateListener, GestureDetector.OnGestureListe
         if (active == 0) {
             targetAngle = newAngle
         }
-        calculateValue(valueAngle)
-        invalidate()
-    }
-
-    //fun setValueTextVisibility(visible: Boolean) { valueText?.visible = visible }
-
-    override fun onAnimationUpdate(valueAnimator: ValueAnimator) {
-        valueAngle = valueAnimator.animatedValue as Float
         calculateValue(valueAngle)
         invalidate()
     }
