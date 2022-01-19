@@ -7,13 +7,13 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
-import android.media.audiofx.Equalizer
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mbr.ampx.bluetooth.BlueDevice
 import com.mbr.ampx.bluetooth.IBlueDeviceListener
-import com.mbr.ampx.utilities.SettingsData
 
 class GlobalViewModel : ViewModel(), IBlueDeviceListener {
 
@@ -38,13 +38,15 @@ class GlobalViewModel : ViewModel(), IBlueDeviceListener {
     val deviceDataReceived : LiveData<ByteArray>
         get() = _deviceDataReceived
 
-    val settingsData = SettingsData()
+
 
     // VARIABLES
     var devices = ArrayList<BlueDevice>()
     fun getDevice(index: Int): BlueDevice = devices[index]
 
     var active: BlueDevice? = null
+
+    private val handler = Handler(Looper.getMainLooper())
 
     init {
         _isScanning.value = false
@@ -114,12 +116,13 @@ class GlobalViewModel : ViewModel(), IBlueDeviceListener {
     private fun startScan() {
         clearDisconnectedDevices()
         _isScanning.value = true
-        val builder = ScanSettings.Builder()
-        builder.setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
-        builder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-        builder.setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE)
-        builder.setReportDelay(0)
-        bluetoothAdapter?.bluetoothLeScanner?.startScan(null, builder.build(), scanCallback)
+        //val filter = ScanFilter.Builder().setServiceUuid(BLUETOOTH_UUID_ADVERTISING).build()
+        val settings = ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE).
+            setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES).build()
+        // setPhy(ScanSettings.PHY_LE_ALL_SUPPORTED)
+        handler.post {
+            bluetoothAdapter?.bluetoothLeScanner?.startScan(null/*listOf(filter)*/, settings, scanCallback)
+        }
     }
 
     private fun stopScan() {
@@ -127,7 +130,9 @@ class GlobalViewModel : ViewModel(), IBlueDeviceListener {
             return
         }
         _isScanning.value = false
-        bluetoothAdapter?.bluetoothLeScanner?.stopScan(scanCallback)
+        handler.post {
+            bluetoothAdapter?.bluetoothLeScanner?.stopScan(scanCallback)
+        }
     }
 
     // Bluetooth Scan Callback

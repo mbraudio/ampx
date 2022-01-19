@@ -256,6 +256,8 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
         //manager.setBrightnessIndex(data[Constants.SYSTEM_INDEX_BRIGHTNESS_INDEX])
         //manager.setVolumeLedsValues(data[Constants.SYSTEM_INDEX_VOLUME_RED], data[Constants.SYSTEM_INDEX_VOLUME_GREEN], data[Constants.SYSTEM_INDEX_VOLUME_BLUE])
 
+        binding.viewModel?.active?.brightnessIndex = data[Constants.SYSTEM_INDEX_BRIGHTNESS_INDEX]
+
         // States
         binding.buttonPower.setActive(true)
         val active = data[Constants.SYSTEM_INDEX_STATE_MUTE] == 1

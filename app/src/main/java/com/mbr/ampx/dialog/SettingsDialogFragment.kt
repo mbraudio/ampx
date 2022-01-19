@@ -30,9 +30,10 @@ class SettingsDialogFragment : DialogFragment(), View.OnClickListener, SeekBar.O
 
         // Binding
         binding.buttonSettingsClose.setOnClickListener(this)
-
-        binding.seekBarBrightness.setOnSeekBarChangeListener(this)
+        
         binding.seekBarBrightness.max = MAX_BRIGHTNESS_INDEX
+        binding.seekBarBrightness.progress = viewModel.active?.brightnessIndex!!
+        binding.seekBarBrightness.setOnSeekBarChangeListener(this)
 
         // Dialog
         val dialog = builder.create()
@@ -53,10 +54,9 @@ class SettingsDialogFragment : DialogFragment(), View.OnClickListener, SeekBar.O
     override fun onProgressChanged(seekBar: SeekBar?, i: Int, b: Boolean) {
         seekBar?.let { bar ->
             if (bar.id == R.id.seekBarBrightness) {
-                val index = i.toByte()
                 binding.viewModel!!.active?.let {
-                    it.sendBrightnessIndex(index)
-                    it.sendBrightnessIndex(index)
+                    it.brightnessIndex = i
+                    it.sendBrightnessIndex(i.toByte())
                 }
             }
         }

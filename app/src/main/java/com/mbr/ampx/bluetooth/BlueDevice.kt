@@ -9,6 +9,7 @@ import com.mbr.ampx.R
 import com.mbr.ampx.utilities.COBS
 import com.mbr.ampx.utilities.Constants
 import java.util.*
+import java.util.concurrent.ConcurrentLinkedQueue
 
 interface IBlueDeviceListener {
     fun onConnectionStateChange(device: BlueDevice)
@@ -19,11 +20,14 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
     val tag = this.javaClass.simpleName
 
     companion object {
-        const val ACTION_DEQUE_SIZE = 32
+        //const val MTU_MAX = 517
+        const val MTU_MAX_AVAILABLE = 247
+        //const val ACTION_DEQUE_SIZE = 32
         val BLUETOOTH_UUID_SERVICE: UUID = UUID.fromString("cbba86f5-ec03-0eb0-3b45-1ce4498b1942")
         val BLUETOOTH_UUID_RX_CHARACTERISTIC: UUID = UUID.fromString("cbba88f7-ec03-0eb0-3b45-1ce4498b1942")
         val BLUETOOTH_UUID_TX_CHARACTERISTIC: UUID = UUID.fromString("cbba87f6-ec03-0eb0-3b45-1ce4498b1942")
         val BLUETOOTH_UUID_CHARACTERISTIC_DESCRIPTOR: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
+        //val BLUETOOTH_UUID_ADVERTISING = ParcelUuid.fromString("0000180a-0000-1000-8000-00805f9b34fb")
     }
 
     private val handler = Handler(Looper.getMainLooper())
@@ -35,8 +39,13 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
     private var txCharacteristic: BluetoothGattCharacteristic? = null
     lateinit var data: ByteArray
 
-    private val actions: ArrayDeque<BluetoothAction> = ArrayDeque(ACTION_DEQUE_SIZE)
+    private val actions = ConcurrentLinkedQueue<BluetoothAction>()
     private var actionActive = false
+
+    private var mtu = 20
+
+    // Settings
+    var brightnessIndex: Int = 0
 
     fun update(device: BluetoothDevice) { this.device = device }
 
@@ -115,6 +124,7 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         rxCharacteristic = null
         txCharacteristic = null
         gatt?.close()
+        gatt = null
     }
 
     private fun configureServiceAndCharacteristics(gatt: BluetoothGatt?): Boolean {
@@ -127,11 +137,13 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         return false
     }
 
+    @Synchronized
     private fun addAction(action: BluetoothAction) {
         actions.offer(action)
         startAction()
     }
 
+    @Synchronized
     private fun startAction() {
         if (actionActive) {
             return
@@ -141,6 +153,7 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         gatt?.let { action.execute(it) }
     }
 
+    @Synchronized
     private fun nextAction() {
         actionActive = false
         startAction()
@@ -181,7 +194,6 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
                         clearActions()
                         gatt?.discoverServices()
                     }
-
                     BluetoothGatt.STATE_DISCONNECTED -> {
                         clearActions()
                         closeGatt()
@@ -201,6 +213,7 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
                     Log.e(tag, "SUCCESS: Service and Characteristics found!")
                     addAction(DescriptorAction(rxCharacteristic!!))
                     addAction(DescriptorAction(txCharacteristic!!))
+                    addAction(MtuAction(MTU_MAX_AVAILABLE))
                     requestSystemData()
                 } else {
                     Log.e(tag, "ERROR: Service and Characteristics not found!")
@@ -244,13 +257,19 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         }
 
         override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
-            Log.e(tag, "on Mtu Changed")
+            resolveMtu(mtu)
+            nextAction()
         }
 
         override fun onServiceChanged(gatt: BluetoothGatt) {
 
         }
 
+    }
+
+    private fun resolveMtu(mtu: Int) {
+        this.mtu = mtu - 3
+        Log.e(tag, "ON MTU CHANGED: $mtu -> Real value: ${this.mtu}")
     }
 
     // SEND / RECEIVE
