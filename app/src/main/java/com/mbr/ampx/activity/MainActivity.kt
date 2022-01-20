@@ -359,4 +359,8 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
     override fun onValueSelection(value: Int, seekBar: ModernSeekBar) {
         binding.viewModel!!.active?.setBalance(value.toByte())
     }
+
+    override fun onLongPress(value: Int, seekBar: ModernSeekBar) {
+        binding.viewModel!!.active?.setBalance(value.toByte())
+    }
 }

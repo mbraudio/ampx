@@ -3,7 +3,6 @@ package com.mbr.ampx.view
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -14,6 +13,8 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
     companion object {
         private const val DEFAULT_LINE_WIDTH = 40.0f
         private const val DEFAULT_MAX_VALUE = 255.0f
+        private const val DEFAULT_TEXT_SIZE = 24.0f
+        private const val DEFAULT_TEXT_DISTANCE = 24.0f
     }
 
     private var centerX = 0f
@@ -28,11 +29,19 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
 
     private var width = 0f
     private var maximumValue = 0f
+    private var textSize = 0f
+    private var textHeight = 0
+    private var textDistance = 0f
+
+    private var textTitle = ModernText()
+    private var textStart = ModernText()
+    private var textEnd = ModernText()
 
     private lateinit var paintRect: Paint
     private lateinit var paintUnderlayLine: Paint
     private lateinit var paintValueLine: Paint
     private lateinit var paintTargetLine: Paint
+    private lateinit var textPaint: Paint
 
     // Gestures and Touches
     private lateinit var gestureDetector: GestureDetector
@@ -79,6 +88,14 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
         paintTargetLine.color = context.getColor(R.color.colorTargetArc)
         paintTargetLine.strokeWidth = (width * 0.5f)
         paintTargetLine.strokeCap = Paint.Cap.ROUND
+
+        textPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
+        textPaint.color = context.getColor(R.color.colorText)
+        textPaint.style = Paint.Style.FILL_AND_STROKE
+        textPaint.textSize = textSize
+        textPaint.textAlign = Paint.Align.LEFT
+        textPaint.isElegantTextHeight = true
+        textPaint.typeface = Typeface.DEFAULT
     }
 
     private fun loadAttributes(context: Context, attrs: AttributeSet?, defStyle: Int) {
@@ -86,18 +103,28 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
         val a = context.obtainStyledAttributes(attrs, R.styleable.ModernSeekBar, defStyle, 0)
         width = a.getDimension(R.styleable.ModernSeekBar_modernGaugeWidth, DEFAULT_LINE_WIDTH)
         maximumValue = a.getFloat(R.styleable.ModernSeekBar_modernMaxValue, DEFAULT_MAX_VALUE)
+        textSize = a.getDimension(R.styleable.ModernSeekBar_modernTextSize, DEFAULT_TEXT_SIZE)
+        textTitle.text = a.getString(R.styleable.ModernSeekBar_modernTextTitle) ?: ""
+        textStart.text = a.getString(R.styleable.ModernSeekBar_modernTextStart) ?: ""
+        textEnd.text = a.getString(R.styleable.ModernSeekBar_modernTextEnd) ?: ""
+        textDistance = a.getDimension(R.styleable.ModernSeekBar_modernTextDistance, DEFAULT_TEXT_DISTANCE)
         a.recycle()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val minimumWidth = paddingStart + paddingEnd
         val w = resolveSizeAndState(minimumWidth, widthMeasureSpec, 1)
-        val minimumHeight = paddingBottom + paddingTop
+        val minimumHeight = paddingBottom + paddingTop + (textHeight * 2)
         val h = resolveSizeAndState(minimumHeight, heightMeasureSpec, 1)
         setMeasuredDimension(w, h)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        calculateDimensionValues(w, h)
+        calculateTextValues()
+    }
+
+    private fun calculateDimensionValues(w: Int, h: Int) {
         bounds.left = paddingStart.toFloat()
         bounds.top = paddingTop.toFloat()
         bounds.bottom = h.toFloat() - paddingBottom
@@ -114,11 +141,36 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
         setCurrentValue(128, 0)
     }
 
+    private fun calculateTextValues() {
+        val text = "X"
+        val textBounds = Rect()
+        textPaint.getTextBounds(text, 0, text.length, textBounds)
+        textHeight = Math.abs(textBounds.top + textBounds.bottom)
+
+        var w = textPaint.measureText(textTitle.text)
+        var x = (centerX - (w / 2))
+        var y = centerY - textHeight - textDistance
+        textTitle.update(x, y)
+
+        x = startX
+        y = centerY + textHeight + textDistance
+        textStart.update(x, y)
+
+        w = textPaint.measureText(textEnd.text)
+        x = endX - w
+        y = centerY + textHeight + textDistance
+        textEnd.update(x, y)
+    }
+
     override fun onDraw(canvas: Canvas) {
         //canvas.drawRect(bounds, paintRect)
         canvas.drawLine(startX, startY, endX, endY, paintUnderlayLine)
         canvas.drawLine(centerX, startY, valueX, endY, paintValueLine)
         canvas.drawLine(valueX, startY, targetX, endY, paintTargetLine)
+
+        textTitle.draw(canvas, textPaint)
+        textStart.draw(canvas, textPaint)
+        textEnd.draw(canvas, textPaint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -161,7 +213,7 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
     }
 
     override fun onLongPress(e: MotionEvent) {
-
+        listener?.onLongPress((maximumValue / 2f).toInt(), this)
     }
 
     override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
@@ -173,13 +225,12 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
     }
 
     override fun onSingleTapUp(motionEvent: MotionEvent): Boolean {
-        //toggleActive()
-        //listener?.onSingleTapUp(active)
         return false
     }
 
     // Listener
     interface IListener {
         fun onValueSelection(value: Int, seekBar: ModernSeekBar)
+        fun onLongPress(value: Int, seekBar: ModernSeekBar)
     }
 }

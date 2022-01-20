@@ -39,8 +39,6 @@ class ModernButton : View, View.OnClickListener, View.OnLongClickListener {
     private var activeBitmap: Bitmap? = null
 
 
-
-
     var listener: IModernButtonListener? = null
 
     constructor(context: Context) : super(context) {
@@ -145,11 +143,6 @@ class ModernButton : View, View.OnClickListener, View.OnLongClickListener {
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        calculateDimensionValues(w, h)
-    }
-
-    private fun calculateDimensionValues(w: Int, h: Int) {
-
         textWidth = 0f
         textHeight = 0f
 

@@ -51,6 +51,11 @@
     <declare-styleable name="ModernSeekBar">
         <attr name="modernGaugeWidth" format="dimension" />
         <attr name="modernMaxValue" format="float" />
+        <attr name="modernTextSize" format="dimension" />
+        <attr name="modernTextTitle" format="string" />
+        <attr name="modernTextStart" format="string" />
+        <attr name="modernTextEnd" format="string" />
+        <attr name="modernTextDistance" format="dimension" />
     </declare-styleable>
 
 </resources>

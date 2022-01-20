@@ -46,5 +46,6 @@
     <string name="disconnected">DISCONNECTED</string>
     <string name="min">MIN</string>
     <string name="max">MAX</string>
+    <string name="balance_capital">BALANCE</string>
 
 </resources>
