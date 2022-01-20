@@ -12,8 +12,8 @@ import com.mbr.ampx.R
 class ModernSeekBar : View, GestureDetector.OnGestureListener {
 
     companion object {
-        private const val DEFAULT_LINE_WIDTH = 46.0f
-        private const val DEFAULT_MAX_VALUE = 100.0f
+        private const val DEFAULT_LINE_WIDTH = 40.0f
+        private const val DEFAULT_MAX_VALUE = 255.0f
     }
 
     private var centerX = 0f
@@ -77,7 +77,7 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
         paintTargetLine = Paint(Paint.ANTI_ALIAS_FLAG)
         paintTargetLine.style = Paint.Style.STROKE
         paintTargetLine.color = context.getColor(R.color.colorTargetArc)
-        paintTargetLine.strokeWidth = width
+        paintTargetLine.strokeWidth = (width * 0.5f)
         paintTargetLine.strokeCap = Paint.Cap.ROUND
     }
 
@@ -111,17 +111,14 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
         startY = centerY
         endY = centerY
 
-        setCurrentValue(-20, 0)
+        setCurrentValue(128, 0)
     }
 
     override fun onDraw(canvas: Canvas) {
-
-        canvas.drawRect(bounds, paintRect)
-
+        //canvas.drawRect(bounds, paintRect)
         canvas.drawLine(startX, startY, endX, endY, paintUnderlayLine)
-        canvas.drawLine(centerX, startY, centerX + valueX, endY, paintValueLine)
-        canvas.drawLine(centerX + valueX, startY, targetX, endY, paintTargetLine)
-
+        canvas.drawLine(centerX, startY, valueX, endY, paintValueLine)
+        canvas.drawLine(valueX, startY, targetX, endY, paintTargetLine)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -135,8 +132,7 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
 
         if (event.action == MotionEvent.ACTION_UP) {
             val target = updateTargetValue()
-            Log.e("MSB", "TARGET: $target")
-            listener?.onValueSelection(target)
+            listener?.onValueSelection(target, this)
         }
 
         invalidate()
@@ -150,7 +146,7 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
     fun setCurrentValue(current: Int, active: Int) {
         valueX = ((current * (endX - startX)) / maximumValue) + startX
         if (active == 0) {
-            targetX = centerX + valueX
+            targetX = valueX
         }
         invalidate()
     }
@@ -184,6 +180,6 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
 
     // Listener
     interface IListener {
-        fun onValueSelection(value: Int)
+        fun onValueSelection(value: Int, seekBar: ModernSeekBar)
     }
 }

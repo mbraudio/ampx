@@ -23,10 +23,11 @@ import com.mbr.ampx.utilities.Utilities.printSystemData
 import com.mbr.ampx.view.GaugeViewEx
 import com.mbr.ampx.view.IModernButtonListener
 import com.mbr.ampx.view.ModernButton
+import com.mbr.ampx.view.ModernSeekBar
 import com.mbr.ampx.viewmodel.GlobalViewModel
 import java.lang.Exception
 
-class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.IListener {
+class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.IListener, ModernSeekBar.IListener {
 
     private val tag = this.javaClass.simpleName
 
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
         Utilities.resources = resources
 
         binding.gaugeViewVolume.setListener(this)
+        binding.seekBarBalance.setListener(this)
         //binding.gaugeViewVolume.setCurrentValue(100, 1)
 
         // Buttons
@@ -192,20 +194,20 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
 
             Commands.COMMAND_UPDATE_VOLUME_VALUE -> {
                 binding.gaugeViewVolume.setCurrentValue(data0, data[2])
-                Log.e(tag, "VOLUME: $data0")
+                //Log.e(tag, "VOLUME: $data0")
             }
 
             Commands.COMMAND_UPDATE_BASS_VALUE -> {
-                Log.e(tag, "BASS: $data0")
+                //Log.e(tag, "BASS: $data0")
             }
 
             Commands.COMMAND_UPDATE_TREBLE_VALUE -> {
-                Log.e(tag, "TREBLE: $data0")
+                //Log.e(tag, "TREBLE: $data0")
             }
 
             Commands.COMMAND_UPDATE_BALANCE_VALUE -> {
-                //Log.e(TAG, "# Value: " + data0);
                 Log.e(tag, "BALANCE: $data0")
+                binding.seekBarBalance.setCurrentValue(data0, data[2])
             }
 
             Commands.COMMAND_CALIBRATION_DATA_1 -> {
@@ -351,5 +353,10 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
         Log.e(tag, "Mute: $value")
         binding.viewModel!!.active?.setMute(value)
         // TODO: Need to add this functionality to STM32 project!!!
+    }
+
+    // Modern SeekBar IListener
+    override fun onValueSelection(value: Int, seekBar: ModernSeekBar) {
+        binding.viewModel!!.active?.setBalance(value.toByte())
     }
 }
