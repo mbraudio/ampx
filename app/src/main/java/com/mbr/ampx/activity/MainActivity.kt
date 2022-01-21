@@ -321,7 +321,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.viewModel!!.active?.setVolume(index.toByte())
     }
 
-    override fun onSingleTapUp(value: Boolean) {
+    override fun onGaugeViewLongPress(value: Boolean) {
         //Log.e(tag, "Mute: $value")
         binding.viewModel!!.active?.setMute(value)
         // TODO: Need to add this functionality to STM32 project!!!

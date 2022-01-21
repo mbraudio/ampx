@@ -89,6 +89,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     private lateinit var valueText: GaugeText
 
     // Gestures and Touches
+    private var ignoreTouches = false
     private lateinit var gestureDetector: GestureDetector
     private var listener: IListener? = null
     fun setListener(listener: IListener) { this.listener = listener }
@@ -375,6 +376,11 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
             if (gestureDetector.onTouchEvent(event)) {
                 return true
             }
+
+            if (ignoreTouches) {
+                return false
+            }
+
             touchX = event.x
             touchY = event.y
             val d = distanceFromCenter(touchX, touchY)
@@ -437,6 +443,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
 
     // Gesture Detector Listener
     override fun onDown(e: MotionEvent): Boolean {
+        ignoreTouches = false
         return true
     }
 
@@ -445,7 +452,9 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     }
 
     override fun onLongPress(e: MotionEvent) {
-
+        ignoreTouches = true
+        toggleActive()
+        listener?.onGaugeViewLongPress(active)
     }
 
     override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
@@ -457,8 +466,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     }
 
     override fun onSingleTapUp(motionEvent: MotionEvent): Boolean {
-        toggleActive()
-        listener?.onSingleTapUp(active)
+
         return false
     }
 
@@ -466,6 +474,6 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     interface IListener {
         fun onGaugeViewValueUpdate(value: Int, max: Int)
         fun onGaugeViewValueSelection(value: Int, max: Int)
-        fun onSingleTapUp(value: Boolean)
+        fun onGaugeViewLongPress(value: Boolean)
     }
 }
