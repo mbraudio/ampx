@@ -33,7 +33,9 @@ class SettingsDialogFragment : DialogFragment(), View.OnClickListener, SeekBar.O
 
         // SeekBar
         binding.seekBarBrightness.max = MAX_BRIGHTNESS_INDEX
-        binding.seekBarBrightness.progress = viewModel.active?.brightnessIndex!!
+        viewModel.active?.let {
+            binding.seekBarBrightness.progress = viewModel.active?.brightnessIndex!!
+        }
         binding.seekBarBrightness.setOnSeekBarChangeListener(this)
 
         // Dialog

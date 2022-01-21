@@ -6,12 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.mbr.ampx.R
 
-interface IModernButtonListener {
-    fun onButtonClick(button: ModernButton)
-    fun onButtonLongClick(button: ModernButton)
-}
-
-class ModernButton : View, View.OnClickListener, View.OnLongClickListener {
+class ModernButton : View {
 
     private var bounds = RectF()
     private var centerX: Float = 0f
@@ -39,8 +34,6 @@ class ModernButton : View, View.OnClickListener, View.OnLongClickListener {
     private var activeBitmap: Bitmap? = null
 
 
-    var listener: IModernButtonListener? = null
-
     constructor(context: Context) : super(context) {
         initialize(context, null)
     }
@@ -54,11 +47,7 @@ class ModernButton : View, View.OnClickListener, View.OnLongClickListener {
     }
 
     private fun initialize(context: Context, attrs: AttributeSet?) {
-
         loadAttributes(context, attrs)
-
-        setOnClickListener(this)
-        setOnLongClickListener(this)
 /*
         testPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         testPaint.style = Paint.Style.STROKE
@@ -66,7 +55,6 @@ class ModernButton : View, View.OnClickListener, View.OnLongClickListener {
         testPaint.strokeWidth = 4f
         testPaint.strokeCap = Paint.Cap.ROUND
 */
-
         paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Paint.Style.FILL_AND_STROKE
         paint.color = context.getColor(R.color.colorUnderlayArc)
@@ -184,15 +172,5 @@ class ModernButton : View, View.OnClickListener, View.OnLongClickListener {
             canvas.drawBitmap(it, centerX - it.width / 2f, centerY - it.height / 2f, bitmapPaint)
         }
 
-    }
-
-
-    override fun onClick(view: View?) {
-        listener?.onButtonClick(this)
-    }
-
-    override fun onLongClick(view: View?): Boolean {
-        listener?.onButtonLongClick(this)
-        return true
     }
 }

@@ -7,7 +7,9 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
+import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import com.mbr.ampx.R
@@ -21,13 +23,12 @@ import com.mbr.ampx.utilities.Constants
 import com.mbr.ampx.utilities.Utilities
 import com.mbr.ampx.utilities.Utilities.printSystemData
 import com.mbr.ampx.view.GaugeViewEx
-import com.mbr.ampx.view.IModernButtonListener
 import com.mbr.ampx.view.ModernButton
 import com.mbr.ampx.view.ModernSeekBar
 import com.mbr.ampx.viewmodel.GlobalViewModel
 import java.lang.Exception
 
-class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.IListener, ModernSeekBar.IListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClickListener, GaugeViewEx.IListener, ModernSeekBar.IListener {
 
     private val tag = this.javaClass.simpleName
 
@@ -54,29 +55,26 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
         binding.seekBarBalance.setListener(this)
         //binding.gaugeViewVolume.setCurrentValue(100, 1)
 
-        // Buttons
-        binding.buttonConnection.listener = object : IModernButtonListener {
-            override fun onButtonClick(button: ModernButton) {
-                ScanDialogFragment().show(supportFragmentManager, "scan")
-            }
 
-            override fun onButtonLongClick(button: ModernButton) {
-                //binding.viewModel.directConnectDisconnect(applicationContext)
-            }
+
+        // Buttons
+        binding.buttonConnection.setOnClickListener {
+            ScanDialogFragment().show(supportFragmentManager, "scan")
         }
 
-        binding.buttonPower.listener = this
+        binding.buttonConnection.setOnLongClickListener {
+            //binding.viewModel.directConnectDisconnect(applicationContext)
+            false
+        }
+
+
+        binding.buttonPower.setOnClickListener(this)
         //binding.buttonMute.listener = this
 
-        binding.buttonSettings.listener = object : IModernButtonListener {
-            override fun onButtonClick(button: ModernButton) {
-                SettingsDialogFragment().show(supportFragmentManager, "settings")
-            }
-
-            override fun onButtonLongClick(button: ModernButton) {
-
-            }
+        binding.buttonSettings.setOnClickListener {
+            SettingsDialogFragment().show(supportFragmentManager, "settings")
         }
+
 
         inputGroup = ButtonGroup(5)
         inputGroup.addButton(binding.inputButtonCd)
@@ -312,32 +310,6 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
         }
     }
 
-    // IModernButtonListener
-    override fun onButtonClick(button: ModernButton) {
-        val active = binding.viewModel!!.active ?: return
-
-        when (button.id) {
-            R.id.buttonPower -> {
-                button.toggleActive()
-                active.togglePower()
-            }
-
-            R.id.inputButtonCd,
-            R.id.inputButtonNetwork,
-            R.id.inputButtonTuner,
-            R.id.inputButtonAux,
-            R.id.inputButtonRecorder -> {
-                val index = inputGroup.select(button)
-                active.changeInput(index.toByte())
-                Log.e(tag, "Input selected: $index")
-            }
-        }
-    }
-
-    override fun onButtonLongClick(button: ModernButton) {
-
-    }
-
     // GAUGE VIEW LISTENER
     override fun onGaugeViewValueUpdate(value: Int, max: Int) {
 
@@ -364,5 +336,41 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
     override fun onLongPress(value: Int, seekBar: ModernSeekBar) {
         //Log.e(tag, "SEEK BAR - on Long Press")
         binding.viewModel!!.active?.setBalance(value.toByte())
+    }
+
+
+    // VIEW ON CLICK LISTENER and ON LONG CLICK LISTENER
+    override fun onClick(view: View?) {
+        if (view == null) {
+            return
+        }
+
+        val active = binding.viewModel!!.active ?: return
+
+        val button = view as ModernButton
+
+        when (view.id) {
+            R.id.buttonPower -> {
+                button.toggleActive()
+                active.togglePower()
+            }
+
+            R.id.inputButtonCd,
+            R.id.inputButtonNetwork,
+            R.id.inputButtonTuner,
+            R.id.inputButtonAux,
+            R.id.inputButtonRecorder -> {
+                val index = inputGroup.select(button)
+                active.changeInput(index.toByte())
+                Log.e(tag, "Input selected: $index")
+            }
+        }
+    }
+
+    override fun onLongClick(view: View?): Boolean {
+        /*if (view.id == R.id.seekBarBalance) {
+
+        }*/
+        return true
     }
 }

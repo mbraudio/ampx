@@ -27,15 +27,6 @@
         <attr name="modernButtonActiveImage" format="reference" />
     </declare-styleable>
 
-    <declare-styleable name="GaugeView">
-        <attr name="numberOfDivisions" format="integer" />
-        <attr name="divisionValue" format="integer" />
-        <attr name="divisionValueMultiplier" format="integer" />
-        <attr name="valueTextHeight" format="dimension" />
-        <attr name="unit" format="string" />
-        <attr name="valueTextBold" format="boolean" />
-    </declare-styleable>
-
     <declare-styleable name="GaugeViewEx">
         <attr name="numberOfDivisionsEx" format="integer" />
         <attr name="divisionValueEx" format="integer" />

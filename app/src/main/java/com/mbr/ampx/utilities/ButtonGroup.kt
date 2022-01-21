@@ -1,6 +1,6 @@
 package com.mbr.ampx.utilities
 
-import com.mbr.ampx.view.IModernButtonListener
+import android.view.View
 import com.mbr.ampx.view.ModernButton
 
 class ButtonGroup(count: Int) {
@@ -28,9 +28,9 @@ class ButtonGroup(count: Int) {
         button.setActive(true)
     }
 
-    fun setGroupListener(listener: IModernButtonListener) {
+    fun setGroupListener(listener: View.OnClickListener) {
         for (current in buttons) {
-            current.listener = listener
+            current.setOnClickListener(listener)
         }
     }
 
