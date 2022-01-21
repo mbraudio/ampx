@@ -350,17 +350,19 @@ class MainActivity : AppCompatActivity(), IModernButtonListener, GaugeViewEx.ILi
     }
 
     override fun onSingleTapUp(value: Boolean) {
-        Log.e(tag, "Mute: $value")
+        //Log.e(tag, "Mute: $value")
         binding.viewModel!!.active?.setMute(value)
         // TODO: Need to add this functionality to STM32 project!!!
     }
 
     // Modern SeekBar IListener
     override fun onValueSelection(value: Int, seekBar: ModernSeekBar) {
+        //Log.e(tag, "SEEK BAR - on Value Selection")
         binding.viewModel!!.active?.setBalance(value.toByte())
     }
 
     override fun onLongPress(value: Int, seekBar: ModernSeekBar) {
+        //Log.e(tag, "SEEK BAR - on Long Press")
         binding.viewModel!!.active?.setBalance(value.toByte())
     }
 }

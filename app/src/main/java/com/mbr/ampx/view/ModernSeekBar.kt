@@ -44,6 +44,7 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
     private lateinit var textPaint: Paint
 
     // Gestures and Touches
+    private var ignoreOnUp = false
     private lateinit var gestureDetector: GestureDetector
     private var listener: IListener? = null
     fun setListener(listener: IListener) { this.listener = listener }
@@ -64,6 +65,8 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
         loadAttributes(context, attrs, defStyle)
 
         gestureDetector = GestureDetector(context, this)
+        gestureDetector.setIsLongpressEnabled(true)
+
         bounds = RectF(0f, 0f, 0f, 0f)
 
         paintRect = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -178,6 +181,10 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
             return true
         }
 
+        if (ignoreOnUp) {
+            return false
+        }
+
         targetX = event.x
         if (targetX < startY) { targetX = startX }
         if (targetX > endX) { targetX = endX }
@@ -205,6 +212,7 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
 
     // Gesture Detector Listener
     override fun onDown(e: MotionEvent): Boolean {
+        ignoreOnUp = false
         return true
     }
 
@@ -213,6 +221,7 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
     }
 
     override fun onLongPress(e: MotionEvent) {
+        ignoreOnUp = true
         listener?.onLongPress((maximumValue / 2f).toInt(), this)
     }
 
