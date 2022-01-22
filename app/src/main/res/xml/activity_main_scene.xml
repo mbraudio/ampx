@@ -15,6 +15,13 @@
 
     <ConstraintSet android:id="@+id/start">
 
+        <com.mbr.ampx.view.ModernButton
+            android:id="@+id/buttonConnection"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:gravity="center" />
+
         <!-- VOLUME -->
         <Constraint android:id="@+id/gaugeViewVolume"
             android:visibility="visible"

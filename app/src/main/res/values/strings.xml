@@ -52,5 +52,6 @@
     <string name="tone">TONE</string>
     <string name="treble">TREBLE</string>
     <string name="bass">BASS</string>
+    <string name="bass_boost">BASS BOOST</string>
 
 </resources>
