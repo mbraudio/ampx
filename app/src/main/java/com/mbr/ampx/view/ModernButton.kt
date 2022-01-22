@@ -32,6 +32,7 @@ class ModernButton : View {
     private var bitmap: Bitmap? = null
     private var normalBitmap: Bitmap? = null
     private var activeBitmap: Bitmap? = null
+    private var activeColorResource = 0
 
 
     constructor(context: Context) : super(context) {
@@ -94,6 +95,11 @@ class ModernButton : View {
                 activeBitmap = BitmapFactory.decodeResource(resources, image)
             }
 
+            activeColorResource = a.getColor(R.styleable.ModernButton_modernButtonActiveColor, 0)
+            if (activeColorResource == 0) {
+                activeColorResource = context.getColor(android.R.color.white)
+            }
+
             a.recycle()
         }
     }
@@ -111,7 +117,7 @@ class ModernButton : View {
 
     private fun adjustActive() {
         if (active) {
-            bitmapPaint.colorFilter = PorterDuffColorFilter(context.getColor(R.color.colorGradientEnd), PorterDuff.Mode.MULTIPLY)
+            bitmapPaint.colorFilter = PorterDuffColorFilter(activeColorResource, PorterDuff.Mode.MULTIPLY)
             text = textActive
             bitmap = if (activeBitmap != null) { activeBitmap } else { normalBitmap }
         } else {
@@ -119,6 +125,7 @@ class ModernButton : View {
             text = textNormal
             bitmap = normalBitmap
         }
+        measureText()
         invalidate()
     }
 
@@ -130,7 +137,7 @@ class ModernButton : View {
         setMeasuredDimension(w, h)
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+    fun measureText() {
         textWidth = 0f
         textHeight = 0f
 
@@ -143,7 +150,10 @@ class ModernButton : View {
 
         textWidthHalf = textWidth / 2f
         textHeightHalf = textHeight / 2f
+    }
 
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        measureText()
         bounds.left = paddingStart.toFloat()
         bounds.top = paddingTop.toFloat()
         bounds.bottom = h.toFloat() - paddingBottom

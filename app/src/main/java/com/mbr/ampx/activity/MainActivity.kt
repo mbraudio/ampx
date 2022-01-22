@@ -11,6 +11,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.lifecycle.ViewModelProvider
 import com.mbr.ampx.R
 import com.mbr.ampx.bluetooth.Commands
@@ -56,7 +57,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         //binding.gaugeViewVolume.setCurrentValue(100, 1)
 
 
-
         // Buttons
         binding.buttonConnection.setOnClickListener {
             ScanDialogFragment().show(supportFragmentManager, "scan")
@@ -66,6 +66,27 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             //binding.viewModel.directConnectDisconnect(applicationContext)
             false
         }
+
+        val transitionListener = object : MotionLayout.TransitionListener {
+            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {
+
+            }
+
+            override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {
+
+            }
+
+            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+                if (currentId == R.id.end || currentId == R.id.start) {
+                    binding.buttonTone.toggleActive()
+                }
+            }
+
+            override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {
+
+            }
+        }
+        binding.motionLayout.setTransitionListener(transitionListener)
 
 
         binding.buttonPower.setOnClickListener(this)

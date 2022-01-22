@@ -10,11 +10,13 @@
             type="com.mbr.ampx.viewmodel.GlobalViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".activity.MainActivity"
-        android:background="@color/myBackground">
+        android:background="@color/myBackground"
+        app:layoutDescription="@xml/activity_main_scene">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/linearLayoutButtons"
@@ -37,7 +39,8 @@
                 app:modernButtonActiveText="@string/disconnect"
                 app:modernButtonTextSize="8sp"
                 app:modernButtonNormalImage="@drawable/outline_bluetooth_white_24"
-                app:modernButtonActiveImage="@drawable/outline_bluetooth_connected_white_24"/>
+                app:modernButtonActiveImage="@drawable/outline_bluetooth_connected_white_24"
+                app:modernButtonActiveColor="@color/colorGradientEnd"/>
 
             <com.mbr.ampx.view.ModernButton
                 android:id="@+id/buttonPower"
@@ -50,7 +53,8 @@
                 app:modernButtonNormalText="@string/power_on"
                 app:modernButtonActiveText="@string/standby"
                 app:modernButtonTextSize="8sp"
-                app:modernButtonNormalImage="@drawable/outline_power_settings_new_white_48"/>
+                app:modernButtonNormalImage="@drawable/outline_power_settings_new_white_48"
+                app:modernButtonActiveColor="@color/colorGradientEnd"/>
 
             <com.mbr.ampx.view.ModernButton
                 android:id="@+id/buttonSettings"
@@ -79,24 +83,25 @@
             android:layout_marginTop="8dp"
             app:modernButtonActive="false"
             app:modernButtonNormalText="@string/tone"
-            app:modernButtonActiveText="@string/tone"
+            app:modernButtonActiveText="@string/volume"
             app:modernButtonTextSize="8sp"
-            app:modernButtonNormalImage="@drawable/outline_graphic_eq_white_24"/>
+            app:modernButtonNormalImage="@drawable/outline_graphic_eq_white_24"
+            app:modernButtonActiveImage="@drawable/outline_volume_up_white_24" />
 
         <com.mbr.ampx.view.GaugeViewEx
             android:id="@+id/gaugeViewVolume"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            app:gaugeActiveImage="@drawable/outline_volume_off_white_36_mod"
+            app:gaugeNormalImage="@drawable/outline_volume_up_white_36_mod"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonTone"
-            app:gaugeNormalImage="@drawable/outline_volume_up_white_36_mod"
-            app:gaugeActiveImage="@drawable/outline_volume_off_white_36_mod" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonTone" />
 
         <!--
         <com.mbr.ampx.view.ModernSeekBar
@@ -136,7 +141,8 @@
                 app:modernButtonActiveText="@string/cd"
                 app:modernButtonTextSize="8sp"
                 app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
-                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"/>
+                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"
+                app:modernButtonActiveColor="@color/colorGradientEnd"/>
 
             <com.mbr.ampx.view.ModernButton
                 android:id="@+id/inputButtonNetwork"
@@ -150,7 +156,8 @@
                 app:modernButtonActiveText="@string/network"
                 app:modernButtonTextSize="8sp"
                 app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
-                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"/>
+                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"
+                app:modernButtonActiveColor="@color/colorGradientEnd"/>
 
             <com.mbr.ampx.view.ModernButton
                 android:id="@+id/inputButtonTuner"
@@ -164,7 +171,8 @@
                 app:modernButtonActiveText="@string/tuner"
                 app:modernButtonTextSize="8sp"
                 app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
-                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"/>
+                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"
+                app:modernButtonActiveColor="@color/colorGradientEnd"/>
 
             <com.mbr.ampx.view.ModernButton
                 android:id="@+id/inputButtonAux"
@@ -178,7 +186,8 @@
                 app:modernButtonActiveText="@string/aux"
                 app:modernButtonTextSize="8sp"
                 app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
-                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"/>
+                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"
+                app:modernButtonActiveColor="@color/colorGradientEnd"/>
 
             <com.mbr.ampx.view.ModernButton
                 android:id="@+id/inputButtonRecorder"
@@ -192,10 +201,11 @@
                 app:modernButtonActiveText="@string/recorder"
                 app:modernButtonTextSize="8sp"
                 app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
-                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"/>
+                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"
+                app:modernButtonActiveColor="@color/colorGradientEnd"/>
 
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 
 </layout>

@@ -25,6 +25,7 @@
         <attr name="modernButtonTextSize" format="dimension" />
         <attr name="modernButtonNormalImage" format="reference" />
         <attr name="modernButtonActiveImage" format="reference" />
+        <attr name="modernButtonActiveColor" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="GaugeViewEx">
