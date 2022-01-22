@@ -101,7 +101,7 @@
             android:layout_width="160dp"
             android:layout_height="160dp"
             app:titleSimple="@string/treble"
-            app:titleTextHeightSimple="16sp"
+            app:titleTextHeightSimple="14sp"
             app:valueTextHeightSimple="10sp" />
 
         <com.mbr.ampx.view.GaugeViewSimple
@@ -109,7 +109,7 @@
             android:layout_width="160dp"
             android:layout_height="160dp"
             app:titleSimple="@string/bass"
-            app:titleTextHeightSimple="16sp"
+            app:titleTextHeightSimple="14sp"
             app:valueTextHeightSimple="10sp" />
 
         <com.mbr.ampx.view.GaugeViewSimple
@@ -117,7 +117,7 @@
             android:layout_width="160dp"
             android:layout_height="160dp"
             app:titleSimple="@string/balance_capital"
-            app:titleTextHeightSimple="16sp"
+            app:titleTextHeightSimple="14sp"
             app:valueTextHeightSimple="10sp" />
         <!-- END TONE -->
 

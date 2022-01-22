@@ -36,7 +36,7 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
     private var touchDistanceMax = 0f
     private var value = 0
     private var maximumValue = 0
-    private var diameter = 0f
+    private var radius = 0f
 
     // CENTER TEXT
     private var titleTextHeight = 0f
@@ -158,7 +158,7 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
         bounds.right = w.toFloat() - paddingEnd
         centerX = (bounds.left + bounds.right) / 2f
         centerY = (bounds.top + bounds.bottom) / 2f
-        diameter = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
+        radius = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
 
         val positions = floatArrayOf(0.0f, 1.0f)
         val colors = intArrayOf(ContextCompat.getColor(context, R.color.colorGradientStart), ContextCompat.getColor(context, R.color.colorGradientEnd))
@@ -174,12 +174,12 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
         boundsValueArc.top = bounds.top + strokeHalf
         boundsValueArc.right = bounds.right - strokeHalf
         boundsValueArc.bottom = bounds.bottom - strokeHalf
-        touchDistanceMin = diameter - (VALUE_ARC_STROKE_WIDTH * 3f)
-        touchDistanceMax = diameter + (VALUE_ARC_STROKE_WIDTH * 3f)
+        touchDistanceMin = radius - (VALUE_ARC_STROKE_WIDTH * 3f)
+        touchDistanceMax = radius + (VALUE_ARC_STROKE_WIDTH * 3f)
 
         // Inner circles
          // Colored
-        coloredCircleRadius = diameter - (diameter * 3f / 7f)
+        coloredCircleRadius = radius - (radius * 3f / 7f)
 
         // Value text
         valueText.text = "0"
@@ -208,8 +208,8 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
         val sinA = Math.sin(angleRadians)
         scaleTextPaint.getTextBounds(text, 0, text.length, textBounds)
         val textHeight = Math.abs(textBounds.top + textBounds.bottom) / 2f
-        val x = (centerX + (diameter + textOffsetX) * cosA).toFloat()
-        val y = (centerY + (diameter) * sinA).toFloat() + (textHeight * 3f/2f)
+        val x = (centerX + (radius + textOffsetX) * cosA).toFloat()
+        val y = (centerY + (radius) * sinA).toFloat() + (textHeight * 3f/2f)
 
         val gaugeText = GaugeText(context.getColor(android.R.color.white), valueTextHeight, false)
         gaugeText.text = text

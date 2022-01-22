@@ -11,7 +11,7 @@ class ModernButton : View {
     private var bounds = RectF()
     private var centerX: Float = 0f
     private var centerY: Float = 0f
-    private var diameter: Float = 0f
+    private var radius: Float = 0f
 
     private var active: Boolean = false
     private lateinit var paint: Paint
@@ -132,12 +132,12 @@ class ModernButton : View {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val minimumWidth = paddingStart + paddingEnd
         val w = resolveSizeAndState(minimumWidth, widthMeasureSpec, 1)
-        val minimumHeight = paddingBottom + paddingTop + textHeight.toInt() + diameter.toInt()
+        val minimumHeight = paddingBottom + paddingTop + textHeight.toInt() + radius.toInt()
         val h = resolveSizeAndState(minimumHeight, heightMeasureSpec, 1)
         setMeasuredDimension(w, h)
     }
 
-    fun measureText() {
+    private fun measureText() {
         textWidth = 0f
         textHeight = 0f
 
@@ -161,21 +161,21 @@ class ModernButton : View {
         centerX = (bounds.left + bounds.right) / 2f
         if (text == null || text == "") {
             centerY = (bounds.top + bounds.bottom) / 2f
-            diameter = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
+            radius = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
         } else {
             centerY = (bounds.top + bounds.bottom - textHeight - circleToTextDistance) / 2f
-            diameter = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top - (textHeight * 2f) - circleToTextDistance) / 2f
+            radius = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top - (textHeight * 2f) - circleToTextDistance) / 2f
         }
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        //canvas.drawRect(bounds, testPaint)
-        canvas.drawCircle(centerX, centerY, diameter, paint)
+        //canvas.drawRect(bounds, paint)
+        canvas.drawCircle(centerX, centerY, radius, paint)
 
         text?.let {
-            canvas.drawText(it, centerX - textWidthHalf, centerY + diameter + textHeight + circleToTextDistance, textPaint)
+            canvas.drawText(it, centerX - textWidthHalf, centerY + radius + textHeight + circleToTextDistance, textPaint)
         }
 
         bitmap?.let {

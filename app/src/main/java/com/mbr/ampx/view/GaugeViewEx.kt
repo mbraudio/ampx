@@ -54,7 +54,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     private var divisionValue = 0
     private var value = 0
     private var maximumValue = 0
-    private var diameter = 0f
+    private var radius = 0f
     private var unit: String? = null
 
     private var scaleDiameter: Float = 0f
@@ -200,7 +200,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         bounds.right = w.toFloat() - paddingEnd
         centerX = (bounds.left + bounds.right) / 2f
         centerY = (bounds.top + bounds.bottom) / 2f
-        diameter = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
+        radius = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
 
         val positions = floatArrayOf(0.0f, 1.0f)
         val colors = intArrayOf(ContextCompat.getColor(context, R.color.colorGradientStart), ContextCompat.getColor(context, R.color.colorGradientEnd))
@@ -216,7 +216,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         boundsValueArc.top = bounds.top + strokeHalf + OUTER_ARC_DISTANCE_TO_VALUE_ARC
         boundsValueArc.right = bounds.right - strokeHalf - OUTER_ARC_DISTANCE_TO_VALUE_ARC
         boundsValueArc.bottom = bounds.bottom - strokeHalf - OUTER_ARC_DISTANCE_TO_VALUE_ARC
-        val diameterScaleArc = diameter - OUTER_ARC_DISTANCE_TO_VALUE_ARC
+        val diameterScaleArc = radius - OUTER_ARC_DISTANCE_TO_VALUE_ARC
         touchDistanceMin = diameterScaleArc - VALUE_ARC_STROKE_WIDTH * 4f
         touchDistanceMax = diameterScaleArc + VALUE_ARC_STROKE_WIDTH * 3f
         scaleDiameter = diameterScaleArc - VALUE_ARC_STROKE_WIDTH - VALUE_ARC_DISTANCE_TO_SCALE
@@ -226,7 +226,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         coloredCircleRadius = scaleDiameter - SCALE_LINE_LENGTH - SCALE_ARC_DISTANCE_TO_COLORED_CIRCLE
 
         bitmap = BitmapFactory.decodeResource(resources, R.drawable.outline_volume_up_white_36_mod)
-        var distanceY = diameter / 28f
+        var distanceY = radius / 28f
         if (distanceY < 12f) {
             distanceY = 12f
         }
@@ -290,8 +290,8 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         val sinA = Math.sin(angleRadians)
         scaleTextPaint.getTextBounds(text, 0, text.length, textBounds)
         val textHeight = Math.abs(textBounds.top + textBounds.bottom) / 2f
-        val x = (centerX + (diameter + textOffset + textOffsetX) * cosA).toFloat()
-        val y = (centerY + (diameter + textOffset) * sinA).toFloat() + (textHeight / 2.0f)
+        val x = (centerX + (radius + textOffset + textOffsetX) * cosA).toFloat()
+        val y = (centerY + (radius + textOffset) * sinA).toFloat() + (textHeight / 2.0f)
 
         val gaugeText = GaugeText(context.getColor(android.R.color.white), SMALL_TEXT_HEIGHT, false)
         gaugeText.text = text
