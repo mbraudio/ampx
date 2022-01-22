@@ -32,7 +32,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:layout_width="0dp"
-                android:layout_height="52dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
                 app:modernButtonActive="false"
                 app:modernButtonNormalText="@string/connect"
@@ -47,7 +47,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:layout_width="0dp"
-                android:layout_height="80dp"
+                android:layout_height="76dp"
                 android:layout_weight="2"
                 app:modernButtonActive="false"
                 app:modernButtonNormalText="@string/power_on"
@@ -89,6 +89,7 @@
             app:modernButtonActiveImage="@drawable/outline_volume_up_white_24" />
 
         <com.mbr.ampx.view.GaugeViewEx
+            android:visibility="invisible"
             android:id="@+id/gaugeViewVolume"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -103,6 +104,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonTone" />
 
+        <!-- TONE -->
         <com.mbr.ampx.view.ModernSeekBar
             android:visibility="invisible"
             android:id="@+id/seekBarBalance"
@@ -110,13 +112,46 @@
             android:layout_height="42dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:layout_marginTop="16dp"
-            app:modernTextSize="8sp"
-            app:modernTextDistance="8dp"
+            android:layout_marginTop="24dp"
+            app:modernTextSize="10sp"
+            app:modernTextDistance="4dp"
             app:layout_constraintTop_toBottomOf="@+id/buttonTone"
             app:modernTextTitle="@string/balance_capital"
             app:modernTextStart="L"
             app:modernTextEnd="R"/>
+
+        <com.mbr.ampx.view.GaugeViewSimple
+            android:id="@+id/gaugeViewTreble"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="96dp"
+            android:layout_marginEnd="96dp"
+            android:layout_marginTop="16dp"
+            app:titleSimple="@string/treble"
+            app:titleTextHeightSimple="16sp"
+            app:valueTextHeightSimple="10sp"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/seekBarBalance" />
+
+        <com.mbr.ampx.view.GaugeViewSimple
+            android:id="@+id/gaugeViewBass"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="96dp"
+            android:layout_marginEnd="96dp"
+            android:layout_marginTop="8dp"
+            app:titleSimple="@string/bass"
+            app:titleTextHeightSimple="16sp"
+            app:valueTextHeightSimple="10sp"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gaugeViewTreble" />
+        <!-- END TONE -->
 
         <LinearLayout
             android:id="@+id/linearLayoutInputs"

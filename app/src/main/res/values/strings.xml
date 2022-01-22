@@ -46,7 +46,11 @@
     <string name="disconnected">DISCONNECTED</string>
     <string name="min">MIN</string>
     <string name="max">MAX</string>
+    <string name="minus_sign">-</string>
+    <string name="plus_sign">+</string>
     <string name="balance_capital">BALANCE</string>
     <string name="tone">TONE</string>
+    <string name="treble">TREBLE</string>
+    <string name="bass">BASS</string>
 
 </resources>

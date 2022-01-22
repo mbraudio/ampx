@@ -156,12 +156,12 @@ class ModernSeekBar : View, GestureDetector.OnGestureListener {
         textTitle.update(x, y)
 
         x = startX
-        y = centerY + textHeight + textDistance
+        y = centerY + (textHeight * 2) + textDistance
         textStart.update(x, y)
 
         w = textPaint.measureText(textEnd.text)
         x = endX - w
-        y = centerY + textHeight + textDistance
+        y = centerY + (textHeight * 2) + textDistance
         textEnd.update(x, y)
     }
 

@@ -40,6 +40,14 @@
         <attr name="gaugeActiveImage" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="GaugeViewSimple">
+        <attr name="maximumValueSimple" format="integer" />
+        <attr name="titleTextHeightSimple" format="dimension" />
+        <attr name="valueTextHeightSimple" format="dimension" />
+        <attr name="valueTextBoldSimple" format="boolean" />
+        <attr name="titleSimple" format="string" />
+    </declare-styleable>
+
     <declare-styleable name="ModernSeekBar">
         <attr name="modernGaugeWidth" format="dimension" />
         <attr name="modernMaxValue" format="float" />

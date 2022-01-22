@@ -11,35 +11,19 @@ import com.mbr.ampx.R
 import com.mbr.ampx.utilities.Constants
 import kotlin.math.sqrt
 
-class GaugeViewEx : View, GestureDetector.OnGestureListener {
+class GaugeViewSimple : View, GestureDetector.OnGestureListener {
 
     companion object {
         //private val TAG = GaugeView::class.java.simpleName
 
         // DEFAULT VALUES
-        private const val DEFAULT_NUMBER_OF_DIVISIONS = 50
-        private const val DEFAULT_DIVISION_VALUE = 2
         private const val DEFAULT_MAXIMUM_VALUE = 100
-        private const val DEFAULT_CENTER_VALUE_TEXT_HEIGHT = 60.0f
+        private const val DEFAULT_CENTER_VALUE_TEXT_HEIGHT = 50.0f
 
         // ADJUSTMENTS
-        private const val VALUE_ARC_STROKE_WIDTH = 56.0f
-        private const val SCALE_LINE_LENGTH = 40.0f
-        private const val OUTER_ARC_DISTANCE_TO_VALUE_ARC = 16.0f
-        private const val VALUE_ARC_DISTANCE_TO_SCALE = 24.0f
-        private const val SCALE_ARC_DISTANCE_TO_COLORED_CIRCLE = 120.0f
-        private const val COLORED_CIRCLE_WIDTH = 8.0f
-        private const val SMALL_TEXT_HEIGHT = 40.0f
+        private const val VALUE_ARC_STROKE_WIDTH = 40.0f
+        private const val COLORED_CIRCLE_WIDTH = 6.0f
     }
-
-    // Center image
-    private lateinit var bitmapPaint: Paint
-    private var bitmap: Bitmap? = null
-    private var normalBitmap: Bitmap? = null
-    private var activeBitmap: Bitmap? = null
-    private var active = false
-    private var bitmapX = 0f
-    private var bitmapY = 0f
 
     // TYPED VARIABLES
     private val touchEnabled = true
@@ -50,18 +34,14 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     private var targetAngle = 0f
     private var touchDistanceMin = 0f
     private var touchDistanceMax = 0f
-    private var numberOfDivisions = 0
-    private var divisionValue = 0
     private var value = 0
     private var maximumValue = 0
     private var diameter = 0f
-    private var unit: String? = null
-
-    private var scaleDiameter: Float = 0f
 
     // CENTER TEXT
-    private var centerValueTextHeight = 0f
-    private var valueTextBold = false
+    private var titleTextHeight = 0f
+    private var valueTextHeight = 0f
+    private var boldText = false
 
     private var bounds = RectF()
     private var centerX = 0f
@@ -74,18 +54,17 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     private lateinit var paintUnderlayArc: Paint
     private lateinit var paintValueArc: Paint
     private lateinit var paintTargetArc: Paint
-    // Scale lines
-    private var lines = ArrayList<GaugeLine>()
-    private lateinit var paintScaleLine: Paint
     // Inner circles
     private lateinit var paintColoredCircle: Paint
     private var coloredCircleRadius: Float = 0f
 
     private lateinit var scaleTextPaint: Paint
-
     private var texts = ArrayList<GaugeText>()
 
+    private var title = ""
+
     private lateinit var valueText: GaugeText
+    private lateinit var titleText: GaugeText
 
     // Gestures and Touches
     private var ignoreTouches = false
@@ -130,13 +109,6 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         paintTargetArc.strokeWidth = VALUE_ARC_STROKE_WIDTH
         paintTargetArc.strokeCap = Paint.Cap.ROUND
 
-        // Scale lines
-        val scaleLineStrokeWidth = 4f
-        paintScaleLine = Paint(Paint.ANTI_ALIAS_FLAG)
-        paintScaleLine.style = Paint.Style.STROKE
-        paintScaleLine.color = context.getColor(R.color.colorGradientEnd)
-        paintScaleLine.strokeWidth = scaleLineStrokeWidth
-
         // Inner circles
         // Colored
         paintColoredCircle = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -147,41 +119,27 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         scaleTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         scaleTextPaint.color = context.getColor(R.color.colorText)
         scaleTextPaint.style = Paint.Style.FILL_AND_STROKE
-        scaleTextPaint.textSize = 38.0f
+        scaleTextPaint.textSize = titleTextHeight
         scaleTextPaint.textAlign = Paint.Align.LEFT
         scaleTextPaint.isElegantTextHeight = true
-        scaleTextPaint.typeface = Typeface.SERIF //ResourcesCompat.getFont(context, R.font.orbitron)
+        scaleTextPaint.typeface = Typeface.SERIF
 
-        valueText = GaugeText(context.getColor(android.R.color.white), centerValueTextHeight, valueTextBold)
-
-        bitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        bitmapPaint.style = Paint.Style.FILL
-
-        adjustActive()
+        valueText = GaugeText(context.getColor(android.R.color.white), valueTextHeight, boldText)
+        titleText = GaugeText(context.getColor(android.R.color.white), titleTextHeight, boldText)
+        titleText.text = title
     }
 
     private fun loadAttributes(context: Context, attrs: AttributeSet?, defStyle: Int) {
         // Load attributes
-        val a = context.obtainStyledAttributes(attrs, R.styleable.GaugeViewEx, defStyle, 0)
-        numberOfDivisions = a.getInt(R.styleable.GaugeViewEx_numberOfDivisionsEx, DEFAULT_NUMBER_OF_DIVISIONS)
-        divisionValue = a.getInt(R.styleable.GaugeViewEx_divisionValueEx, DEFAULT_DIVISION_VALUE)
-        maximumValue = a.getInt(R.styleable.GaugeViewEx_maximumValueEx, DEFAULT_MAXIMUM_VALUE)
-        centerValueTextHeight = a.getDimension(R.styleable.GaugeViewEx_valueTextHeightEx, DEFAULT_CENTER_VALUE_TEXT_HEIGHT)
-        unit = a.getString(R.styleable.GaugeViewEx_unitEx)
-        if (unit == null) {
-            unit = resources.getString(R.string.percentage)
+        val a = context.obtainStyledAttributes(attrs, R.styleable.GaugeViewSimple, defStyle, 0)
+        maximumValue = a.getInt(R.styleable.GaugeViewSimple_maximumValueSimple, DEFAULT_MAXIMUM_VALUE)
+        titleTextHeight = a.getDimension(R.styleable.GaugeViewSimple_titleTextHeightSimple, DEFAULT_CENTER_VALUE_TEXT_HEIGHT)
+        valueTextHeight = a.getDimension(R.styleable.GaugeViewSimple_valueTextHeightSimple, DEFAULT_CENTER_VALUE_TEXT_HEIGHT)
+        boldText = a.getBoolean(R.styleable.GaugeViewSimple_valueTextBoldSimple, false)
+        val text = a.getString(R.styleable.GaugeViewSimple_titleSimple)
+        text?.let {
+            title = it
         }
-        valueTextBold = a.getBoolean(R.styleable.GaugeViewEx_valueTextBoldEx, false)
-        active = a.getBoolean(R.styleable.GaugeViewEx_gaugeActive, false)
-        var image = a.getResourceId(R.styleable.GaugeViewEx_gaugeNormalImage, 0)
-        if (image != 0) {
-            normalBitmap = BitmapFactory.decodeResource(resources, image)
-        }
-        image = a.getResourceId(R.styleable.GaugeViewEx_gaugeActiveImage, 0)
-        if (image != 0) {
-            activeBitmap = BitmapFactory.decodeResource(resources, image)
-        }
-
         a.recycle()
     }
 
@@ -212,132 +170,64 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
 
         // Value arc(s)
         val strokeHalf = VALUE_ARC_STROKE_WIDTH / 2f
-        boundsValueArc.left = bounds.left + strokeHalf + OUTER_ARC_DISTANCE_TO_VALUE_ARC
-        boundsValueArc.top = bounds.top + strokeHalf + OUTER_ARC_DISTANCE_TO_VALUE_ARC
-        boundsValueArc.right = bounds.right - strokeHalf - OUTER_ARC_DISTANCE_TO_VALUE_ARC
-        boundsValueArc.bottom = bounds.bottom - strokeHalf - OUTER_ARC_DISTANCE_TO_VALUE_ARC
-        val diameterScaleArc = diameter - OUTER_ARC_DISTANCE_TO_VALUE_ARC
-        touchDistanceMin = diameterScaleArc - VALUE_ARC_STROKE_WIDTH * 4f
-        touchDistanceMax = diameterScaleArc + VALUE_ARC_STROKE_WIDTH * 3f
-        scaleDiameter = diameterScaleArc - VALUE_ARC_STROKE_WIDTH - VALUE_ARC_DISTANCE_TO_SCALE
+        boundsValueArc.left = bounds.left + strokeHalf
+        boundsValueArc.top = bounds.top + strokeHalf
+        boundsValueArc.right = bounds.right - strokeHalf
+        boundsValueArc.bottom = bounds.bottom - strokeHalf
+        touchDistanceMin = diameter - (VALUE_ARC_STROKE_WIDTH * 3f)
+        touchDistanceMax = diameter + (VALUE_ARC_STROKE_WIDTH * 3f)
 
         // Inner circles
          // Colored
-        coloredCircleRadius = scaleDiameter - SCALE_LINE_LENGTH - SCALE_ARC_DISTANCE_TO_COLORED_CIRCLE
-
-        bitmap = BitmapFactory.decodeResource(resources, R.drawable.outline_volume_up_white_36_mod)
-        var distanceY = diameter / 28f
-        if (distanceY < 12f) {
-            distanceY = 12f
-        }
+        coloredCircleRadius = diameter - (diameter * 3f / 7f)
 
         // Value text
+        valueText.text = "0"
         val textBounds = Rect()
         valueText.paint.getTextBounds(valueText.text, 0, valueText.text.length, textBounds)
-        val textHeight = Math.abs(textBounds.top + textBounds.bottom) / 2f
-        valueText.updatePosition(centerX, centerY + (textHeight * 2f) + distanceY)
+        var textHeightHalf = Math.abs(textBounds.top + textBounds.bottom).toFloat()
+        valueText.updatePosition(centerX, centerY + coloredCircleRadius + (textHeightHalf * 2f))
 
-        bitmap?.let {
-            bitmapX = centerX - (it.width / 2f)
-            bitmapY = centerY - it.height - distanceY
-        }
+        // Title text
+        titleText.paint.getTextBounds(titleText.text, 0, titleText.text.length, textBounds)
+        textHeightHalf = Math.abs(textBounds.top + textBounds.bottom) / 2f
+        titleText.updatePosition(centerX, centerY + textHeightHalf)
     }
 
-    private fun calculateScaleValues() {
-        lines.clear()
-        val numberOfLines = numberOfDivisions + 1
-        lines = ArrayList(numberOfLines)
-        val totalAngle = endAngle - startAngle
-        val divisionAngle = totalAngle / numberOfDivisions
-        val lineStart = scaleDiameter
-        val lineEnd = scaleDiameter - SCALE_LINE_LENGTH
-        //val dia = diameter + 5.0f
-        //val textBounds = Rect()
-        var line: GaugeLine
-        //val textOffset = -28.0f
-        for (i in 0 until numberOfLines) {
-            val currentAngle = (startAngle + i * divisionAngle).toDouble()
-            val angleRadians = Math.toRadians(currentAngle)
-            val cosA = Math.cos(angleRadians)
-            val sinA = Math.sin(angleRadians)
-            val startX = (centerX + lineStart * cosA).toFloat()
-            val startY = (centerY + lineStart * sinA).toFloat()
-            val stopX = (centerX + lineEnd * cosA).toFloat()
-            val stopY = (centerY + lineEnd * sinA).toFloat()
-            line = GaugeLine(startX, startY, stopX, stopY)
-            /*
-            info.text = "${i * divisionValue}"
-            val textWidth = scaleTextPaint.measureText(info.text) / 2f
-            scaleTextPaint.getTextBounds(info.text, 0, info.text.length, textBounds)
-            val textHeight = Math.abs(textBounds.top + textBounds.bottom) / 2f
-            info.textX = (centerX + (dia + textOffset) * cosA).toFloat() - textWidth
-            info.textY = (centerY + (dia + textOffset) * sinA).toFloat() + textHeight
-            */
-            lines.add(line)
-        }
-
+    private fun addText() {
         // Scale lines don't have text here, so add text for min and max
-        addText(startAngle, context.getString(R.string.min))
-        addText(endAngle, context.getString(R.string.max))
+        addText(startAngle, context.getString(R.string.minus_sign))
+        addText(endAngle, context.getString(R.string.plus_sign))
     }
 
     private fun addText(angle: Float, text: String) {
         val textBounds = Rect()
-        val textOffset = -32.0f
-        val textOffsetX = -224f
+        val textOffsetX = 64f
         val angleRadians = Math.toRadians(angle.toDouble())
         val cosA = Math.cos(angleRadians)
         val sinA = Math.sin(angleRadians)
         scaleTextPaint.getTextBounds(text, 0, text.length, textBounds)
         val textHeight = Math.abs(textBounds.top + textBounds.bottom) / 2f
-        val x = (centerX + (diameter + textOffset + textOffsetX) * cosA).toFloat()
-        val y = (centerY + (diameter + textOffset) * sinA).toFloat() + (textHeight / 2.0f)
+        val x = (centerX + (diameter + textOffsetX) * cosA).toFloat()
+        val y = (centerY + (diameter) * sinA).toFloat() + (textHeight * 3f/2f)
 
-        val gaugeText = GaugeText(context.getColor(android.R.color.white), SMALL_TEXT_HEIGHT, false)
+        val gaugeText = GaugeText(context.getColor(android.R.color.white), valueTextHeight, false)
         gaugeText.text = text
         gaugeText.updatePosition(x, y)
 
         texts.add(gaugeText)
     }
 
-    fun setActive(active: Boolean) {
-        this.active = active
-        adjustActive()
-    }
-
-    fun toggleActive(): Boolean {
-        active = !active
-        adjustActive()
-        return active
-    }
-
-    private fun adjustActive() {
-        bitmap = if (active) {
-            if (activeBitmap != null) { activeBitmap } else { normalBitmap }
-        } else {
-            normalBitmap
-        }
-        invalidate()
-    }
-
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         calculateDimensionValues(w, h)
-        calculateScaleValues()
+        addText()
     }
 
     override fun onDraw(canvas: Canvas) {
-        //canvas.drawRect(bounds, paintScaleLine)
+        //canvas.drawRect(bounds, paintColoredCircle)
         canvas.drawArc(boundsValueArc, startAngle, totalAngle, false, paintUnderlayArc)
         canvas.drawArc(boundsValueArc, startAngle, valueAngle, false, paintValueArc)
         canvas.drawArc(boundsValueArc, startAngle + valueAngle, targetAngle - valueAngle, false, paintTargetArc)
-
-        for (line in lines) {
-            //val line = scaleLines[i]
-            /*if (info.drawText) {
-                canvas.drawText(info.text, info.textX, info.textY, scaleTextPaint)
-            }*/
-            canvas.drawLine(line.startX, line.startY, line.endX, line.endY, paintScaleLine)
-        }
 
         canvas.drawCircle(centerX, centerY, coloredCircleRadius, paintColoredCircle)
 
@@ -346,10 +236,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         }
 
         valueText.draw(canvas)
-
-        bitmap?.let {
-            canvas.drawBitmap(it, bitmapX, bitmapY, bitmapPaint)
-        }
+        titleText.draw(canvas)
 
         // Center spot
         //canvas.drawCircle(centerX, centerY, 1f, paintColoredCircle)
@@ -357,7 +244,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
 
     private fun calculateValue(angle: Float) {
         value = ((angle * maximumValue) / totalAngle).toInt()
-        valueText.text = "$value$unit"
+        valueText.text = "$value"
     }
 
     fun setCurrentValue(current: Int, active: Int) {
@@ -421,7 +308,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
             targetAngle += 360f
         }
         val targetValue = ((targetAngle * maximumValue) / totalAngle).toInt()
-        valueText.text = "$targetValue$unit"
+        valueText.text = "$targetValue"
     }
 
     private fun getAngleForPoint(x: Float, y: Float): Float {
@@ -452,8 +339,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
 
     override fun onLongPress(e: MotionEvent) {
         ignoreTouches = true
-        toggleActive()
-        listener?.onGaugeViewLongPress(active)
+        listener?.onGaugeViewLongPress()
     }
 
     override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
@@ -472,6 +358,6 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     interface IListener {
         fun onGaugeViewValueUpdate(value: Int, max: Int)
         fun onGaugeViewValueSelection(value: Int, max: Int)
-        fun onGaugeViewLongPress(value: Boolean)
+        fun onGaugeViewLongPress()
     }
 }
