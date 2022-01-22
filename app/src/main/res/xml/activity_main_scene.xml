@@ -38,40 +38,36 @@
             android:layout_marginTop="8dp"/>
 
         <!-- TONE -->
-        <Constraint android:id="@+id/seekBarBalance"
+        <Constraint android:id="@+id/gaugeViewBass"
             android:visibility="invisible"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonTone" />
 
         <Constraint android:id="@+id/gaugeViewTreble"
             android:visibility="invisible"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="96dp"
-            android:layout_marginEnd="96dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seekBarBalance" />
-
-        <Constraint android:id="@+id/gaugeViewBass"
-            android:visibility="invisible"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="96dp"
-            android:layout_marginEnd="96dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonTone" />
+
+        <Constraint android:id="@+id/gaugeViewBalance"
+            android:visibility="invisible"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gaugeViewTreble" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gaugeViewBass" />
 
     </ConstraintSet>
 
@@ -100,40 +96,36 @@
             android:layout_marginTop="8dp"/>
 
         <!-- TONE -->
-        <Constraint android:id="@+id/seekBarBalance"
+        <Constraint android:id="@+id/gaugeViewBass"
             android:visibility="visible"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonTone" />
 
         <Constraint android:id="@+id/gaugeViewTreble"
             android:visibility="visible"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="96dp"
-            android:layout_marginEnd="96dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seekBarBalance" />
-
-        <Constraint android:id="@+id/gaugeViewBass"
-            android:visibility="visible"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="96dp"
-            android:layout_marginEnd="96dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonTone" />
+
+        <Constraint android:id="@+id/gaugeViewBalance"
+            android:visibility="visible"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gaugeViewTreble" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gaugeViewBass" />
 
     </ConstraintSet>
 
