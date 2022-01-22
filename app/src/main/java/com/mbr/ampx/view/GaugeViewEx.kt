@@ -76,7 +76,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     private lateinit var paintValueArc: Paint
     private lateinit var paintTargetArc: Paint
     // Scale lines
-    private var scaleLines = ArrayList<GaugeLine>()
+    private var lines = ArrayList<GaugeLine>()
     private lateinit var paintScaleLine: Paint
     // Inner circles
     private lateinit var paintColoredCircle: Paint
@@ -245,9 +245,9 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     }
 
     private fun calculateScaleValues() {
-        scaleLines.clear()
+        lines.clear()
         val numberOfLines = numberOfDivisions + 1
-        scaleLines = ArrayList(numberOfLines)
+        lines = ArrayList(numberOfLines)
         val totalAngle = endAngle - startAngle
         val divisionAngle = totalAngle / numberOfDivisions
         val lineStart = scaleDiameter
@@ -274,7 +274,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
             info.textX = (centerX + (dia + textOffset) * cosA).toFloat() - textWidth
             info.textY = (centerY + (dia + textOffset) * sinA).toFloat() + textHeight
             */
-            scaleLines.add(line)
+            lines.add(line)
         }
 
         // Scale lines don't have text here, so add text for min and max
@@ -332,8 +332,8 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         canvas.drawArc(boundsValueArc, startAngle, valueAngle, false, paintValueArc)
         canvas.drawArc(boundsValueArc, startAngle + valueAngle, targetAngle - valueAngle, false, paintTargetArc)
 
-        for (i in scaleLines.indices) {
-            val line = scaleLines[i]
+        for (line in lines) {
+            //val line = scaleLines[i]
             /*if (info.drawText) {
                 canvas.drawText(info.text, info.textX, info.textY, scaleTextPaint)
             }*/
@@ -406,9 +406,9 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     }
 
     private fun distanceFromCenter(x: Float, y: Float): Float {
-        val xd = Math.abs(x - centerX)
-        val yd = Math.abs(y - centerY)
-        return Math.sqrt(Math.pow(xd.toDouble(), 2.0) + Math.pow(yd.toDouble(), 2.0)).toFloat()
+        val xd = Math.abs(x - centerX).toDouble()
+        val yd = Math.abs(y - centerY).toDouble()
+        return Math.sqrt(Math.pow(xd, 2.0) + Math.pow(yd, 2.0)).toFloat()
     }
 
     private fun updateTargetAngle() {
@@ -466,7 +466,6 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     }
 
     override fun onSingleTapUp(motionEvent: MotionEvent): Boolean {
-
         return false
     }
 
