@@ -76,7 +76,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     private lateinit var paintValueArc: Paint
     private lateinit var paintTargetArc: Paint
     // Scale lines
-    private var scaleLines = ArrayList<GaugeScaleLine>()
+    private var scaleLines = ArrayList<GaugeLine>()
     private lateinit var paintScaleLine: Paint
     // Inner circles
     private lateinit var paintColoredCircle: Paint
@@ -254,7 +254,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         val lineEnd = scaleDiameter - SCALE_LINE_LENGTH
         //val dia = diameter + 5.0f
         //val textBounds = Rect()
-        var line: GaugeScaleLine
+        var line: GaugeLine
         //val textOffset = -28.0f
         for (i in 0 until numberOfLines) {
             val currentAngle = (startAngle + i * divisionAngle).toDouble()
@@ -265,7 +265,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
             val startY = (centerY + lineStart * sinA).toFloat()
             val stopX = (centerX + lineEnd * cosA).toFloat()
             val stopY = (centerY + lineEnd * sinA).toFloat()
-            line = GaugeScaleLine(startX, startY, stopX, stopY)
+            line = GaugeLine(startX, startY, stopX, stopY)
             /*
             info.text = "${i * divisionValue}"
             val textWidth = scaleTextPaint.measureText(info.text) / 2f
