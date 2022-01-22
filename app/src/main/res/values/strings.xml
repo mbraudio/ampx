@@ -47,5 +47,6 @@
     <string name="min">MIN</string>
     <string name="max">MAX</string>
     <string name="balance_capital">BALANCE</string>
+    <string name="tone">TONE</string>
 
 </resources>

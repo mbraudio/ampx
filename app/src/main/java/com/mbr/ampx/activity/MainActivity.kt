@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         Utilities.resources = resources
 
         binding.gaugeViewVolume.setListener(this)
-        binding.seekBarBalance.setListener(this)
+        //binding.seekBarBalance.setListener(this)
         //binding.gaugeViewVolume.setCurrentValue(100, 1)
 
 
@@ -205,7 +205,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
             Commands.COMMAND_UPDATE_BALANCE_VALUE -> {
                 Log.e(tag, "BALANCE: $data0")
-                binding.seekBarBalance.setCurrentValue(data0, data[2])
+                //binding.seekBarBalance.setCurrentValue(data0, data[2])
             }
 
             Commands.COMMAND_CALIBRATION_DATA_1 -> {

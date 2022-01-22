@@ -23,7 +23,6 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         private const val DEFAULT_CENTER_VALUE_TEXT_HEIGHT = 60.0f
 
         // ADJUSTMENTS
-        private const val DISTANCE_FROM_EDGE_FOR_TEXT = 16f //78.0f
         private const val VALUE_ARC_STROKE_WIDTH = 56.0f
         private const val SCALE_LINE_LENGTH = 40.0f
         private const val OUTER_ARC_DISTANCE_TO_VALUE_ARC = 16.0f
@@ -213,11 +212,11 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
 
         // Value arc(s)
         val strokeHalf = VALUE_ARC_STROKE_WIDTH / 2f
-        boundsValueArc.left = bounds.left  + DISTANCE_FROM_EDGE_FOR_TEXT + strokeHalf + OUTER_ARC_DISTANCE_TO_VALUE_ARC
-        boundsValueArc.top = bounds.top  + DISTANCE_FROM_EDGE_FOR_TEXT + strokeHalf + OUTER_ARC_DISTANCE_TO_VALUE_ARC
-        boundsValueArc.right = bounds.right - DISTANCE_FROM_EDGE_FOR_TEXT - strokeHalf - OUTER_ARC_DISTANCE_TO_VALUE_ARC
-        boundsValueArc.bottom = bounds.bottom - DISTANCE_FROM_EDGE_FOR_TEXT - strokeHalf - OUTER_ARC_DISTANCE_TO_VALUE_ARC
-        val diameterScaleArc = diameter - DISTANCE_FROM_EDGE_FOR_TEXT - OUTER_ARC_DISTANCE_TO_VALUE_ARC
+        boundsValueArc.left = bounds.left + strokeHalf + OUTER_ARC_DISTANCE_TO_VALUE_ARC
+        boundsValueArc.top = bounds.top + strokeHalf + OUTER_ARC_DISTANCE_TO_VALUE_ARC
+        boundsValueArc.right = bounds.right - strokeHalf - OUTER_ARC_DISTANCE_TO_VALUE_ARC
+        boundsValueArc.bottom = bounds.bottom - strokeHalf - OUTER_ARC_DISTANCE_TO_VALUE_ARC
+        val diameterScaleArc = diameter - OUTER_ARC_DISTANCE_TO_VALUE_ARC
         touchDistanceMin = diameterScaleArc - VALUE_ARC_STROKE_WIDTH * 4f
         touchDistanceMax = diameterScaleArc + VALUE_ARC_STROKE_WIDTH * 3f
         scaleDiameter = diameterScaleArc - VALUE_ARC_STROKE_WIDTH - VALUE_ARC_DISTANCE_TO_SCALE
@@ -327,7 +326,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     }
 
     override fun onDraw(canvas: Canvas) {
-
+        //canvas.drawRect(bounds, paintScaleLine)
         canvas.drawArc(boundsValueArc, startAngle, totalAngle, false, paintUnderlayArc)
         canvas.drawArc(boundsValueArc, startAngle, valueAngle, false, paintValueArc)
         canvas.drawArc(boundsValueArc, startAngle + valueAngle, targetAngle - valueAngle, false, paintTargetArc)

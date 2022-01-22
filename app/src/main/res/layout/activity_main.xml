@@ -67,20 +67,38 @@
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
+        <com.mbr.ampx.view.ModernButton
+            android:id="@+id/buttonTone"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            app:layout_constraintTop_toBottomOf="@id/linearLayoutButtons"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            app:modernButtonActive="false"
+            app:modernButtonNormalText="@string/tone"
+            app:modernButtonActiveText="@string/tone"
+            app:modernButtonTextSize="8sp"
+            app:modernButtonNormalImage="@drawable/outline_graphic_eq_white_24"/>
+
         <com.mbr.ampx.view.GaugeViewEx
             android:id="@+id/gaugeViewVolume"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayoutButtons"
+            app:layout_constraintTop_toBottomOf="@+id/buttonTone"
             app:gaugeNormalImage="@drawable/outline_volume_up_white_36_mod"
             app:gaugeActiveImage="@drawable/outline_volume_off_white_36_mod" />
 
+        <!--
         <com.mbr.ampx.view.ModernSeekBar
             android:id="@+id/seekBarBalance"
             android:layout_width="match_parent"
@@ -94,6 +112,7 @@
             app:modernTextTitle="@string/balance_capital"
             app:modernTextStart="L"
             app:modernTextEnd="R"/>
+            -->
 
         <LinearLayout
             android:id="@+id/linearLayoutInputs"
@@ -102,8 +121,8 @@
             android:layout_height="52dp"
             android:orientation="horizontal"
             android:weightSum="5"
-            app:layout_constraintTop_toBottomOf="@id/seekBarBalance"
-            android:layout_marginTop="16dp">
+            app:layout_constraintTop_toBottomOf="@id/gaugeViewVolume"
+            android:layout_marginTop="8dp">
 
             <com.mbr.ampx.view.ModernButton
                 android:id="@+id/inputButtonCd"
