@@ -252,10 +252,10 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         val divisionAngle = totalAngle / numberOfDivisions
         val lineStart = scaleDiameter
         val lineEnd = scaleDiameter - SCALE_LINE_LENGTH
-        val dia = diameter + 5.0f
-        val textBounds = Rect()
-        var info: GaugeScaleLine
-        val textOffset = -28.0f
+        //val dia = diameter + 5.0f
+        //val textBounds = Rect()
+        var line: GaugeScaleLine
+        //val textOffset = -28.0f
         for (i in 0 until numberOfLines) {
             val currentAngle = (startAngle + i * divisionAngle).toDouble()
             val angleRadians = Math.toRadians(currentAngle)
@@ -265,16 +265,16 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
             val startY = (centerY + lineStart * sinA).toFloat()
             val stopX = (centerX + lineEnd * cosA).toFloat()
             val stopY = (centerY + lineEnd * sinA).toFloat()
-            info = GaugeScaleLine(startX, startY, stopX, stopY)
+            line = GaugeScaleLine(startX, startY, stopX, stopY)
+            /*
             info.text = "${i * divisionValue}"
-
             val textWidth = scaleTextPaint.measureText(info.text) / 2f
             scaleTextPaint.getTextBounds(info.text, 0, info.text.length, textBounds)
             val textHeight = Math.abs(textBounds.top + textBounds.bottom) / 2f
             info.textX = (centerX + (dia + textOffset) * cosA).toFloat() - textWidth
             info.textY = (centerY + (dia + textOffset) * sinA).toFloat() + textHeight
-
-            scaleLines.add(info)
+            */
+            scaleLines.add(line)
         }
 
         // Scale lines don't have text here, so add text for min and max
@@ -333,11 +333,11 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         canvas.drawArc(boundsValueArc, startAngle + valueAngle, targetAngle - valueAngle, false, paintTargetArc)
 
         for (i in scaleLines.indices) {
-            val info = scaleLines[i]
-            if (info.drawText) {
+            val line = scaleLines[i]
+            /*if (info.drawText) {
                 canvas.drawText(info.text, info.textX, info.textY, scaleTextPaint)
-            }
-            canvas.drawLine(info.startX, info.startY, info.endX, info.endY, paintScaleLine)
+            }*/
+            canvas.drawLine(line.startX, line.startY, line.endX, line.endY, paintScaleLine)
         }
 
         canvas.drawCircle(centerX, centerY, coloredCircleRadius, paintColoredCircle)
