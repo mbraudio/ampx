@@ -15,6 +15,7 @@
 
     <ConstraintSet android:id="@+id/start">
 
+        <!-- VOLUME -->
         <Constraint android:id="@+id/gaugeViewVolume"
             android:visibility="visible"
             android:layout_width="match_parent"
@@ -36,10 +37,21 @@
             app:layout_constraintTop_toBottomOf="@id/gaugeViewVolume"
             android:layout_marginTop="8dp"/>
 
+        <!-- TONE -->
+        <Constraint android:id="@+id/seekBarBalance"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/buttonTone" />
+
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
 
+        <!-- VOLUME -->
         <Constraint android:id="@id/gaugeViewVolume"
             android:visibility="invisible"
             android:layout_width="match_parent"
@@ -60,6 +72,16 @@
             android:layout_height="52dp"
             app:layout_constraintTop_toBottomOf="parent"
             android:layout_marginTop="8dp"/>
+
+        <!-- TONE -->
+        <Constraint android:id="@+id/seekBarBalance"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/buttonTone" />
 
     </ConstraintSet>
 

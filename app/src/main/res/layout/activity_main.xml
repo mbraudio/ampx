@@ -103,8 +103,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonTone" />
 
-        <!--
         <com.mbr.ampx.view.ModernSeekBar
+            android:visibility="invisible"
             android:id="@+id/seekBarBalance"
             android:layout_width="match_parent"
             android:layout_height="42dp"
@@ -113,11 +113,10 @@
             android:layout_marginTop="16dp"
             app:modernTextSize="8sp"
             app:modernTextDistance="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/gaugeViewVolume"
+            app:layout_constraintTop_toBottomOf="@+id/buttonTone"
             app:modernTextTitle="@string/balance_capital"
             app:modernTextStart="L"
             app:modernTextEnd="R"/>
-            -->
 
         <LinearLayout
             android:id="@+id/linearLayoutInputs"
