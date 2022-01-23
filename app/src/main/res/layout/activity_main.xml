@@ -73,17 +73,14 @@
             android:id="@+id/buttonTone"
             android:layout_width="52dp"
             android:layout_height="52dp"
-            android:layout_gravity="center"
             android:layout_marginTop="8dp"
-            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/buttonPower"
-            app:modernButtonActive="false"
-            app:modernButtonActiveImage="@drawable/outline_volume_up_white_24"
-            app:modernButtonActiveText="@string/volume"
+            app:modernButtonActiveColor="@color/colorGradientEnd"
             app:modernButtonNormalImage="@drawable/outline_graphic_eq_white_24"
             app:modernButtonNormalText="@string/tone"
+            app:modernButtonActiveText="@string/tone"
             app:modernButtonTextSize="8sp" />
 
         <com.mbr.ampx.view.GaugeViewEx
@@ -205,6 +202,50 @@
                 app:modernButtonTextSize="8sp" />
 
         </LinearLayout>
+
+        <com.mbr.ampx.view.ModernButton
+            android:id="@+id/buttonBassBoost"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            app:modernButtonActiveColor="@color/colorGradientEnd"
+            app:modernButtonActiveImage="@drawable/outline_music_note_white_24"
+            app:modernButtonActiveText="@string/bass_boost"
+            app:modernButtonNormalImage="@drawable/outline_music_note_white_24"
+            app:modernButtonNormalText="@string/bass_boost"
+            app:modernButtonTextSize="8sp" />
+
+        <com.mbr.ampx.view.ModernButton
+            android:id="@+id/buttonDirect"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            app:modernButtonActiveColor="@color/colorGradientEnd"
+            app:modernButtonActiveImage="@drawable/outline_settings_input_component_white_24"
+            app:modernButtonActiveText="@string/direct"
+            app:modernButtonNormalImage="@drawable/outline_settings_input_component_white_24"
+            app:modernButtonNormalText="@string/direct"
+            app:modernButtonTextSize="8sp" />
+
+        <com.mbr.ampx.view.ModernButton
+            android:id="@+id/buttonSpeakersA"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            app:modernButtonActiveColor="@color/colorGradientEnd"
+            app:modernButtonActiveImage="@drawable/outline_speaker_white_24"
+            app:modernButtonActiveText="@string/speakers_a"
+            app:modernButtonNormalImage="@drawable/outline_speaker_white_24"
+            app:modernButtonNormalText="@string/speakers_a"
+            app:modernButtonTextSize="8sp" />
+
+        <com.mbr.ampx.view.ModernButton
+            android:id="@+id/buttonSpeakersB"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            app:modernButtonActiveColor="@color/colorGradientEnd"
+            app:modernButtonActiveImage="@drawable/outline_speaker_white_24"
+            app:modernButtonActiveText="@string/speakers_b"
+            app:modernButtonNormalImage="@drawable/outline_speaker_white_24"
+            app:modernButtonNormalText="@string/speakers_b"
+            app:modernButtonTextSize="8sp" />
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 

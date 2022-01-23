@@ -53,5 +53,7 @@
     <string name="treble">TREBLE</string>
     <string name="bass">BASS</string>
     <string name="bass_boost">BASS BOOST</string>
+    <string name="speakers_a">SPEAKERS A</string>
+    <string name="speakers_b">SPEAKERS B</string>
 
 </resources>
