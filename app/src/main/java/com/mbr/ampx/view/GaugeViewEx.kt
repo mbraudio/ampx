@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.mbr.ampx.R
+import com.mbr.ampx.listener.IGaugeViewListener
 import com.mbr.ampx.utilities.Constants
 import kotlin.math.sqrt
 
@@ -52,7 +53,6 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     private var touchDistanceMax = 0f
     private var numberOfDivisions = 0
     private var divisionValue = 0
-    private var value = 0
     private var maximumValue = 0
     private var radius = 0f
     private var unit: String? = null
@@ -90,8 +90,8 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     // Gestures and Touches
     private var ignoreTouches = false
     private lateinit var gestureDetector: GestureDetector
-    private var listener: IListener? = null
-    fun setListener(listener: IListener) { this.listener = listener }
+    private var listener: IGaugeViewListener? = null
+    fun setListener(listener: IGaugeViewListener) { this.listener = listener }
 
     constructor(context: Context) : super(context) {
         initialize(context, null, 0)
@@ -332,10 +332,6 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         canvas.drawArc(boundsValueArc, startAngle + valueAngle, targetAngle - valueAngle, false, paintTargetArc)
 
         for (line in lines) {
-            //val line = scaleLines[i]
-            /*if (info.drawText) {
-                canvas.drawText(info.text, info.textX, info.textY, scaleTextPaint)
-            }*/
             canvas.drawLine(line.startX, line.startY, line.endX, line.endY, paintScaleLine)
         }
 
@@ -353,11 +349,6 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
 
         // Center spot
         //canvas.drawCircle(centerX, centerY, 1f, paintColoredCircle)
-    }
-
-    private fun calculateValue(angle: Float) {
-        value = ((angle * maximumValue) / totalAngle).toInt()
-        valueText.text = "$value$unit"
     }
 
     fun setCurrentValue(current: Int, active: Int) {
@@ -387,11 +378,10 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
                 when (event.action) {
                     MotionEvent.ACTION_MOVE -> {
                         updateTargetAngle()
-                        listener?.onGaugeViewValueUpdate(value, maximumValue)
                     }
                     MotionEvent.ACTION_UP -> {
-                        calculateValue(targetAngle)
-                        listener?.onGaugeViewValueSelection(value, maximumValue)
+                        val value = calculateValue(targetAngle)
+                        listener?.onGaugeViewValueSelection(value, maximumValue, id)
                     }
                 }
                 //Log.e(TAG, "ACTION: " + event.getAction());
@@ -420,8 +410,13 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         if (angle < startAngle) {
             targetAngle += 360f
         }
-        val targetValue = ((targetAngle * maximumValue) / totalAngle).toInt()
-        valueText.text = "$targetValue$unit"
+        calculateValue(targetAngle)
+    }
+
+    private fun calculateValue(angle: Float): Int {
+        val value = ((angle * maximumValue) / totalAngle).toInt()
+        valueText.text = "$value$unit"
+        return value
     }
 
     private fun getAngleForPoint(x: Float, y: Float): Float {
@@ -453,7 +448,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     override fun onLongPress(e: MotionEvent) {
         ignoreTouches = true
         toggleActive()
-        listener?.onGaugeViewLongPress(active)
+        listener?.onGaugeViewLongPress(active, id)
     }
 
     override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
@@ -468,10 +463,4 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         return false
     }
 
-    // Listener
-    interface IListener {
-        fun onGaugeViewValueUpdate(value: Int, max: Int)
-        fun onGaugeViewValueSelection(value: Int, max: Int)
-        fun onGaugeViewLongPress(value: Boolean)
-    }
 }

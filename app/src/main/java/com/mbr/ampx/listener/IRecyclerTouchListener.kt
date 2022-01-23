@@ -6,7 +6,7 @@ import android.view.MotionEvent
 import androidx.recyclerview.widget.RecyclerView
 import com.mbr.ampx.dialog.IRecyclerClickListener
 
-class RecyclerTouchListener(context: Context, recyclerView: RecyclerView, private val clickListener: IRecyclerClickListener) : RecyclerView.OnItemTouchListener {
+class IRecyclerTouchListener(context: Context, recyclerView: RecyclerView, private val clickListener: IRecyclerClickListener) : RecyclerView.OnItemTouchListener {
 
     private val gestureDetector: GestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
 

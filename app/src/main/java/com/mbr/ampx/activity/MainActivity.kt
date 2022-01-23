@@ -17,18 +17,18 @@ import com.mbr.ampx.bluetooth.Commands
 import com.mbr.ampx.databinding.ActivityMainBinding
 import com.mbr.ampx.dialog.ScanDialogFragment
 import com.mbr.ampx.dialog.SettingsDialogFragment
+import com.mbr.ampx.listener.IGaugeViewListener
 import com.mbr.ampx.utilities.ButtonGroup
 import com.mbr.ampx.utilities.COBS
 import com.mbr.ampx.utilities.Constants
 import com.mbr.ampx.utilities.Utilities
 import com.mbr.ampx.utilities.Utilities.printSystemData
-import com.mbr.ampx.view.GaugeViewEx
+import com.mbr.ampx.view.GaugeViewSimple
 import com.mbr.ampx.view.ModernButton
-import com.mbr.ampx.view.ModernSeekBar
 import com.mbr.ampx.viewmodel.GlobalViewModel
 import java.lang.Exception
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClickListener, GaugeViewEx.IListener, ModernSeekBar.IListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClickListener, IGaugeViewListener {
 
     private val tag = this.javaClass.simpleName
 
@@ -51,10 +51,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
         Utilities.resources = resources
 
+        // Gauge Views
         binding.gaugeViewVolume.setListener(this)
-        //binding.seekBarBalance.setListener(this)
-        //binding.gaugeViewVolume.setCurrentValue(100, 1)
-
+        binding.gaugeViewBass.setListener(this)
+        binding.gaugeViewTreble.setListener(this)
+        binding.gaugeViewBalance.setListener(this)
 
         // BUTTONS
         binding.buttonConnection.setOnClickListener {
@@ -201,16 +202,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             }
 
             Commands.COMMAND_UPDATE_BASS_VALUE -> {
-                //Log.e(tag, "BASS: $data0")
+                Log.e(tag, "BASS: $data0")
+                binding.gaugeViewBass.setCurrentValue(data0, data[2])
             }
 
             Commands.COMMAND_UPDATE_TREBLE_VALUE -> {
-                //Log.e(tag, "TREBLE: $data0")
+                Log.e(tag, "TREBLE: $data0")
+                binding.gaugeViewTreble.setCurrentValue(data0, data[2])
             }
 
             Commands.COMMAND_UPDATE_BALANCE_VALUE -> {
                 Log.e(tag, "BALANCE: $data0")
-                //binding.seekBarBalance.setCurrentValue(data0, data[2])
+                binding.gaugeViewBalance.setCurrentValue(data0, data[2])
             }
 
             Commands.COMMAND_CALIBRATION_DATA_1 -> {
@@ -283,6 +286,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.buttonPower.setActive(false)
         binding.gaugeViewVolume.setCurrentValue(0, 0)
         binding.gaugeViewVolume.setActive(false)
+        binding.gaugeViewBass.setCurrentValue(GaugeViewSimple.DEFAULT_MAXIMUM_VALUE_HALF, 0)
+        binding.gaugeViewTreble.setCurrentValue(GaugeViewSimple.DEFAULT_MAXIMUM_VALUE_HALF, 0)
+        binding.gaugeViewBalance.setCurrentValue(GaugeViewSimple.DEFAULT_MAXIMUM_VALUE_HALF, 0)
         //gaugeViewVolume.setValueTextVisibility(false)
         binding.buttonDirect.setActive(false)
         binding.buttonBassBoost.setActive(false)
@@ -308,34 +314,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
                 }
             }
         }
-    }
-
-    // GAUGE VIEW LISTENER
-    override fun onGaugeViewValueUpdate(value: Int, max: Int) {
-
-    }
-
-    override fun onGaugeViewValueSelection(value: Int, max: Int) {
-        val index = (value * Constants.NUMBER_OF_VOLUME_STEPS) / max
-        Log.e(tag, "Index: $index")
-        binding.viewModel!!.active?.setVolume(index.toByte())
-    }
-
-    override fun onGaugeViewLongPress(value: Boolean) {
-        //Log.e(tag, "Mute: $value")
-        binding.viewModel!!.active?.setMute(value)
-        // TODO: Need to add this functionality to STM32 project!!!
-    }
-
-    // Modern SeekBar IListener
-    override fun onValueSelection(value: Int, seekBar: ModernSeekBar) {
-        //Log.e(tag, "SEEK BAR - on Value Selection")
-        binding.viewModel!!.active?.setBalance(value.toByte())
-    }
-
-    override fun onLongPress(value: Int, seekBar: ModernSeekBar) {
-        //Log.e(tag, "SEEK BAR - on Long Press")
-        binding.viewModel!!.active?.setBalance(value.toByte())
     }
 
     // VIEW ON CLICK LISTENER and ON LONG CLICK LISTENER
@@ -388,5 +366,52 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
         }*/
         return true
+    }
+
+    // GAUGE VIEW LISTENER
+    override fun onGaugeViewValueSelection(value: Int, max: Int, id: Int) {
+        val active = binding.viewModel!!.active ?: return
+
+        when (id) {
+            R.id.gaugeViewVolume -> {
+                val index = (value * Constants.NUMBER_OF_VOLUME_STEPS) / max
+                Log.e(tag, "Index: $index")
+                active.setVolume(index.toByte())
+            }
+
+            R.id.gaugeViewBass -> {
+
+            }
+
+            R.id.gaugeViewTreble -> {
+
+            }
+
+            R.id.gaugeViewBalance -> {
+                active.setBalance(value.toByte())
+            }
+        }
+    }
+
+    override fun onGaugeViewLongPress(value: Boolean, id: Int) {
+        val active = binding.viewModel!!.active ?: return
+
+        when (id) {
+            R.id.gaugeViewVolume -> {
+                active.setMute(value)
+            }
+
+            R.id.gaugeViewBass -> {
+
+            }
+
+            R.id.gaugeViewTreble -> {
+
+            }
+
+            R.id.gaugeViewBalance -> {
+
+            }
+        }
     }
 }

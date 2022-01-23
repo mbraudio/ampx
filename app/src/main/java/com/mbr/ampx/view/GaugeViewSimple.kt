@@ -3,11 +3,13 @@ package com.mbr.ampx.view
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.mbr.ampx.R
+import com.mbr.ampx.listener.IGaugeViewListener
 import com.mbr.ampx.utilities.Constants
 import kotlin.math.sqrt
 
@@ -17,7 +19,8 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
         //private val TAG = GaugeView::class.java.simpleName
 
         // DEFAULT VALUES
-        private const val DEFAULT_MAXIMUM_VALUE = 100
+        private const val DEFAULT_MAXIMUM_VALUE = 255
+        const val DEFAULT_MAXIMUM_VALUE_HALF = 127
         private const val DEFAULT_CENTER_VALUE_TEXT_HEIGHT = 50.0f
 
         // ADJUSTMENTS
@@ -30,11 +33,11 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
     private val startAngle = 120f
     private val endAngle = 420f
     private val totalAngle = endAngle - startAngle
+    private var centerAngle = (totalAngle / 2f) + startAngle
     private var valueAngle = 0f
     private var targetAngle = 0f
     private var touchDistanceMin = 0f
     private var touchDistanceMax = 0f
-    private var value = 0
     private var maximumValue = 0
     private var radius = 0f
 
@@ -69,8 +72,8 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
     // Gestures and Touches
     private var ignoreTouches = false
     private lateinit var gestureDetector: GestureDetector
-    private var listener: IListener? = null
-    fun setListener(listener: IListener) { this.listener = listener }
+    private var listener: IGaugeViewListener? = null
+    fun setListener(listener: IGaugeViewListener) { this.listener = listener }
 
     constructor(context: Context) : super(context) {
         initialize(context, null, 0)
@@ -100,6 +103,7 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
 
         paintValueArc = Paint(Paint.ANTI_ALIAS_FLAG)
         paintValueArc.style = Paint.Style.STROKE
+        paintValueArc.color = context.getColor(R.color.colorGradientEnd)
         paintValueArc.strokeWidth = VALUE_ARC_STROKE_WIDTH
         paintValueArc.strokeCap = Paint.Cap.ROUND
 
@@ -160,14 +164,6 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
         centerY = (bounds.top + bounds.bottom) / 2f
         radius = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
 
-        val positions = floatArrayOf(0.0f, 1.0f)
-        val colors = intArrayOf(ContextCompat.getColor(context, R.color.colorGradientStart), ContextCompat.getColor(context, R.color.colorGradientEnd))
-        val gradient = SweepGradient(centerX, centerY, colors, positions)
-        val matrix = Matrix()
-        matrix.preRotate(startAngle - (VALUE_ARC_STROKE_WIDTH / 2f), centerX, centerY)
-        gradient.setLocalMatrix(matrix)
-        paintValueArc.shader = gradient
-
         // Value arc(s)
         val strokeHalf = VALUE_ARC_STROKE_WIDTH / 2f
         boundsValueArc.left = bounds.left + strokeHalf
@@ -195,7 +191,7 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
     }
 
     private fun addText() {
-        // Scale lines don't have text here, so add text for min and max
+        // Add text for min and max
         addText(startAngle, context.getString(R.string.minus_sign))
         addText(endAngle, context.getString(R.string.plus_sign))
     }
@@ -226,8 +222,8 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
     override fun onDraw(canvas: Canvas) {
         //canvas.drawRect(bounds, paintColoredCircle)
         canvas.drawArc(boundsValueArc, startAngle, totalAngle, false, paintUnderlayArc)
-        canvas.drawArc(boundsValueArc, startAngle, valueAngle, false, paintValueArc)
-        canvas.drawArc(boundsValueArc, startAngle + valueAngle, targetAngle - valueAngle, false, paintTargetArc)
+        canvas.drawArc(boundsValueArc, centerAngle, valueAngle, false, paintValueArc)
+        canvas.drawArc(boundsValueArc, centerAngle + valueAngle, targetAngle - (centerAngle + valueAngle), false, paintTargetArc)
 
         canvas.drawCircle(centerX, centerY, coloredCircleRadius, paintColoredCircle)
 
@@ -242,18 +238,14 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
         //canvas.drawCircle(centerX, centerY, 1f, paintColoredCircle)
     }
 
-    private fun calculateValue(angle: Float) {
-        value = ((angle * maximumValue) / totalAngle).toInt()
-        valueText.text = "$value"
-    }
-
     fun setCurrentValue(current: Int, active: Int) {
-        val newAngle = (current.toFloat() * totalAngle) / Constants.NUMBER_OF_VOLUME_STEPS.toFloat()
-        valueAngle = newAngle
+        // Current 0 - 255
+        val value = current - DEFAULT_MAXIMUM_VALUE_HALF
+        valueAngle = (value * totalAngle) / DEFAULT_MAXIMUM_VALUE
         if (active == 0) {
-            targetAngle = newAngle
+            targetAngle = centerAngle + valueAngle
         }
-        calculateValue(valueAngle)
+        valueText.text = "$value"
         invalidate()
     }
 
@@ -274,11 +266,10 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
                 when (event.action) {
                     MotionEvent.ACTION_MOVE -> {
                         updateTargetAngle()
-                        listener?.onGaugeViewValueUpdate(value, maximumValue)
                     }
                     MotionEvent.ACTION_UP -> {
-                        calculateValue(targetAngle)
-                        listener?.onGaugeViewValueSelection(value, maximumValue)
+                        val value = calculateValue(targetAngle)
+                        listener?.onGaugeViewValueSelection(value, maximumValue, id)
                     }
                 }
                 //Log.e(TAG, "ACTION: " + event.getAction());
@@ -300,15 +291,17 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
     private fun updateTargetAngle() {
         // Calculate the angle of user touch
         val angle = getAngleForPoint(touchX, touchY)
-        if ((angle < startAngle) && (angle > (endAngle - 360f))) {
+        if ((angle < startAngle) || (angle > endAngle)) {
             return
         }
-        targetAngle = angle - startAngle
-        if (angle < startAngle) {
-            targetAngle += 360f
-        }
-        val targetValue = ((targetAngle * maximumValue) / totalAngle).toInt()
-        valueText.text = "$targetValue"
+        targetAngle = angle
+        calculateValue(angle)
+    }
+
+    private fun calculateValue(angle: Float): Int {
+        val value = (((angle - startAngle) * maximumValue) / totalAngle).toInt()
+        valueText.text = "$value"
+        return value
     }
 
     private fun getAngleForPoint(x: Float, y: Float): Float {
@@ -321,9 +314,6 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
             angle = 360f - angle
         }
         angle += 90f
-        if (angle > 360f) {
-            angle -= 360f
-        }
         return angle
     }
 
@@ -339,7 +329,7 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
 
     override fun onLongPress(e: MotionEvent) {
         ignoreTouches = true
-        listener?.onGaugeViewLongPress()
+        listener?.onGaugeViewLongPress(false, id)
     }
 
     override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
@@ -352,12 +342,5 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
 
     override fun onSingleTapUp(motionEvent: MotionEvent): Boolean {
         return false
-    }
-
-    // Listener
-    interface IListener {
-        fun onGaugeViewValueUpdate(value: Int, max: Int)
-        fun onGaugeViewValueSelection(value: Int, max: Int)
-        fun onGaugeViewLongPress()
     }
 }

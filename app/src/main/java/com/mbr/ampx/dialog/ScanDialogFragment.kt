@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mbr.ampx.R
 import com.mbr.ampx.adapter.DeviceAdapter
 import com.mbr.ampx.databinding.DialogScanBinding
-import com.mbr.ampx.listener.RecyclerTouchListener
+import com.mbr.ampx.listener.IRecyclerTouchListener
 import com.mbr.ampx.viewmodel.GlobalViewModel
 
 interface IRecyclerClickListener {
@@ -54,7 +54,7 @@ class ScanDialogFragment : DialogFragment(), View.OnClickListener, IRecyclerClic
         recyclerViewAdapter = DeviceAdapter(resources)
         recycler.adapter = recyclerViewAdapter
 
-        val recyclerTouchListener = RecyclerTouchListener(requireContext(), recycler, this)
+        val recyclerTouchListener = IRecyclerTouchListener(requireContext(), recycler, this)
         recycler.addOnItemTouchListener(recyclerTouchListener)
 
         // View model
