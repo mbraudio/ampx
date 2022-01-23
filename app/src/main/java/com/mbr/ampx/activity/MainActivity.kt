@@ -286,9 +286,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.buttonPower.setActive(false)
         binding.gaugeViewVolume.setCurrentValue(0, 0)
         binding.gaugeViewVolume.setActive(false)
-        binding.gaugeViewBass.setCurrentValue(GaugeViewSimple.DEFAULT_MAXIMUM_VALUE_HALF, 0)
-        binding.gaugeViewTreble.setCurrentValue(GaugeViewSimple.DEFAULT_MAXIMUM_VALUE_HALF, 0)
-        binding.gaugeViewBalance.setCurrentValue(GaugeViewSimple.DEFAULT_MAXIMUM_VALUE_HALF, 0)
+        binding.gaugeViewBass.setCurrentValue(GaugeViewSimple.DEFAULT_VALUE_HALF, 0)
+        binding.gaugeViewTreble.setCurrentValue(GaugeViewSimple.DEFAULT_VALUE_HALF, 0)
+        binding.gaugeViewBalance.setCurrentValue(GaugeViewSimple.DEFAULT_VALUE_HALF, 0)
         //gaugeViewVolume.setValueTextVisibility(false)
         binding.buttonDirect.setActive(false)
         binding.buttonBassBoost.setActive(false)
@@ -380,11 +380,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             }
 
             R.id.gaugeViewBass -> {
-
+                active.setBass(value.toByte())
             }
 
             R.id.gaugeViewTreble -> {
-
+                active.setTreble(value.toByte())
             }
 
             R.id.gaugeViewBalance -> {
@@ -402,15 +402,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             }
 
             R.id.gaugeViewBass -> {
-
+                active.setBass(GaugeViewSimple.DEFAULT_VALUE_HALF.toByte())
             }
 
             R.id.gaugeViewTreble -> {
-
+                active.setTreble(GaugeViewSimple.DEFAULT_VALUE_HALF.toByte())
             }
 
             R.id.gaugeViewBalance -> {
-
+                active.setBalance(GaugeViewSimple.DEFAULT_VALUE_HALF.toByte())
             }
         }
     }

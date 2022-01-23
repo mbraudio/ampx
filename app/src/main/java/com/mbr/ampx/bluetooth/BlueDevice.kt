@@ -343,6 +343,20 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
+    fun setBass(value: Byte) {
+        val crc = (Commands.COMMAND_UPDATE_BASS_VALUE.toByte() + value).toByte()
+        val data = byteArrayOf(Commands.COMMAND_UPDATE_BASS_VALUE.toByte(), value, crc)
+        val buffer = COBS.encode(data)
+        addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
+    }
+
+    fun setTreble(value: Byte) {
+        val crc = (Commands.COMMAND_UPDATE_TREBLE_VALUE.toByte() + value).toByte()
+        val data = byteArrayOf(Commands.COMMAND_UPDATE_TREBLE_VALUE.toByte(), value, crc)
+        val buffer = COBS.encode(data)
+        addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
+    }
+
     fun setBalance(value: Byte) {
         val crc = (Commands.COMMAND_UPDATE_BALANCE_VALUE.toByte() + value).toByte()
         val data = byteArrayOf(Commands.COMMAND_UPDATE_BALANCE_VALUE.toByte(), value, crc)

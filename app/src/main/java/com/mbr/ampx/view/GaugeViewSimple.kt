@@ -3,14 +3,11 @@ package com.mbr.ampx.view
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.content.ContextCompat
 import com.mbr.ampx.R
 import com.mbr.ampx.listener.IGaugeViewListener
-import com.mbr.ampx.utilities.Constants
 import kotlin.math.sqrt
 
 class GaugeViewSimple : View, GestureDetector.OnGestureListener {
@@ -20,7 +17,7 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
 
         // DEFAULT VALUES
         private const val DEFAULT_MAXIMUM_VALUE = 255
-        const val DEFAULT_MAXIMUM_VALUE_HALF = 127
+        const val DEFAULT_VALUE_HALF = 127
         private const val DEFAULT_CENTER_VALUE_TEXT_HEIGHT = 50.0f
 
         // ADJUSTMENTS
@@ -240,7 +237,7 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
 
     fun setCurrentValue(current: Int, active: Int) {
         // Current 0 - 255
-        val value = current - DEFAULT_MAXIMUM_VALUE_HALF
+        val value = current - DEFAULT_VALUE_HALF
         valueAngle = (value * totalAngle) / DEFAULT_MAXIMUM_VALUE
         if (active == 0) {
             targetAngle = centerAngle + valueAngle
