@@ -202,17 +202,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             }
 
             Commands.COMMAND_UPDATE_BASS_VALUE -> {
-                Log.e(tag, "BASS: $data0")
                 binding.gaugeViewBass.setCurrentValue(data0, data[2])
             }
 
             Commands.COMMAND_UPDATE_TREBLE_VALUE -> {
-                Log.e(tag, "TREBLE: $data0")
                 binding.gaugeViewTreble.setCurrentValue(data0, data[2])
             }
 
             Commands.COMMAND_UPDATE_BALANCE_VALUE -> {
-                Log.e(tag, "BALANCE: $data0")
                 binding.gaugeViewBalance.setCurrentValue(data0, data[2])
             }
 
@@ -361,10 +358,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
     }
 
     override fun onLongClick(view: View?): Boolean {
-        // TODO: Finish this function...
-        /*if (view.id == R.id.seekBarBalance) {
-
-        }*/
         return true
     }
 
