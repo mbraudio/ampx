@@ -17,6 +17,14 @@ object Utilities {
         return crc == data[size]
     }
 
+    fun byteArrayToIntArray(array: ByteArray): IntArray {
+        val ints = IntArray(array.size)
+        for (i in array.indices) {
+            ints[i] = array[i].toUByte().toInt()
+        }
+        return ints
+    }
+
     fun printSystemData(data: IntArray) {
         val one = 1.toByte()
         Log.e("SYSTEM", "APD: " + if (data[Constants.SYSTEM_INDEX_APD] == 1) "ON" else "OFF")
@@ -50,4 +58,16 @@ object Utilities {
         }
         return resources.getString(R.string.unknown)
     }
+
+/*
+    fun setWindowFlag(bits: Int, on: Boolean) {
+        val winParams = window.attributes
+        if (on) {
+            winParams.flags = winParams.flags or bits
+        } else {
+            winParams.flags = winParams.flags and bits.inv()
+        }
+        window.attributes = winParams
+    }
+*/
 }

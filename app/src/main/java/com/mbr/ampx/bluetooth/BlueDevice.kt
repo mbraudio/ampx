@@ -305,13 +305,13 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
-    fun toggleSpeakerA() {
+    fun toggleSpeakersA() {
         val data = byteArrayOf(Commands.COMMAND_TOGGLE_SPEAKER_A.toByte(), Commands.COMMAND_TOGGLE_SPEAKER_A.toByte())
         val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
-    fun toggleSpeakerB() {
+    fun toggleSpeakersB() {
         val data = byteArrayOf(Commands.COMMAND_TOGGLE_SPEAKER_B.toByte(), Commands.COMMAND_TOGGLE_SPEAKER_B.toByte())
         val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))

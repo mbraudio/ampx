@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
-import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.lifecycle.ViewModelProvider
@@ -57,7 +56,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         //binding.gaugeViewVolume.setCurrentValue(100, 1)
 
 
-        // Buttons
+        // BUTTONS
         binding.buttonConnection.setOnClickListener {
             ScanDialogFragment().show(supportFragmentManager, "scan")
         }
@@ -67,6 +66,36 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             false
         }
 
+        binding.buttonPower.setOnClickListener(this)
+        //binding.buttonMute.listener = this
+
+        binding.buttonSettings.setOnClickListener {
+            SettingsDialogFragment().show(supportFragmentManager, "settings")
+            //it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+        }
+
+        // INPUT BUTTONS
+        inputGroup = ButtonGroup(5)
+        inputGroup.addButton(binding.inputButtonCd)
+        inputGroup.addButton(binding.inputButtonNetwork)
+        inputGroup.addButton(binding.inputButtonTuner)
+        inputGroup.addButton(binding.inputButtonAux)
+        inputGroup.addButton(binding.inputButtonRecorder)
+        inputGroup.setGroupListener(this)
+
+        // TONE BUTTONS
+        binding.buttonDirect.setOnClickListener(this)
+        binding.buttonBassBoost.setOnClickListener(this)
+        binding.buttonSpeakersA.setOnClickListener(this)
+        binding.buttonSpeakersB.setOnClickListener(this)
+
+        // Bluetooth Adapter
+        createBluetoothAdapter()
+
+        // Observers
+        addObservers()
+
+        // Set transition listener
         val transitionListener = object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {
 
@@ -87,31 +116,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             }
         }
         binding.motionLayout.setTransitionListener(transitionListener)
-
-
-        binding.buttonPower.setOnClickListener(this)
-        //binding.buttonMute.listener = this
-
-        binding.buttonSettings.setOnClickListener {
-            SettingsDialogFragment().show(supportFragmentManager, "settings")
-        }
-
-
-        inputGroup = ButtonGroup(5)
-        inputGroup.addButton(binding.inputButtonCd)
-        inputGroup.addButton(binding.inputButtonNetwork)
-        inputGroup.addButton(binding.inputButtonTuner)
-        inputGroup.addButton(binding.inputButtonAux)
-        inputGroup.addButton(binding.inputButtonRecorder)
-        inputGroup.setGroupListener(this)
-
-        // TODO: ADD REST OF BUTTONS !!!
-
-        // Bluetooth Adapter
-        createBluetoothAdapter()
-
-        // Observers
-        addObservers()
     }
 
     private fun addObservers() {
@@ -131,30 +135,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         })
     }
 
-    /*
-    fun setWindowFlag(bits: Int, on: Boolean) {
-        val winParams = window.attributes
-        if (on) {
-            winParams.flags = winParams.flags or bits
-        } else {
-            winParams.flags = winParams.flags and bits.inv()
-        }
-        window.attributes = winParams
-    }
-    */
-
-    private fun byteArrayToIntArray(array: ByteArray): IntArray {
-        val ints = IntArray(array.size)
-        for (i in array.indices) {
-            ints[i] = array[i].toUByte().toInt()
-        }
-        return ints
-    }
-
     private fun processData(buffer: ByteArray) {
         val data: IntArray = try {
             val temp = COBS.decode(buffer)
-            byteArrayToIntArray(temp)
+            Utilities.byteArrayToIntArray(temp)
         } catch (ex: Exception) {
             Log.e(tag, "ERROR: Received data has failed to decode!")
             ex.printStackTrace()
@@ -188,23 +172,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             }
 
             Commands.COMMAND_TOGGLE_DIRECT -> {
-                //buttonDirect.setActive(enabled)
+                binding.buttonDirect.setActive(enabled)
             }
 
             Commands.COMMAND_CHANGE_INPUT -> {
-                inputGroup.select(data0.toInt())
+                inputGroup.select(data0)
             }
 
             Commands.COMMAND_TOGGLE_SPEAKER_A -> {
-                //buttonSpeakersA.setActive(enabled)
+                binding.buttonSpeakersA.setActive(enabled)
             }
 
             Commands.COMMAND_TOGGLE_SPEAKER_B -> {
-                //buttonSpeakersB.setActive(enabled)
+                binding.buttonSpeakersB.setActive(enabled)
             }
 
             Commands.COMMAND_TOGGLE_LOUDNESS -> {
-                //buttonLoudness.setActive(enabled)
+                binding.buttonBassBoost.setActive(enabled)
             }
 
             Commands.COMMAND_TOGGLE_PAMP_DIRECT -> {
@@ -235,7 +219,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
                 }
                 var i = 2
                 while (i < data.size - 1) {
-                    text += data[i].toInt().toString() + ", "
+                    text += data[i].toString() + ", "
                     i++
                 }
             }
@@ -244,7 +228,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
                 if (data.size > 1) {
                     var i = 2
                     while (i < data.size) {
-                        text += data[i].toInt().toString() + ", "
+                        text += data[i].toString() + ", "
                         i++
                     }
                 }
@@ -272,27 +256,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
     }
 
     private fun select(data: IntArray) {
-        //var active = false
-        //val manager: BlueManager = BlueManager.getInstance()
-        //manager.setBrightnessIndex(data[Constants.SYSTEM_INDEX_BRIGHTNESS_INDEX])
-        //manager.setVolumeLedsValues(data[Constants.SYSTEM_INDEX_VOLUME_RED], data[Constants.SYSTEM_INDEX_VOLUME_GREEN], data[Constants.SYSTEM_INDEX_VOLUME_BLUE])
-
+        // Brightness index
         binding.viewModel?.active?.brightnessIndex = data[Constants.SYSTEM_INDEX_BRIGHTNESS_INDEX]
 
         // States
         binding.buttonPower.setActive(true)
-        val active = data[Constants.SYSTEM_INDEX_STATE_MUTE] == 1
-        binding.gaugeViewVolume.setActive(active)
+        var enabled = data[Constants.SYSTEM_INDEX_STATE_MUTE] == 1
+        binding.gaugeViewVolume.setActive(enabled)
 
         // System
-        //active = data[Constants.SYSTEM_INDEX_DIRECT] == one
-        //binding.buttonDirect.setActive(active)
-        //active = data[Constants.SYSTEM_INDEX_LOUDNESS] == one
-        //buttonLoudness.setActive(active)
-        //active = data[Constants.SYSTEM_INDEX_SPEAKERS_A] == one
-        //buttonSpeakersA.setActive(active)
-        //active = data[Constants.SYSTEM_INDEX_SPEAKERS_B] == one
-        //buttonSpeakersB.setActive(active)
+        enabled = data[Constants.SYSTEM_INDEX_DIRECT] == 1
+        binding.buttonDirect.setActive(enabled)
+        enabled = data[Constants.SYSTEM_INDEX_LOUDNESS] == 1
+        binding.buttonBassBoost.setActive(enabled)
+        enabled = data[Constants.SYSTEM_INDEX_SPEAKERS_A] == 1
+        binding.buttonSpeakersA.setActive(enabled)
+        enabled = data[Constants.SYSTEM_INDEX_SPEAKERS_B] == 1
+        binding.buttonSpeakersB.setActive(enabled)
         val index = data[Constants.SYSTEM_INDEX_INPUT]
         inputGroup.select(index)
         //binding.gaugeViewVolume.setValueTextVisibility(true)
@@ -301,14 +281,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
     private fun deselect() {
         binding.buttonPower.setActive(false)
-        //buttonMute.setImageResource(0)
         binding.gaugeViewVolume.setCurrentValue(0, 0)
         binding.gaugeViewVolume.setActive(false)
         //gaugeViewVolume.setValueTextVisibility(false)
-        //buttonDirect.setActive(false)
-        //buttonLoudness.setActive(false)
-        //buttonSpeakersA.setActive(false)
-        //buttonSpeakersB.setActive(false)
+        binding.buttonDirect.setActive(false)
+        binding.buttonBassBoost.setActive(false)
+        binding.buttonSpeakersA.setActive(false)
+        binding.buttonSpeakersB.setActive(false)
         inputGroup.select(-1)
         binding.buttonSettings.setActive(false)
     }
@@ -359,7 +338,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.viewModel!!.active?.setBalance(value.toByte())
     }
 
-
     // VIEW ON CLICK LISTENER and ON LONG CLICK LISTENER
     override fun onClick(view: View?) {
         if (view == null) {
@@ -372,7 +350,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
         when (view.id) {
             R.id.buttonPower -> {
-                button.toggleActive()
+                //button.toggleActive()
                 active.togglePower()
             }
 
@@ -385,10 +363,27 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
                 active.changeInput(index.toByte())
                 Log.e(tag, "Input selected: $index")
             }
+
+            R.id.buttonDirect -> {
+                active.toggleDirect()
+            }
+
+            R.id.buttonBassBoost -> {
+                active.toggleLoudness()
+            }
+
+            R.id.buttonSpeakersA -> {
+                active.toggleSpeakersA()
+            }
+
+            R.id.buttonSpeakersB -> {
+                active.toggleSpeakersB()
+            }
         }
     }
 
     override fun onLongClick(view: View?): Boolean {
+        // TODO: Finish this function...
         /*if (view.id == R.id.seekBarBalance) {
 
         }*/
