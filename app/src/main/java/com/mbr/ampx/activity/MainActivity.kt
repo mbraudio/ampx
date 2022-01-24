@@ -244,7 +244,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             printSystemData(data)
             // Power State
             val on = data[Constants.SYSTEM_INDEX_STATE_POWER] == Constants.POWER_STATE_ON
-            binding.buttonPower.setActive(on)
             if (on) {
                 select(data)
             } else {
@@ -261,38 +260,72 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
         // States
         binding.buttonPower.setActive(true)
+
         var enabled = data[Constants.SYSTEM_INDEX_STATE_MUTE] == 1
         binding.gaugeViewVolume.setActive(enabled)
+        binding.gaugeViewVolume.isEnabled = true
+
+        binding.gaugeViewBass.isEnabled = true
+        binding.gaugeViewTreble.isEnabled = true
+        binding.gaugeViewBalance.isEnabled = true
 
         // System
         enabled = data[Constants.SYSTEM_INDEX_DIRECT] == 1
         binding.buttonDirect.setActive(enabled)
+        binding.buttonDirect.isEnabled = true
+
         enabled = data[Constants.SYSTEM_INDEX_LOUDNESS] == 1
         binding.buttonBassBoost.setActive(enabled)
+        binding.buttonBassBoost.isEnabled = true
+
         enabled = data[Constants.SYSTEM_INDEX_SPEAKERS_A] == 1
         binding.buttonSpeakersA.setActive(enabled)
+        binding.buttonSpeakersA.isEnabled = true
+
         enabled = data[Constants.SYSTEM_INDEX_SPEAKERS_B] == 1
         binding.buttonSpeakersB.setActive(enabled)
+        binding.buttonSpeakersB.isEnabled = true
+
         val index = data[Constants.SYSTEM_INDEX_INPUT]
         inputGroup.select(index)
-        //binding.gaugeViewVolume.setValueTextVisibility(true)
+
         binding.buttonSettings.setActive(true)
+        binding.buttonSettings.isEnabled = true
     }
 
     private fun deselect() {
         binding.buttonPower.setActive(false)
+        //binding.buttonPower.isEnabled = false
+
         binding.gaugeViewVolume.setCurrentValue(0, 0)
         binding.gaugeViewVolume.setActive(false)
+        binding.gaugeViewVolume.isEnabled = false
+
         binding.gaugeViewBass.setCurrentValue(GaugeViewSimple.DEFAULT_VALUE_HALF, 0)
+        binding.gaugeViewBass.isEnabled = false
+
         binding.gaugeViewTreble.setCurrentValue(GaugeViewSimple.DEFAULT_VALUE_HALF, 0)
+        binding.gaugeViewTreble.isEnabled = false
+
         binding.gaugeViewBalance.setCurrentValue(GaugeViewSimple.DEFAULT_VALUE_HALF, 0)
-        //gaugeViewVolume.setValueTextVisibility(false)
+        binding.gaugeViewBalance.isEnabled = false
+
         binding.buttonDirect.setActive(false)
+        binding.buttonDirect.isEnabled = false
+
         binding.buttonBassBoost.setActive(false)
+        binding.buttonBassBoost.isEnabled = false
+
         binding.buttonSpeakersA.setActive(false)
+        binding.buttonSpeakersA.isEnabled = false
+
         binding.buttonSpeakersB.setActive(false)
+        binding.buttonSpeakersB.isEnabled = false
+
         inputGroup.select(-1)
+
         binding.buttonSettings.setActive(false)
+        binding.buttonSettings.isEnabled = false
     }
 
     private fun createBluetoothAdapter() {

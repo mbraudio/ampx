@@ -42,8 +42,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     private var bitmapX = 0f
     private var bitmapY = 0f
 
-    // TYPED VARIABLES
-    private val touchEnabled = true
+    // VARIABLES
     private val startAngle = 120f
     private val endAngle = 420f
     private val totalAngle = endAngle - startAngle
@@ -362,7 +361,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        return if (touchEnabled) {
+        return if (isEnabled) {
             if (gestureDetector.onTouchEvent(event)) {
                 return true
             }
