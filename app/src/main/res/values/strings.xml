@@ -48,6 +48,8 @@
     <string name="max">MAX</string>
     <string name="minus_sign">-</string>
     <string name="plus_sign">+</string>
+    <string name="left_short">L</string>
+    <string name="right_short">R</string>
     <string name="balance_capital">BALANCE</string>
     <string name="tone">TONE</string>
     <string name="treble">TREBLE</string>

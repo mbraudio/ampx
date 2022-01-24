@@ -287,7 +287,8 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
 
     fun setMute(mute: Boolean) {
         val value = if (mute) 1 else 0
-        val data = byteArrayOf(Commands.COMMAND_TOGGLE_MUTE.toByte(), value.toByte())
+        val crc = (Commands.COMMAND_TOGGLE_MUTE + value).toByte()
+        val data = byteArrayOf(Commands.COMMAND_TOGGLE_MUTE.toByte(), value.toByte(), crc)
         val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
@@ -299,6 +300,7 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
+    // When using only 2 same bytes, crc calc is not needed! :)
     fun toggleDirect() {
         val data = byteArrayOf(Commands.COMMAND_TOGGLE_DIRECT.toByte(), Commands.COMMAND_TOGGLE_DIRECT.toByte())
         val buffer = COBS.encode(data)

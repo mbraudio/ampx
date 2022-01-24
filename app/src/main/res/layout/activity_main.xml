@@ -80,7 +80,8 @@
             app:modernButtonActiveColor="@color/colorGradientEnd"
             app:modernButtonNormalImage="@drawable/outline_graphic_eq_white_24"
             app:modernButtonNormalText="@string/tone"
-            app:modernButtonActiveText="@string/tone"
+            app:modernButtonActiveImage="@drawable/outline_volume_up_white_24"
+            app:modernButtonActiveText="@string/volume"
             app:modernButtonTextSize="8sp" />
 
         <com.mbr.ampx.view.GaugeViewEx
@@ -113,7 +114,10 @@
             android:layout_height="160dp"
             app:titleSimple="@string/balance_capital"
             app:titleTextHeightSimple="14sp"
-            app:valueTextHeightSimple="10sp" />
+            app:valueTextHeightSimple="10sp"
+            app:minText="@string/left_short"
+            app:maxText="@string/right_short"
+            app:valueAbsolute="true"/>
         <!-- END TONE -->
 
         <LinearLayout

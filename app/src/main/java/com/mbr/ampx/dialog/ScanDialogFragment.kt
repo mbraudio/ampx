@@ -149,9 +149,8 @@ class ScanDialogFragment : DialogFragment(), View.OnClickListener, IRecyclerClic
     override fun onRecyclerItemClick(position: Int) {
         val model = binding.viewModel!!
         val device = model.getDevice(position)
-        val active = model.active
 
-        active?.let { a ->
+        model.active?.let { a ->
             if (a.isConnected() && device == a) {
                 context?.let { device.connectOrDisconnect(it) }
                 return

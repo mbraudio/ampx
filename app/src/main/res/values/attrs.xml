@@ -46,6 +46,9 @@
         <attr name="valueTextHeightSimple" format="dimension" />
         <attr name="valueTextBoldSimple" format="boolean" />
         <attr name="titleSimple" format="string" />
+        <attr name="minText" format="string" />
+        <attr name="maxText" format="string" />
+        <attr name="valueAbsolute" format="boolean" />
     </declare-styleable>
 
 </resources>

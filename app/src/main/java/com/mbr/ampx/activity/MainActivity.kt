@@ -99,7 +99,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         // Set transition listener
         val transitionListener = object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {
-
+                if (startId == R.id.end || startId == R.id.start) {
+                    binding.buttonTone.toggleActive()
+                }
             }
 
             override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {
@@ -107,9 +109,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             }
 
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-                if (currentId == R.id.end || currentId == R.id.start) {
-                    binding.buttonTone.toggleActive()
-                }
+
             }
 
             override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {
@@ -139,22 +139,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
     private fun processData(buffer: ByteArray) {
         val data: IntArray = try {
             val temp = COBS.decode(buffer)
+            // When using CALIBRATOR disable CRC check!!!
+            if (!Utilities.calculateCrc(temp)) {
+                Log.e(tag, "ERROR: Received data has invalid CRC!");
+                return
+            }
             Utilities.byteArrayToIntArray(temp)
         } catch (ex: Exception) {
             Log.e(tag, "ERROR: Received data has failed to decode!")
             ex.printStackTrace()
             return
         }
-        if (data.isEmpty()) {
+
+        if (data.size < 3) {
             return
         }
 
-        // When using CALIBRATOR disable CRC check!!!
-        /*final boolean valid = Utilities.calculateCrc(data);
-        if (!valid) {
-            Log.e(TAG, "ERROR: Received data has invalid CRC!");
-            return;
-        }*/
         val command = data[0]
         val data0 = data[1]
         val enabled = data0 == 1
@@ -313,7 +313,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         }
     }
 
-    // VIEW ON CLICK LISTENER and ON LONG CLICK LISTENER
+    // VIEW ON CLICK LISTENER
     override fun onClick(view: View?) {
         if (view == null) {
             return
@@ -357,6 +357,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         }
     }
 
+    // VIEW ON LONG CLICK LISTENER
     override fun onLongClick(view: View?): Boolean {
         return true
     }

@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import com.mbr.ampx.R
 import com.mbr.ampx.listener.IGaugeViewListener
+import kotlin.math.abs
 import kotlin.math.sqrt
 
 class GaugeViewSimple : View, GestureDetector.OnGestureListener {
@@ -17,7 +18,7 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
 
         // DEFAULT VALUES
         private const val DEFAULT_MAXIMUM_VALUE = 255
-        const val DEFAULT_VALUE_HALF = 127
+        const val DEFAULT_VALUE_HALF = 128
         private const val DEFAULT_CENTER_VALUE_TEXT_HEIGHT = 50.0f
 
         // ADJUSTMENTS
@@ -25,7 +26,7 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
         private const val COLORED_CIRCLE_WIDTH = 6.0f
     }
 
-    // TYPED VARIABLES
+    // VARIABLES
     private val touchEnabled = true
     private val startAngle = 120f
     private val endAngle = 420f
@@ -42,6 +43,9 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
     private var titleTextHeight = 0f
     private var valueTextHeight = 0f
     private var boldText = false
+    private var minText = ""
+    private var maxText = ""
+    private var valueAbsolute = false
 
     private var bounds = RectF()
     private var centerX = 0f
@@ -100,7 +104,7 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
 
         paintValueArc = Paint(Paint.ANTI_ALIAS_FLAG)
         paintValueArc.style = Paint.Style.STROKE
-        paintValueArc.color = context.getColor(R.color.colorGradientEnd)
+        paintValueArc.color = context.getColor(R.color.colorGradientStart)
         paintValueArc.strokeWidth = VALUE_ARC_STROKE_WIDTH
         paintValueArc.strokeCap = Paint.Cap.ROUND
 
@@ -137,10 +141,25 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
         titleTextHeight = a.getDimension(R.styleable.GaugeViewSimple_titleTextHeightSimple, DEFAULT_CENTER_VALUE_TEXT_HEIGHT)
         valueTextHeight = a.getDimension(R.styleable.GaugeViewSimple_valueTextHeightSimple, DEFAULT_CENTER_VALUE_TEXT_HEIGHT)
         boldText = a.getBoolean(R.styleable.GaugeViewSimple_valueTextBoldSimple, false)
-        val text = a.getString(R.styleable.GaugeViewSimple_titleSimple)
+        var text = a.getString(R.styleable.GaugeViewSimple_titleSimple)
         text?.let {
             title = it
         }
+
+        minText = context.getString(R.string.minus_sign)
+        text = a.getString(R.styleable.GaugeViewSimple_minText)
+        text?.let {
+            minText = it
+        }
+
+        maxText = context.getString(R.string.plus_sign)
+        text = a.getString(R.styleable.GaugeViewSimple_maxText)
+        text?.let {
+            maxText = text
+        }
+
+        valueAbsolute = a.getBoolean(R.styleable.GaugeViewSimple_valueAbsolute, false)
+
         a.recycle()
     }
 
@@ -189,8 +208,8 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
 
     private fun addText() {
         // Add text for min and max
-        addText(startAngle, context.getString(R.string.minus_sign))
-        addText(endAngle, context.getString(R.string.plus_sign))
+        addText(startAngle, minText)
+        addText(endAngle, maxText)
     }
 
     private fun addText(angle: Float, text: String) {
@@ -242,7 +261,11 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
         if (active == 0) {
             targetAngle = centerAngle + valueAngle
         }
-        valueText.text = "$value"
+        var percentValue = ((value.toFloat() * 100f) / DEFAULT_VALUE_HALF.toFloat()).toInt()
+        if (valueAbsolute) {
+            percentValue = abs(percentValue)
+        }
+        valueText.text = "$percentValue%"
         invalidate()
     }
 
