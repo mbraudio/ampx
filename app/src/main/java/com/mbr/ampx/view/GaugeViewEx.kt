@@ -10,7 +10,9 @@ import androidx.core.content.ContextCompat
 import com.mbr.ampx.R
 import com.mbr.ampx.listener.IGaugeViewListener
 import com.mbr.ampx.utilities.Constants
-import kotlin.math.sqrt
+import java.lang.Math.pow
+import java.lang.Math.toDegrees
+import kotlin.math.*
 
 class GaugeViewEx : View, GestureDetector.OnGestureListener {
 
@@ -67,6 +69,13 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     private var centerY = 0f
     private var touchX = 0f
     private var touchY = 0f
+
+    private lateinit var paintSpot: Paint
+    private var spotX = 0f
+    private var spotY = 0f
+    private var spotRadius = 0f
+    private var drawSpot = false
+
 
     // Value arc(s)
     private lateinit var boundsValueArc: RectF
@@ -143,6 +152,12 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         paintColoredCircle.color = context.getColor(R.color.colorGradientStart)
         paintColoredCircle.strokeWidth = COLORED_CIRCLE_WIDTH
 
+        // Spot
+        paintSpot = Paint(Paint.ANTI_ALIAS_FLAG)
+        paintSpot.style = Paint.Style.FILL_AND_STROKE
+        paintSpot.color = context.getColor(R.color.colorGradientStart)
+        paintSpot.strokeWidth = COLORED_CIRCLE_WIDTH
+
         scaleTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         scaleTextPaint.color = context.getColor(R.color.colorText)
         scaleTextPaint.style = Paint.Style.FILL_AND_STROKE
@@ -199,7 +214,9 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         bounds.right = w.toFloat() - paddingEnd
         centerX = (bounds.left + bounds.right) / 2f
         centerY = (bounds.top + bounds.bottom) / 2f
-        radius = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
+        radius = min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
+
+        spotRadius = radius / 40f
 
         val positions = floatArrayOf(0.0f, 1.0f)
         val colors = intArrayOf(ContextCompat.getColor(context, R.color.colorGradientStart), ContextCompat.getColor(context, R.color.colorGradientEnd))
@@ -257,8 +274,8 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         for (i in 0 until numberOfLines) {
             val currentAngle = (startAngle + i * divisionAngle).toDouble()
             val angleRadians = Math.toRadians(currentAngle)
-            val cosA = Math.cos(angleRadians)
-            val sinA = Math.sin(angleRadians)
+            val cosA = cos(angleRadians)
+            val sinA = sin(angleRadians)
             val startX = (centerX + lineStart * cosA).toFloat()
             val startY = (centerY + lineStart * sinA).toFloat()
             val stopX = (centerX + lineEnd * cosA).toFloat()
@@ -285,10 +302,10 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         val textOffset = -32.0f
         val textOffsetX = -224f
         val angleRadians = Math.toRadians(angle.toDouble())
-        val cosA = Math.cos(angleRadians)
-        val sinA = Math.sin(angleRadians)
+        val cosA = cos(angleRadians)
+        val sinA = sin(angleRadians)
         scaleTextPaint.getTextBounds(text, 0, text.length, textBounds)
-        val textHeight = Math.abs(textBounds.top + textBounds.bottom) / 2f
+        val textHeight = abs(textBounds.top + textBounds.bottom) / 2f
         val x = (centerX + (radius + textOffset + textOffsetX) * cosA).toFloat()
         val y = (centerY + (radius + textOffset) * sinA).toFloat() + (textHeight / 2.0f)
 
@@ -348,6 +365,10 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
 
         // Center spot
         //canvas.drawCircle(centerX, centerY, 1f, paintColoredCircle)
+
+        if (drawSpot) {
+            canvas.drawCircle(spotX, spotY, spotRadius, paintSpot)
+        }
     }
 
     fun setCurrentValue(current: Int, active: Int) {
@@ -373,7 +394,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
             touchX = event.x
             touchY = event.y
             val d = distanceFromCenter(touchX, touchY)
-            if (d > touchDistanceMin && d < touchDistanceMax) {
+            if ((d > touchDistanceMin) && (d < touchDistanceMax)) {
                 when (event.action) {
                     MotionEvent.ACTION_MOVE -> {
                         updateTargetAngle()
@@ -394,9 +415,9 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     }
 
     private fun distanceFromCenter(x: Float, y: Float): Float {
-        val xd = Math.abs(x - centerX).toDouble()
-        val yd = Math.abs(y - centerY).toDouble()
-        return Math.sqrt(Math.pow(xd, 2.0) + Math.pow(yd, 2.0)).toFloat()
+        val xd = abs(x - centerX).toDouble()
+        val yd = abs(y - centerY).toDouble()
+        return sqrt(pow(xd, 2.0) + pow(yd, 2.0)).toFloat()
     }
 
     private fun updateTargetAngle() {
@@ -415,15 +436,23 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     private fun calculateValue(angle: Float): Int {
         val value = ((angle * maximumValue) / totalAngle).toInt()
         valueText.text = "$value$unit"
+        updateSpot(angle)
         return value
+    }
+
+    private fun updateSpot(angle: Float) {
+        val angleRadians = Math.toRadians((startAngle + angle).toDouble()).toFloat()
+        spotX = centerX + (coloredCircleRadius * cos(angleRadians))
+        spotY = centerY + (coloredCircleRadius * sin(angleRadians))
+        drawSpot = (spotX > 0f) && (spotY > 0f)
     }
 
     private fun getAngleForPoint(x: Float, y: Float): Float {
         val tx = (x - centerX).toDouble()
         val ty = (y - centerY).toDouble()
         val length = sqrt(tx * tx + ty * ty)
-        val r = Math.acos(ty / length)
-        var angle = Math.toDegrees(r).toFloat()
+        val r = acos(ty / length)
+        var angle = toDegrees(r).toFloat()
         if (x > centerX) {
             angle = 360f - angle
         }

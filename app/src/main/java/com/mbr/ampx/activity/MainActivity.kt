@@ -312,7 +312,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.buttonPower.setActive(false)
         //binding.buttonPower.isEnabled = false
 
-        binding.gaugeViewVolume.setCurrentValue(0, 0)
+        binding.gaugeViewVolume.setCurrentValue(100, 0)
         binding.gaugeViewVolume.setActive(false)
         binding.gaugeViewVolume.isEnabled = false
 
