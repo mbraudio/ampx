@@ -57,5 +57,6 @@
     <string name="bass_boost">BASS BOOST</string>
     <string name="speakers_a">SPEAKERS A</string>
     <string name="speakers_b">SPEAKERS B</string>
+    <string name="temp_zero">0°</string>
 
 </resources>

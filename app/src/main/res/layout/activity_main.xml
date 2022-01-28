@@ -41,14 +41,26 @@
             app:modernButtonNormalText="@string/connect"
             app:modernButtonTextSize="8sp" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/temperatureViewLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/temp_zero"
+            android:textAlignment="center"
+            android:textSize="11sp"
+            app:drawableTopCompat="@drawable/outline_thermostat_white_20"
+            app:layout_constraintEnd_toEndOf="@+id/buttonConnection"
+            app:layout_constraintStart_toStartOf="@+id/buttonConnection"
+            app:layout_constraintTop_toTopOf="@+id/buttonTone" />
+
         <com.mbr.ampx.view.ModernButton
             android:id="@+id/buttonPower"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/horizontalGuidelineTop"
             app:layout_constraintBottom_toBottomOf="@id/horizontalGuidelineTop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/horizontalGuidelineTop"
             app:modernButtonActive="false"
             app:modernButtonActiveColor="@color/colorGradientEnd"
             app:modernButtonActiveText="@string/standby"
@@ -68,6 +80,18 @@
             app:modernButtonNormalImage="@drawable/outline_settings_white_24"
             app:modernButtonNormalText="@string/settings"
             app:modernButtonTextSize="8sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/temperatureViewRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/temp_zero"
+            android:textAlignment="center"
+            android:textSize="11sp"
+            app:drawableTopCompat="@drawable/outline_thermostat_white_20"
+            app:layout_constraintEnd_toEndOf="@+id/buttonSettings"
+            app:layout_constraintStart_toStartOf="@+id/buttonSettings"
+            app:layout_constraintTop_toTopOf="@+id/buttonTone" />
 
         <com.mbr.ampx.view.ModernButton
             android:id="@+id/buttonTone"

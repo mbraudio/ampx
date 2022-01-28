@@ -7,7 +7,7 @@
         android:id="@+id/fromVolumeToTone"
         app:constraintSetStart="@+id/start"
         app:constraintSetEnd="@id/end"
-        app:duration="380" >
+        app:duration="360" >
         <OnClick
             app:targetId="@+id/buttonTone"
             app:clickAction="toggle"/>
@@ -43,6 +43,15 @@
             android:layout_height="52dp"
             app:layout_constraintTop_toBottomOf="@id/gaugeViewVolume"
             android:layout_marginTop="8dp"/>
+
+        <!-- TEMPERATURE VIEWS -->
+        <Constraint android:id="@+id/temperatureViewLeft">
+            <PropertySet app:visibilityMode="ignore"/>
+        </Constraint>
+
+        <Constraint android:id="@+id/temperatureViewRight">
+            <PropertySet app:visibilityMode="ignore"/>
+        </Constraint>
 
         <!-- TONE -->
         <Constraint android:id="@+id/gaugeViewBass"
@@ -129,6 +138,15 @@
             android:layout_height="52dp"
             app:layout_constraintTop_toBottomOf="parent"
             android:layout_marginTop="8dp"/>
+
+        <!-- TEMPERATURE VIEWS -->
+        <Constraint android:id="@+id/temperatureViewLeft">
+            <PropertySet app:visibilityMode="ignore"/>
+        </Constraint>
+
+        <Constraint android:id="@+id/temperatureViewRight">
+            <PropertySet app:visibilityMode="ignore"/>
+        </Constraint>
 
         <!-- TONE -->
         <Constraint android:id="@+id/gaugeViewBass"

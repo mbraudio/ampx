@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.buttonSettings.setOnClickListener {
             SettingsDialogFragment().show(supportFragmentManager, "settings")
             //it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+            //binding.viewModel!!.active?.requestCalibration(1, 62)
         }
 
         // INPUT BUTTONS
@@ -122,18 +123,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
     private fun addObservers() {
         val model = binding.viewModel!!
 
-        model.deviceStateChanged.observe(this, {
+        model.deviceStateChanged.observe(this) {
             val status = model.active != null && model.active!!.isConnected()
             binding.buttonConnection.setActive(status)
             if (!status) {
                 ready = false
                 setSystemData(null)
             }
-        })
+        }
 
-        model.deviceDataReceived.observe(this, {
+        model.deviceDataReceived.observe(this) {
             processData(it)
-        })
+        }
     }
 
     private fun processData(buffer: ByteArray) {
@@ -211,6 +212,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
             Commands.COMMAND_UPDATE_BALANCE_VALUE -> {
                 binding.gaugeViewBalance.setCurrentValue(data0, data[2])
+            }
+
+            Commands.COMMAND_UPDATE_TEMPERATURE -> {
+                //Log.e(tag, "TEMPERATURE: R:$data0 | L:${data[2]}")
+                val right = "$data0°"
+                val left = "${data[2]}°"
+                binding.temperatureViewRight.text = right
+                binding.temperatureViewLeft.text = left
             }
 
             Commands.COMMAND_CALIBRATION_DATA_1 -> {
@@ -291,6 +300,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
         binding.buttonSettings.setActive(true)
         binding.buttonSettings.isEnabled = true
+
+        // TEMPERATURE
+        binding.temperatureViewLeft.visibility = View.VISIBLE
+        binding.temperatureViewLeft.text = getString(R.string.temp_zero)
+        binding.temperatureViewRight.visibility = View.VISIBLE
+        binding.temperatureViewRight.text = getString(R.string.temp_zero)
     }
 
     private fun deselect() {
@@ -326,6 +341,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
         binding.buttonSettings.setActive(false)
         binding.buttonSettings.isEnabled = false
+
+        // TEMPERATURE
+        binding.temperatureViewLeft.visibility = View.INVISIBLE
+        binding.temperatureViewRight.visibility = View.INVISIBLE
     }
 
     private fun createBluetoothAdapter() {
