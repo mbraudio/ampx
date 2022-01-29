@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Admin/Desktop/Elektronika/Code/AmpX/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2235" />
+        <entry key="..\:/Users/Admin/Desktop/Elektronika/Code/AmpX/app/src/main/res/drawable/round_bluetooth_20.xml" value="0.2245" />
         <entry key="..\:/Users/Admin/Desktop/Elektronika/Code/AmpX/app/src/main/res/drawable/selector_modern_button_background.xml" value="0.2635416666666667" />
         <entry key="..\:/Users/Admin/Desktop/Elektronika/Code/AmpX/app/src/main/res/drawable/shape_modern_background.xml" value="0.2635416666666667" />
         <entry key="..\:/Users/Admin/Desktop/Elektronika/Code/AmpX/app/src/main/res/drawable/shape_modern_background_selected.xml" value="0.2635416666666667" />
@@ -14,7 +15,7 @@
         <entry key="..\:/Users/Admin/Desktop/Elektronika/Code/AmpX/app/src/main/res/layout/sample_custom_button.xml" value="0.24739583333333334" />
         <entry key="..\:/Users/Admin/Desktop/Elektronika/Code/AmpX/app/src/main/res/layout/view_custom_button.xml" value="0.25" />
         <entry key="..\:/Users/Admin/Desktop/Elektronika/Code/AmpX/app/src/main/res/layout/view_modern_button.xml" value="0.9" />
-        <entry key="..\:/Users/Admin/Desktop/Elektronika/Code/AmpX/app/src/main/res/layout/view_recycler_device.xml" value="0.19429824561403508" />
+        <entry key="..\:/Users/Admin/Desktop/Elektronika/Code/AmpX/app/src/main/res/layout/view_recycler_device.xml" value="0.33" />
       </map>
     </option>
   </component>

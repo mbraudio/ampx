@@ -241,7 +241,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
          // Colored
         coloredCircleRadius = scaleDiameter - SCALE_LINE_LENGTH - SCALE_ARC_DISTANCE_TO_COLORED_CIRCLE
 
-        bitmap = BitmapFactory.decodeResource(resources, R.drawable.outline_volume_up_white_36_mod)
+        bitmap = BitmapFactory.decodeResource(resources, R.drawable.round_volume_up_white_36)
         var distanceY = radius / 28f
         if (distanceY < 12f) {
             distanceY = 12f

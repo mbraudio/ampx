@@ -68,9 +68,9 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
     val icon: Int
         get() {
             return if (device == null) {
-                R.drawable.baseline_report_problem_white_48dp
+                R.drawable.round_report_problem_white_48
             } else {
-                if (device!!.name == null) R.drawable.baseline_report_problem_white_48dp else R.drawable.baseline_speaker_white_48dp
+                if (device!!.name == null) R.drawable.round_report_problem_white_48 else R.drawable.round_speaker_white_48
             }
         }
 

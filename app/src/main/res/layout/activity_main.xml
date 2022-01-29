@@ -35,9 +35,9 @@
             android:layout_marginStart="24dp"
             app:modernButtonActive="false"
             app:modernButtonActiveColor="@color/colorGradientEnd"
-            app:modernButtonActiveImage="@drawable/outline_bluetooth_connected_white_24"
+            app:modernButtonActiveImage="@drawable/round_bluetooth_connected_white_24"
             app:modernButtonActiveText="@string/disconnect"
-            app:modernButtonNormalImage="@drawable/outline_bluetooth_white_24"
+            app:modernButtonNormalImage="@drawable/round_bluetooth_white_24"
             app:modernButtonNormalText="@string/connect"
             app:modernButtonTextSize="8sp" />
 
@@ -48,7 +48,7 @@
             android:text="@string/temp_zero"
             android:textAlignment="center"
             android:textSize="11sp"
-            app:drawableTopCompat="@drawable/outline_thermostat_white_20"
+            app:drawableTopCompat="@drawable/round_thermostat_white_20"
             app:layout_constraintEnd_toEndOf="@+id/buttonConnection"
             app:layout_constraintStart_toStartOf="@+id/buttonConnection"
             app:layout_constraintTop_toTopOf="@+id/buttonTone" />
@@ -64,7 +64,7 @@
             app:modernButtonActive="false"
             app:modernButtonActiveColor="@color/colorGradientEnd"
             app:modernButtonActiveText="@string/standby"
-            app:modernButtonNormalImage="@drawable/outline_power_settings_new_white_48"
+            app:modernButtonNormalImage="@drawable/round_power_settings_new_white_48"
             app:modernButtonNormalText="@string/power_on"
             app:modernButtonTextSize="8sp" />
 
@@ -77,7 +77,7 @@
             app:layout_constraintBottom_toBottomOf="@id/horizontalGuidelineTop"
             android:layout_marginEnd="24dp"
             app:modernButtonActiveText="@string/settings"
-            app:modernButtonNormalImage="@drawable/outline_settings_white_24"
+            app:modernButtonNormalImage="@drawable/round_settings_white_24"
             app:modernButtonNormalText="@string/settings"
             app:modernButtonTextSize="8sp" />
 
@@ -88,7 +88,7 @@
             android:text="@string/temp_zero"
             android:textAlignment="center"
             android:textSize="11sp"
-            app:drawableTopCompat="@drawable/outline_thermostat_white_20"
+            app:drawableTopCompat="@drawable/round_thermostat_white_20"
             app:layout_constraintEnd_toEndOf="@+id/buttonSettings"
             app:layout_constraintStart_toStartOf="@+id/buttonSettings"
             app:layout_constraintTop_toTopOf="@+id/buttonTone" />
@@ -102,9 +102,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/buttonPower"
             app:modernButtonActiveColor="@color/colorGradientEnd"
-            app:modernButtonNormalImage="@drawable/outline_graphic_eq_white_24"
+            app:modernButtonNormalImage="@drawable/round_graphic_eq_white_24"
             app:modernButtonNormalText="@string/tone"
-            app:modernButtonActiveImage="@drawable/outline_volume_up_white_24"
+            app:modernButtonActiveImage="@drawable/round_volume_up_white_24"
             app:modernButtonActiveText="@string/volume"
             app:modernButtonTextSize="8sp" />
 
@@ -112,8 +112,8 @@
             android:id="@+id/gaugeViewVolume"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:gaugeActiveImage="@drawable/outline_volume_off_white_36_mod"
-            app:gaugeNormalImage="@drawable/outline_volume_up_white_36_mod" />
+            app:gaugeActiveImage="@drawable/round_volume_off_white_36"
+            app:gaugeNormalImage="@drawable/round_volume_up_white_36" />
 
         <!-- TONE -->
         <com.mbr.ampx.view.GaugeViewSimple
@@ -163,9 +163,9 @@
                 android:gravity="center"
                 app:modernButtonActive="false"
                 app:modernButtonActiveColor="@color/colorGradientEnd"
-                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"
+                app:modernButtonActiveImage="@drawable/round_radio_button_checked_white_24"
                 app:modernButtonActiveText="@string/cd"
-                app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
+                app:modernButtonNormalImage="@drawable/round_radio_button_unchecked_white_24"
                 app:modernButtonNormalText="@string/cd"
                 app:modernButtonTextSize="8sp" />
 
@@ -178,9 +178,9 @@
                 android:gravity="center"
                 app:modernButtonActive="true"
                 app:modernButtonActiveColor="@color/colorGradientEnd"
-                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"
+                app:modernButtonActiveImage="@drawable/round_radio_button_checked_white_24"
                 app:modernButtonActiveText="@string/network"
-                app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
+                app:modernButtonNormalImage="@drawable/round_radio_button_unchecked_white_24"
                 app:modernButtonNormalText="@string/network"
                 app:modernButtonTextSize="8sp" />
 
@@ -193,9 +193,9 @@
                 android:gravity="center"
                 app:modernButtonActive="false"
                 app:modernButtonActiveColor="@color/colorGradientEnd"
-                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"
+                app:modernButtonActiveImage="@drawable/round_radio_button_checked_white_24"
                 app:modernButtonActiveText="@string/tuner"
-                app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
+                app:modernButtonNormalImage="@drawable/round_radio_button_unchecked_white_24"
                 app:modernButtonNormalText="@string/tuner"
                 app:modernButtonTextSize="8sp" />
 
@@ -208,9 +208,9 @@
                 android:gravity="center"
                 app:modernButtonActive="false"
                 app:modernButtonActiveColor="@color/colorGradientEnd"
-                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"
+                app:modernButtonActiveImage="@drawable/round_radio_button_checked_white_24"
                 app:modernButtonActiveText="@string/aux"
-                app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
+                app:modernButtonNormalImage="@drawable/round_radio_button_unchecked_white_24"
                 app:modernButtonNormalText="@string/aux"
                 app:modernButtonTextSize="8sp" />
 
@@ -223,9 +223,9 @@
                 android:gravity="center"
                 app:modernButtonActive="false"
                 app:modernButtonActiveColor="@color/colorGradientEnd"
-                app:modernButtonActiveImage="@drawable/outline_radio_button_checked_white_24"
+                app:modernButtonActiveImage="@drawable/round_radio_button_checked_white_24"
                 app:modernButtonActiveText="@string/recorder"
-                app:modernButtonNormalImage="@drawable/outline_radio_button_unchecked_white_24"
+                app:modernButtonNormalImage="@drawable/round_radio_button_unchecked_white_24"
                 app:modernButtonNormalText="@string/recorder"
                 app:modernButtonTextSize="8sp" />
 
@@ -236,9 +236,9 @@
             android:layout_width="52dp"
             android:layout_height="52dp"
             app:modernButtonActiveColor="@color/colorGradientEnd"
-            app:modernButtonActiveImage="@drawable/outline_music_note_white_24"
+            app:modernButtonActiveImage="@drawable/round_music_note_white_20"
             app:modernButtonActiveText="@string/bass_boost"
-            app:modernButtonNormalImage="@drawable/outline_music_note_white_24"
+            app:modernButtonNormalImage="@drawable/round_music_note_white_20"
             app:modernButtonNormalText="@string/bass_boost"
             app:modernButtonTextSize="8sp" />
 
@@ -247,9 +247,9 @@
             android:layout_width="52dp"
             android:layout_height="52dp"
             app:modernButtonActiveColor="@color/colorGradientEnd"
-            app:modernButtonActiveImage="@drawable/outline_settings_input_component_white_24"
+            app:modernButtonActiveImage="@drawable/round_settings_input_component_white_24"
             app:modernButtonActiveText="@string/direct"
-            app:modernButtonNormalImage="@drawable/outline_settings_input_component_white_24"
+            app:modernButtonNormalImage="@drawable/round_settings_input_component_white_24"
             app:modernButtonNormalText="@string/direct"
             app:modernButtonTextSize="8sp" />
 
@@ -258,9 +258,9 @@
             android:layout_width="52dp"
             android:layout_height="52dp"
             app:modernButtonActiveColor="@color/colorGradientEnd"
-            app:modernButtonActiveImage="@drawable/outline_speaker_white_24"
+            app:modernButtonActiveImage="@drawable/round_speaker_white_24"
             app:modernButtonActiveText="@string/speakers_a"
-            app:modernButtonNormalImage="@drawable/outline_speaker_white_24"
+            app:modernButtonNormalImage="@drawable/round_speaker_white_24"
             app:modernButtonNormalText="@string/speakers_a"
             app:modernButtonTextSize="8sp" />
 
@@ -269,9 +269,9 @@
             android:layout_width="52dp"
             android:layout_height="52dp"
             app:modernButtonActiveColor="@color/colorGradientEnd"
-            app:modernButtonActiveImage="@drawable/outline_speaker_white_24"
+            app:modernButtonActiveImage="@drawable/round_speaker_white_24"
             app:modernButtonActiveText="@string/speakers_b"
-            app:modernButtonNormalImage="@drawable/outline_speaker_white_24"
+            app:modernButtonNormalImage="@drawable/round_speaker_white_24"
             app:modernButtonNormalText="@string/speakers_b"
             app:modernButtonTextSize="8sp" />
 
