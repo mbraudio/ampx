@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         }
 
         model.showTemperature.observe(this) {
-
+            setupTemperatureViews()
         }
     }
 
@@ -308,10 +308,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.buttonSettings.isEnabled = true
 
         // TEMPERATURE
-        binding.temperatureViewLeft.visibility = View.VISIBLE
-        binding.temperatureViewLeft.text = getString(R.string.temp_zero)
-        binding.temperatureViewRight.visibility = View.VISIBLE
-        binding.temperatureViewRight.text = getString(R.string.temp_zero)
+        setupTemperatureViews()
     }
 
     private fun deselect() {
@@ -352,6 +349,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         // TEMPERATURE
         binding.temperatureViewLeft.visibility = View.INVISIBLE
         binding.temperatureViewRight.visibility = View.INVISIBLE
+    }
+
+    private fun setupTemperatureViews() {
+        val show = binding.viewModel!!.showTemperature.value == true
+        if (show && ready) {
+            binding.temperatureViewLeft.visibility = View.VISIBLE
+            binding.temperatureViewLeft.text = getString(R.string.temp_zero)
+            binding.temperatureViewRight.visibility = View.VISIBLE
+            binding.temperatureViewRight.text = getString(R.string.temp_zero)
+        } else {
+            binding.temperatureViewLeft.visibility = View.INVISIBLE
+            binding.temperatureViewRight.visibility = View.INVISIBLE
+        }
     }
 
     private fun createBluetoothAdapter() {

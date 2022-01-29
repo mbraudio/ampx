@@ -46,7 +46,7 @@ class SettingsDialogFragment : DialogFragment(), View.OnClickListener, SeekBar.O
 
         binding.switchTemperature.isChecked = viewModel.showTemperature.value == true
         binding.switchTemperature.setOnCheckedChangeListener { _, b ->
-            binding.switchTemperature.isChecked = b
+            viewModel.setShowTemperature(b)
         }
 
         // Dialog

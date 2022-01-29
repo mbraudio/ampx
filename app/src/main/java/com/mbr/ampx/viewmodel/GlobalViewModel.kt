@@ -61,6 +61,10 @@ class GlobalViewModel : ViewModel(), IBlueDeviceListener {
 
     private var bluetoothAdapter: BluetoothAdapter? = null
 
+    fun setShowTemperature(value: Boolean) {
+        _showTemperature.value = value
+    }
+
     fun createBluetoothAdapter(context: Context): Boolean {
         val manager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         bluetoothAdapter = manager.adapter
