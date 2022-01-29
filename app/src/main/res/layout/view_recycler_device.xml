@@ -10,26 +10,26 @@
     android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textViewScanDeviceName"
+        android:id="@+id/textViewDeviceName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/devices"
-        android:textSize="28sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@android:color/white"
         android:gravity="center"
-        android:drawableStart="@drawable/round_speaker_white_48"
+        android:drawableStart="@drawable/round_speaker_white_36"
         android:drawablePadding="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textViewScanDeviceState"
+        android:id="@+id/textViewDeviceState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/disconnected"
-        android:textSize="11sp"
+        android:textSize="12sp"
         android:textColor="@android:color/white"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"

@@ -12,8 +12,8 @@ import com.mbr.ampx.bluetooth.BlueDevice
 class DeviceAdapter(private val resources: Resources) : RecyclerView.Adapter<DeviceAdapter.DeviceViewHolder>() {
 
     class DeviceViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val textViewName: TextView = view.findViewById(R.id.textViewScanDeviceName)
-        val textViewState: TextView = view.findViewById(R.id.textViewScanDeviceState)
+        val textViewName: TextView = view.findViewById(R.id.textViewDeviceName)
+        val textViewState: TextView = view.findViewById(R.id.textViewDeviceState)
     }
 
     private var devices: ArrayList<BlueDevice>? = ArrayList()
