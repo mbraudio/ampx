@@ -39,6 +39,10 @@ class GlobalViewModel : ViewModel(), IBlueDeviceListener {
         get() = _deviceDataReceived
 
 
+    private val _showTemperature = MutableLiveData<Boolean>()
+    val showTemperature : LiveData<Boolean>
+        get() = _showTemperature
+
 
     // VARIABLES
     var devices = ArrayList<BlueDevice>()
@@ -52,6 +56,7 @@ class GlobalViewModel : ViewModel(), IBlueDeviceListener {
         _isScanning.value = false
         _newDeviceAdded.value = false
         _deviceStateChanged.value = false
+        _showTemperature.value = false
     }
 
     private var bluetoothAdapter: BluetoothAdapter? = null

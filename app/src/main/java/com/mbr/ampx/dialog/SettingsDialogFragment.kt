@@ -34,9 +34,20 @@ class SettingsDialogFragment : DialogFragment(), View.OnClickListener, SeekBar.O
         // SeekBar
         binding.seekBarBrightness.max = MAX_BRIGHTNESS_INDEX
         viewModel.active?.let {
-            binding.seekBarBrightness.progress = viewModel.active?.brightnessIndex!!
+            binding.seekBarBrightness.progress = it.brightnessIndex
+            binding.switchVolumeLed.isChecked = it.volumeLed == 1
         }
+
         binding.seekBarBrightness.setOnSeekBarChangeListener(this)
+        binding.switchVolumeLed.setOnCheckedChangeListener { _, b ->
+            val state = if (b) 1 else 0
+            viewModel.active?.enableVolumeKnobLed(state.toByte())
+        }
+
+        binding.switchTemperature.isChecked = viewModel.showTemperature.value == true
+        binding.switchTemperature.setOnCheckedChangeListener { _, b ->
+            binding.switchTemperature.isChecked = b
+        }
 
         // Dialog
         val dialog = builder.create()

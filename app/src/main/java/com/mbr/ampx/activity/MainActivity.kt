@@ -135,6 +135,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         model.deviceDataReceived.observe(this) {
             processData(it)
         }
+
+        model.showTemperature.observe(this) {
+
+        }
     }
 
     private fun processData(buffer: ByteArray) {
@@ -142,7 +146,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             val temp = COBS.decode(buffer)
             // When using CALIBRATOR disable CRC check!!!
             if (!Utilities.calculateCrc(temp)) {
-                Log.e(tag, "ERROR: Received data has invalid CRC!");
+                Log.e(tag, "ERROR: Received data has invalid CRC!")
                 return
             }
             Utilities.byteArrayToIntArray(temp)
@@ -266,6 +270,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
     private fun select(data: IntArray) {
         // Brightness index
         binding.viewModel?.active?.brightnessIndex = data[Constants.SYSTEM_INDEX_BRIGHTNESS_INDEX]
+        // Volume led enabled
+        binding.viewModel?.active?.volumeLed = data[Constants.SYSTEM_INDEX_VOLUME_KNOB_LED]
 
         // States
         binding.buttonPower.setActive(true)
@@ -312,7 +318,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.buttonPower.setActive(false)
         //binding.buttonPower.isEnabled = false
 
-        binding.gaugeViewVolume.setCurrentValue(100, 0)
+        binding.gaugeViewVolume.setCurrentValue(0, 0)
         binding.gaugeViewVolume.setActive(false)
         binding.gaugeViewVolume.isEnabled = false
 
@@ -341,6 +347,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
         binding.buttonSettings.setActive(false)
         binding.buttonSettings.isEnabled = false
+        binding.buttonSettings.isEnabled = true // TODO: Remove this
 
         // TEMPERATURE
         binding.temperatureViewLeft.visibility = View.INVISIBLE

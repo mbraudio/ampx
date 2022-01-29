@@ -18,19 +18,10 @@
     <string name="aux">AUX</string>
     <string name="recorder">RECORDER</string>
 
-    <string name="speakers">SPEAKERS</string>
-    <string name="a">A</string>
-    <string name="b">B</string>
     <string name="direct">DIRECT</string>
-    <string name="loudness">LOUDNESS</string>
-    <string name="power_amp_direct">P.AMP DIRECT</string>
-    <string name="calibration">CALIBRATION</string>
 
     <string name="brightness">BRIGHTNESS</string>
     <string name="volume">VOLUME</string>
-    <string name="red">RED</string>
-    <string name="green">GREEN</string>
-    <string name="blue">BLUE</string>
 
     <string name="devices">DEVICES</string>
     <string name="percentage">%</string>
@@ -38,7 +29,6 @@
     <string name="scan">SCAN</string>
     <string name="stop">STOP</string>
     <string name="close">CLOSE</string>
-
 
     <string name="connected">CONNECTED</string>
     <string name="connecting_dots">CONNECTING&#8230;</string>
@@ -58,5 +48,7 @@
     <string name="speakers_a">SPEAKERS A</string>
     <string name="speakers_b">SPEAKERS B</string>
     <string name="temp_zero">0°</string>
+    <string name="volume_led">VOLUME LED</string>
+    <string name="show_temperature">SHOW TEMPERATURE</string>
 
 </resources>

@@ -17,8 +17,9 @@ object Constants {
     const val SYSTEM_INDEX_SPEAKERS_B = 5
     const val SYSTEM_INDEX_INPUT = 6
     const val SYSTEM_INDEX_BRIGHTNESS_INDEX = 7
-    const val SYSTEM_INDEX_STATE_POWER = 8
-    const val SYSTEM_INDEX_STATE_MUTE = 9
+    const val SYSTEM_INDEX_VOLUME_KNOB_LED = 8
+    const val SYSTEM_INDEX_STATE_POWER = 9
+    const val SYSTEM_INDEX_STATE_MUTE = 10
 
     // POWER
     // STATES

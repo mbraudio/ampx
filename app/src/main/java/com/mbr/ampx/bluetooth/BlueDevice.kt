@@ -46,6 +46,7 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
 
     // Settings
     var brightnessIndex: Int = 0
+    var volumeLed: Int = 0
 
     fun update(device: BluetoothDevice) { this.device = device }
 
@@ -373,6 +374,11 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
-
+    fun enableVolumeKnobLed(value: Byte) {
+        val crc = (Commands.COMMAND_SET_VOLUME_KNOB_LED.toByte() + value).toByte()
+        val data = byteArrayOf(Commands.COMMAND_SET_VOLUME_KNOB_LED.toByte(), value, crc)
+        val buffer = COBS.encode(data)
+        addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
+    }
 
 }

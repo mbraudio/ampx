@@ -17,6 +17,7 @@ class Commands {
         const val COMMAND_UPDATE_BALANCE_VALUE = 13
         const val COMMAND_UPDATE_TEMPERATURE = 14
         const val COMMAND_BRIGHTNESS_INDEX = 15
+        const val COMMAND_SET_VOLUME_KNOB_LED = 16
 
         const val COMMAND_CALIBRATION = 100
         const val COMMAND_CALIBRATION_DATA_1 = 101

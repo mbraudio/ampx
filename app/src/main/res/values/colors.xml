@@ -4,19 +4,10 @@
     <color name="colorPrimaryDark">#FF2555FF</color>
     <color name="colorAccent">#FF2555FF</color>
 
-    <color name="black_overlay">#66000000</color>
-
     <color name="main">#FF2555FF</color>
 
-    <color name="colorScaleStart">#FF224488</color>
-    <color name="colorScaleEnd">#FF224488</color>
     <color name="colorText">#FFFFFFFF</color>
-    <color name="colorMain">#FF202020</color>
-    <color name="colorScaleOuterArc">#1e2827</color>
-    <color name="colorScaleUnderlayArc">#26333e</color>
-    <color name="colorScaleOverlayArc">#F79002</color>
-    <color name="colorScaleSelectedArc">#2290F2</color>
-    <color name="colorScaleInnerCircle">#49616e</color>
+
 
     <!-- GAUGE VIEW EX -->
     <color name="myBackground">#131620</color>
