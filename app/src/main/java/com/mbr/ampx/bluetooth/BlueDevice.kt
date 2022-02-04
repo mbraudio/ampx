@@ -8,6 +8,7 @@ import android.util.Log
 import com.mbr.ampx.R
 import com.mbr.ampx.utilities.COBS
 import com.mbr.ampx.utilities.Constants
+import com.mbr.ampx.viewmodel.DAC
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -47,6 +48,8 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
     // Settings
     var brightnessIndex: Int = 0
     var volumeLed: Int = 0
+
+    val dac = DAC()
 
     fun update(device: BluetoothDevice) { this.device = device }
 

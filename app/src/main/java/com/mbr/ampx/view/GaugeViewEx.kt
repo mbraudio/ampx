@@ -94,6 +94,8 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     private var texts = ArrayList<GaugeText>()
 
     private lateinit var valueText: GaugeText
+    private lateinit var inputText: GaugeText
+    private lateinit var sampleRateText: GaugeText
 
     // Gestures and Touches
     private var ignoreTouches = false
@@ -167,6 +169,8 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         scaleTextPaint.typeface = Typeface.SERIF //ResourcesCompat.getFont(context, R.font.orbitron)
 
         valueText = GaugeText(context.getColor(android.R.color.white), centerValueTextHeight, valueTextBold)
+        inputText = GaugeText(context.getColor(android.R.color.white), centerValueTextHeight / 2f, false)
+        sampleRateText = GaugeText(context.getColor(android.R.color.white), centerValueTextHeight / 2f, false)
 
         bitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         bitmapPaint.style = Paint.Style.FILL
@@ -242,21 +246,30 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         coloredCircleRadius = scaleDiameter - SCALE_LINE_LENGTH - SCALE_ARC_DISTANCE_TO_COLORED_CIRCLE
 
         bitmap = BitmapFactory.decodeResource(resources, R.drawable.round_volume_up_white_36)
+
         var distanceY = radius / 28f
         if (distanceY < 12f) {
             distanceY = 12f
         }
 
         // Value text
-        val textBounds = Rect()
-        valueText.paint.getTextBounds(valueText.text, 0, valueText.text.length, textBounds)
-        val textHeight = Math.abs(textBounds.top + textBounds.bottom) / 2f
-        valueText.updatePosition(centerX, centerY + (textHeight * 2f) + distanceY)
+        adjustGaugeText(valueText, distanceY)
+        // Dac texts
+        val radiusHalf = radius / 2f
+        adjustGaugeText(inputText, radiusHalf + (centerValueTextHeight / 2f))
+        adjustGaugeText(sampleRateText, radiusHalf + centerValueTextHeight)
 
         bitmap?.let {
             bitmapX = centerX - (it.width / 2f)
             bitmapY = centerY - it.height - distanceY
         }
+    }
+
+    private fun adjustGaugeText(gaugeText: GaugeText, distanceY: Float) {
+        val textBounds = Rect()
+        gaugeText.paint.getTextBounds(gaugeText.text, 0, gaugeText.text.length, textBounds)
+        val textHeight = abs(textBounds.top + textBounds.bottom) / 2f
+        gaugeText.updatePosition(centerX, centerY + (textHeight * 2f) + distanceY)
     }
 
     private fun calculateScaleValues() {
@@ -267,10 +280,6 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         val divisionAngle = totalAngle / numberOfDivisions
         val lineStart = scaleDiameter
         val lineEnd = scaleDiameter - SCALE_LINE_LENGTH
-        //val dia = diameter + 5.0f
-        //val textBounds = Rect()
-        var line: GaugeLine
-        //val textOffset = -28.0f
         for (i in 0 until numberOfLines) {
             val currentAngle = (startAngle + i * divisionAngle).toDouble()
             val angleRadians = Math.toRadians(currentAngle)
@@ -280,16 +289,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
             val startY = (centerY + lineStart * sinA).toFloat()
             val stopX = (centerX + lineEnd * cosA).toFloat()
             val stopY = (centerY + lineEnd * sinA).toFloat()
-            line = GaugeLine(startX, startY, stopX, stopY)
-            /*
-            info.text = "${i * divisionValue}"
-            val textWidth = scaleTextPaint.measureText(info.text) / 2f
-            scaleTextPaint.getTextBounds(info.text, 0, info.text.length, textBounds)
-            val textHeight = Math.abs(textBounds.top + textBounds.bottom) / 2f
-            info.textX = (centerX + (dia + textOffset) * cosA).toFloat() - textWidth
-            info.textY = (centerY + (dia + textOffset) * sinA).toFloat() + textHeight
-            */
-            lines.add(line)
+            lines.add(GaugeLine(startX, startY, stopX, stopY))
         }
 
         // Scale lines don't have text here, so add text for min and max
@@ -321,7 +321,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         adjustActive()
     }
 
-    fun toggleActive(): Boolean {
+    private fun toggleActive(): Boolean {
         active = !active
         adjustActive()
         return active
@@ -358,6 +358,10 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         }
 
         valueText.draw(canvas)
+        if (isEnabled) {
+            inputText.draw(canvas)
+            sampleRateText.draw(canvas)
+        }
 
         bitmap?.let {
             canvas.drawBitmap(it, bitmapX, bitmapY, bitmapPaint)
@@ -378,6 +382,16 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
             targetAngle = newAngle
         }
         calculateValue(valueAngle)
+        invalidate()
+    }
+
+    fun setDacSampleRate(sampleRate: String) {
+        sampleRateText.text = sampleRate
+        invalidate()
+    }
+
+    fun setInputType(inputType: String) {
+        inputText.text = inputType
         invalidate()
     }
 

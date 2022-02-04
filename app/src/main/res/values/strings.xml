@@ -72,4 +72,7 @@
     <string name="RXIN2">RXIN2</string>
     <string name="RXIN4">RXIN4</string>
 
+    <string name="analog">ANALOG</string>
+    <string name="digital">DIGITAL</string>
+
 </resources>

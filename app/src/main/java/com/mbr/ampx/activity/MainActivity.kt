@@ -163,6 +163,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         val command = data[0]
         val data0 = data[1]
         val enabled = data0 == 1
+        // Do not extract data[2] here, some commands don't have it
 
         when (command) {
             Commands.COMMAND_SYSTEM_DATA -> {
@@ -183,7 +184,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
             Commands.COMMAND_CHANGE_INPUT -> {
                 inputGroup.select(data0)
-                // data1 - if input is digital
+                setInputType(data0)
             }
 
             Commands.COMMAND_TOGGLE_SPEAKER_A -> {
@@ -228,11 +229,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             }
 
             Commands.COMMAND_UPDATE_DAC_DATA -> {
-                binding.viewModel?.let {
-                    it.dac.input = data0
-                    it.dac.rate = data[2]
-                }
-                Log.e(tag, "DAC -> INPUT: ${Utilities.getDacInputString(data0)} | SAMPLE RATE: ${Utilities.getDacSampleRateString(data[2])}")
+                setDacSampleRate(data[2])
+                Log.e(tag, "DAC UPDATE -> INPUT: ${Utilities.getDacInputString(data0)} | SAMPLE RATE: ${Utilities.getDacSampleRateString(data[2])}")
+                // Set new DAC sample rate from device and store it, needed for input changes
+                binding.viewModel?.active?.dac?.setSampleRate(data0, data[2])
             }
 
             Commands.COMMAND_CALIBRATION_DATA_1 -> {
@@ -277,10 +277,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
     }
 
     private fun select(data: IntArray) {
-        // Brightness index
-        binding.viewModel?.active?.brightnessIndex = data[Constants.SYSTEM_INDEX_BRIGHTNESS_INDEX]
-        // Volume led enabled
-        binding.viewModel?.active?.volumeLed = data[Constants.SYSTEM_INDEX_VOLUME_KNOB_LED]
+        binding.viewModel?.let {
+            it.active?.let { a ->
+                // Brightness index
+                a.brightnessIndex = data[Constants.SYSTEM_INDEX_BRIGHTNESS_INDEX]
+                // Volume led enabled
+                a.volumeLed = data[Constants.SYSTEM_INDEX_VOLUME_KNOB_LED]
+                // Set DAC sample rate from device and store it, needed for input changes
+                a.dac.setSampleRate(data[Constants.SYSTEM_INDEX_DAC_INPUT], data[Constants.SYSTEM_INDEX_DAC_RATE])
+            }
+        }
 
         // States
         binding.buttonPower.setActive(true)
@@ -288,6 +294,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         var enabled = data[Constants.SYSTEM_INDEX_STATE_MUTE] == 1
         binding.gaugeViewVolume.setActive(enabled)
         binding.gaugeViewVolume.isEnabled = true
+
+        // DAC
+        setDacSampleRate(data[Constants.SYSTEM_INDEX_DAC_RATE])
 
         binding.gaugeViewBass.isEnabled = true
         binding.gaugeViewTreble.isEnabled = true
@@ -312,16 +321,32 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
         val index = data[Constants.SYSTEM_INDEX_INPUT]
         inputGroup.select(index)
+        setInputType(index)
 
         binding.buttonSettings.setActive(true)
         binding.buttonSettings.isEnabled = true
 
-        // DAC
-        binding.viewModel?.dac!!.input = data[Constants.SYSTEM_INDEX_DAC_INPUT]
-        binding.viewModel?.dac!!.rate = data[Constants.SYSTEM_INDEX_DAC_RATE]
-
         // TEMPERATURE
         setupTemperatureViews()
+    }
+
+    private fun setDacSampleRate(sampleRate: Int) {
+        binding.gaugeViewVolume.setDacSampleRate(Utilities.getDacSampleRateString(sampleRate))
+    }
+
+    private fun setInputType(index: Int) {
+        val digital = index == 0 || index == 2
+        val value = if (index == 0) Constants.PCM9211_INPUT_RXIN_2 else Constants.PCM9211_INPUT_RXIN_4
+        val text = if (digital) getString(R.string.digital) else getString(R.string.analog)
+        binding.gaugeViewVolume.setInputType(text)
+        if (digital) {
+            binding.viewModel?.active?.let {
+                val rate = it.dac.getSampleRate(value)
+                binding.gaugeViewVolume.setDacSampleRate(Utilities.getDacSampleRateString(rate))
+            }
+        } else {
+            binding.gaugeViewVolume.setDacSampleRate("")
+        }
     }
 
     private fun deselect() {
@@ -418,6 +443,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
             R.id.inputButtonRecorder -> {
                 val index = inputGroup.select(button)
                 active.changeInput(index.toByte())
+                setInputType(index)
                 Log.e(tag, "Input selected: $index")
             }
 

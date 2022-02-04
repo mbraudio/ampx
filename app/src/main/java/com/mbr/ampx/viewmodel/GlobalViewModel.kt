@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModel
 import com.mbr.ampx.bluetooth.BlueDevice
 import com.mbr.ampx.bluetooth.IBlueDeviceListener
 
-class DAC(var input: Int, var rate: Int)
+//class DAC(var input: Int, var rate: Int)
 
 class GlobalViewModel : ViewModel(), IBlueDeviceListener {
 
@@ -51,8 +51,6 @@ class GlobalViewModel : ViewModel(), IBlueDeviceListener {
     fun getDevice(index: Int): BlueDevice = devices[index]
 
     var active: BlueDevice? = null
-
-    val dac: DAC = DAC(0,0)
 
     private val handler = Handler(Looper.getMainLooper())
 
