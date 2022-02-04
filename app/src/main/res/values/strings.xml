@@ -51,4 +51,25 @@
     <string name="volume_led">VOLUME LED</string>
     <string name="show_temperature">SHOW TEMPERATURE</string>
 
+
+    <string name="out_of_range">\???</string>
+    <string name="kHz8">8kHz</string>
+    <string name="kHz11">11kHz</string>
+    <string name="kHz12">12kHz</string>
+    <string name="kHz16">16kHz</string>
+    <string name="kHz22">22kHz</string>
+    <string name="kHz24">24kHz</string>
+    <string name="kHz32">32kHz</string>
+    <string name="kHz44">44kHz</string>
+    <string name="kHz48">48kHz</string>
+    <string name="kHz64">64kHz</string>
+    <string name="kHz88">88kHz</string>
+    <string name="kHz96">96kHz</string>
+    <string name="kHz128">128kHz</string>
+    <string name="kHz176">176kHz</string>
+    <string name="kHz196">196kHz</string>
+
+    <string name="RXIN2">RXIN2</string>
+    <string name="RXIN4">RXIN4</string>
+
 </resources>

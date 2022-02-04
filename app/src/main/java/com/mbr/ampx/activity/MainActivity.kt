@@ -183,6 +183,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
             Commands.COMMAND_CHANGE_INPUT -> {
                 inputGroup.select(data0)
+                // data1 - if input is digital
             }
 
             Commands.COMMAND_TOGGLE_SPEAKER_A -> {
@@ -224,6 +225,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
                 val left = "${data[2]}°"
                 binding.temperatureViewRight.text = right
                 binding.temperatureViewLeft.text = left
+            }
+
+            Commands.COMMAND_UPDATE_DAC_DATA -> {
+                binding.viewModel?.let {
+                    it.dac.input = data0
+                    it.dac.rate = data[2]
+                }
+                Log.e(tag, "DAC -> INPUT: ${Utilities.getDacInputString(data0)} | SAMPLE RATE: ${Utilities.getDacSampleRateString(data[2])}")
             }
 
             Commands.COMMAND_CALIBRATION_DATA_1 -> {
@@ -306,6 +315,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
         binding.buttonSettings.setActive(true)
         binding.buttonSettings.isEnabled = true
+
+        // DAC
+        binding.viewModel?.dac!!.input = data[Constants.SYSTEM_INDEX_DAC_INPUT]
+        binding.viewModel?.dac!!.rate = data[Constants.SYSTEM_INDEX_DAC_RATE]
 
         // TEMPERATURE
         setupTemperatureViews()
