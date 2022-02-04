@@ -8,6 +8,10 @@ object Utilities {
 
     lateinit var resources: Resources
 
+    fun isDigital(index: Int): Boolean {
+        return index == 0 || index == 2
+    }
+
     fun calculateCrc(data: ByteArray): Boolean {
         val size = data.size - 2
         var crc: Byte = 0
