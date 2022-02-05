@@ -8,7 +8,6 @@ import android.util.Log
 import com.mbr.ampx.R
 import com.mbr.ampx.utilities.COBS
 import com.mbr.ampx.utilities.Constants
-import com.mbr.ampx.viewmodel.DAC
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -18,7 +17,7 @@ interface IBlueDeviceListener {
 }
 
 class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener) {
-    val tag = this.javaClass.simpleName
+    val tag: String = this.javaClass.simpleName
 
     companion object {
         //const val MTU_MAX = 517
@@ -48,8 +47,6 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
     // Settings
     var brightnessIndex: Int = 0
     var volumeLed: Int = 0
-
-    val dac = DAC()
 
     fun update(device: BluetoothDevice) { this.device = device }
 
@@ -101,12 +98,16 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
 
     fun connectOrDisconnect(context: Context) {
         handler.post {
-            if (connectionState == BluetoothGatt.STATE_DISCONNECTED) {
-                connect(context)
-            } else if (connectionState == BluetoothGatt.STATE_CONNECTED) {
-                disconnect()
-            } else {
-                Log.e(tag, "Connection: BUSY")
+            when (connectionState) {
+                BluetoothGatt.STATE_DISCONNECTED -> {
+                    connect(context)
+                }
+                BluetoothGatt.STATE_CONNECTED -> {
+                    disconnect()
+                }
+                else -> {
+                    Log.e(tag, "Connection: BUSY")
+                }
             }
         }
     }
@@ -329,11 +330,13 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
+    /*
     fun togglePowerAmpDirect() {
         val data = byteArrayOf(Commands.COMMAND_TOGGLE_PAMP_DIRECT.toByte(), Commands.COMMAND_TOGGLE_PAMP_DIRECT.toByte())
         val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
+
 
     fun requestCalibration(channel: Byte, delay: Byte) {
         val crc: Byte = (Commands.COMMAND_CALIBRATION.toByte() + channel + delay).toByte()
@@ -341,6 +344,7 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
+    */
 
     fun setVolume(value: Byte) {
         val crc = (Commands.COMMAND_UPDATE_VOLUME_VALUE.toByte() + value).toByte()

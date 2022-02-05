@@ -19,7 +19,7 @@ import com.mbr.ampx.bluetooth.IBlueDeviceListener
 
 class GlobalViewModel : ViewModel(), IBlueDeviceListener {
 
-    private val DEVICE_NAME = "AmpX"
+    private val deviceName = "AmpX"
 
     // LIVE DATA
     private val _isScanning = MutableLiveData<Boolean>()
@@ -51,6 +51,8 @@ class GlobalViewModel : ViewModel(), IBlueDeviceListener {
     fun getDevice(index: Int): BlueDevice = devices[index]
 
     var active: BlueDevice? = null
+
+    val dac = DAC()
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -85,7 +87,7 @@ class GlobalViewModel : ViewModel(), IBlueDeviceListener {
 
     fun addDevice(device: BluetoothDevice) {
         device.name?.let {
-            if (it != DEVICE_NAME) {
+            if (it != deviceName) {
                 return
             }
         }

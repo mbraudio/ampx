@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.mbr.ampx.R
 import com.mbr.ampx.bluetooth.BlueDevice
@@ -28,9 +29,9 @@ class DeviceAdapter(private val resources: Resources) : RecyclerView.Adapter<Dev
         devices?.let {
             val device: BlueDevice = it[position]
             holder.textViewName.text = device.name
-            holder.textViewName.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(device.icon), null, null, null)
+            holder.textViewName.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(resources, device.icon, null), null, null, null)
             holder.textViewState.text = resources.getString(device.stateName)
-            holder.textViewState.setTextColor(resources.getColor(device.stateColor))
+            holder.textViewState.setTextColor(ResourcesCompat.getColor(resources, device.stateColor, null))
         }
     }
 

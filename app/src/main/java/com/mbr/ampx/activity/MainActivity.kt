@@ -230,13 +230,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
             Commands.COMMAND_UPDATE_DAC_DATA -> {
                 // Set new DAC sample rate from device and store it, needed for input changes
-                binding.viewModel?.active?.dac?.setSampleRate(data0, data[2])
+                binding.viewModel?.dac?.setSampleRate(data0, data[2])
                 // If digital input, update sample rate
                 if (Utilities.isDigital(data[2])) {
                     setDacSampleRate(data[2])
                 }
                 Log.e(tag, "DAC UPDATE -> INPUT: ${Utilities.getDacInputString(data0)} | SAMPLE RATE: ${Utilities.getDacSampleRateString(data[2])}")
-
             }
 
             Commands.COMMAND_CALIBRATION_DATA_1 -> {
@@ -282,13 +281,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
     private fun select(data: IntArray) {
         binding.viewModel?.let {
+            // Set DAC sample rate from device and store it, needed for input changes
+            it.dac.setSampleRate(data[Constants.SYSTEM_INDEX_DAC_INPUT], data[Constants.SYSTEM_INDEX_DAC_RATE])
             it.active?.let { a ->
                 // Brightness index
                 a.brightnessIndex = data[Constants.SYSTEM_INDEX_BRIGHTNESS_INDEX]
                 // Volume led enabled
                 a.volumeLed = data[Constants.SYSTEM_INDEX_VOLUME_KNOB_LED]
-                // Set DAC sample rate from device and store it, needed for input changes
-                a.dac.setSampleRate(data[Constants.SYSTEM_INDEX_DAC_INPUT], data[Constants.SYSTEM_INDEX_DAC_RATE])
             }
         }
 
@@ -340,12 +339,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
     private fun setInputType(index: Int) {
         val digital = Utilities.isDigital(index)
-        val value = if (index == 0) Constants.PCM9211_INPUT_RXIN_2 else Constants.PCM9211_INPUT_RXIN_4
+        val input = if (index == 0) Constants.PCM9211_INPUT_RXIN_2 else Constants.PCM9211_INPUT_RXIN_4
         val text = if (digital) getString(R.string.digital) else getString(R.string.analog)
         binding.gaugeViewVolume.setInputType(text)
         if (digital) {
-            binding.viewModel?.active?.let {
-                val rate = it.dac.getSampleRate(value)
+            binding.viewModel?.let {
+                val rate = it.dac.getSampleRate(input)
                 binding.gaugeViewVolume.setDacSampleRate(Utilities.getDacSampleRateString(rate))
             }
         } else {

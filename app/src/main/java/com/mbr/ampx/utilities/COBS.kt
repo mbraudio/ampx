@@ -1,8 +1,6 @@
 package com.mbr.ampx.utilities
 
 import java.io.ByteArrayOutputStream
-import kotlin.experimental.and
-import kotlin.math.sin
 
 object COBS {
 

@@ -8,8 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import com.mbr.ampx.R
 import com.mbr.ampx.listener.IGaugeViewListener
-import kotlin.math.abs
-import kotlin.math.sqrt
+import kotlin.math.*
 
 class GaugeViewSimple : View, GestureDetector.OnGestureListener {
 
@@ -177,7 +176,7 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
         bounds.right = w.toFloat() - paddingEnd
         centerX = (bounds.left + bounds.right) / 2f
         centerY = (bounds.top + bounds.bottom) / 2f
-        radius = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
+        radius = min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
 
         // Value arc(s)
         val strokeHalf = VALUE_ARC_STROKE_WIDTH / 2f
@@ -196,12 +195,12 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
         valueText.text = "0"
         val textBounds = Rect()
         valueText.paint.getTextBounds(valueText.text, 0, valueText.text.length, textBounds)
-        var textHeightHalf = Math.abs(textBounds.top + textBounds.bottom).toFloat()
+        var textHeightHalf = abs(textBounds.top + textBounds.bottom).toFloat()
         valueText.updatePosition(centerX, centerY + coloredCircleRadius + (textHeightHalf * 2f))
 
         // Title text
         titleText.paint.getTextBounds(titleText.text, 0, titleText.text.length, textBounds)
-        textHeightHalf = Math.abs(textBounds.top + textBounds.bottom) / 2f
+        textHeightHalf = abs(textBounds.top + textBounds.bottom) / 2f
         titleText.updatePosition(centerX, centerY + textHeightHalf)
     }
 
@@ -215,10 +214,10 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
         val textBounds = Rect()
         val textOffsetX = 64f
         val angleRadians = Math.toRadians(angle.toDouble())
-        val cosA = Math.cos(angleRadians)
-        val sinA = Math.sin(angleRadians)
+        val cosA = cos(angleRadians)
+        val sinA = sin(angleRadians)
         scaleTextPaint.getTextBounds(text, 0, text.length, textBounds)
-        val textHeight = Math.abs(textBounds.top + textBounds.bottom) / 2f
+        val textHeight = abs(textBounds.top + textBounds.bottom) / 2f
         val x = (centerX + (radius + textOffsetX) * cosA).toFloat()
         val y = (centerY + (radius) * sinA).toFloat() + (textHeight * 3f/2f)
 
@@ -302,9 +301,9 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
     }
 
     private fun distanceFromCenter(x: Float, y: Float): Float {
-        val xd = Math.abs(x - centerX).toDouble()
-        val yd = Math.abs(y - centerY).toDouble()
-        return Math.sqrt(Math.pow(xd, 2.0) + Math.pow(yd, 2.0)).toFloat()
+        val xd = abs(x - centerX).toDouble()
+        val yd = abs(y - centerY).toDouble()
+        return sqrt(xd.pow(2.0) + yd.pow(2.0)).toFloat()
     }
 
     private fun updateTargetAngle() {
@@ -327,7 +326,7 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
         val tx = (x - centerX).toDouble()
         val ty = (y - centerY).toDouble()
         val length = sqrt(tx * tx + ty * ty)
-        val r = Math.acos(ty / length)
+        val r = acos(ty / length)
         var angle = Math.toDegrees(r).toFloat()
         if (x > centerX) {
             angle = 360f - angle

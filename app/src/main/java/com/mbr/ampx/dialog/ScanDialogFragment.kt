@@ -26,7 +26,7 @@ interface IRecyclerClickListener {
 
 class ScanDialogFragment : DialogFragment(), View.OnClickListener, IRecyclerClickListener {
 
-    private val TAG = this.javaClass.simpleName
+    private val TAG: String = this.javaClass.simpleName
 
     /*companion object {
         private const val CLOSE_DELAY = 800 // ms
@@ -76,23 +76,23 @@ class ScanDialogFragment : DialogFragment(), View.OnClickListener, IRecyclerClic
     private fun addObservers() {
         val model = binding.viewModel!!
 
-        model.isScanning.observe(this, {
+        model.isScanning.observe(this) {
             adjustGui(it)
-        })
+        }
 
-        model.newDeviceAdded.observe(this, {
+        model.newDeviceAdded.observe(this) {
             if (it) {
                 recyclerViewAdapter.setDevices(null)
                 recyclerViewAdapter.setDevices(model.devices)
                 recyclerViewAdapter.notifyDataSetChanged()
             }
-        })
+        }
 
-        model.deviceStateChanged.observe( this, {
+        model.deviceStateChanged.observe( this) {
             if (it) {
                 recyclerViewAdapter.notifyDataSetChanged()
             }
-        })
+        }
     }
 
     private fun checkForPermissions(context: Context) {

@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        android:id="@+id/fromVolumeToTone"
         app:constraintSetStart="@+id/start"
         app:constraintSetEnd="@id/end"
         app:duration="360" >

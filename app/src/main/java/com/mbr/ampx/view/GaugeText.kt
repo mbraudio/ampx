@@ -2,7 +2,6 @@ package com.mbr.ampx.view
 
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.Rect
 import android.graphics.Typeface
 
 class GaugeText(color: Int, height: Float, bold: Boolean) {

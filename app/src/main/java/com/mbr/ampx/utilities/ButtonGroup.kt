@@ -24,7 +24,7 @@ class ButtonGroup(count: Int) {
         if (index < 0) {
             return
         }
-        val button = buttons.get(index)
+        val button = buttons[index]
         button.setActive(true)
     }
 
@@ -32,9 +32,5 @@ class ButtonGroup(count: Int) {
         for (current in buttons) {
             current.setOnClickListener(listener)
         }
-    }
-
-    fun onDestroy() {
-        buttons.clear()
     }
 }

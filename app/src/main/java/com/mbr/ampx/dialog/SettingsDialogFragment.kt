@@ -14,7 +14,7 @@ import com.mbr.ampx.viewmodel.GlobalViewModel
 
 class SettingsDialogFragment : DialogFragment(), View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
-    private val MAX_BRIGHTNESS_INDEX = 4
+    private val maxBrightnessIndex = 4
 
     private lateinit var binding: DialogSettingsBinding
 
@@ -32,7 +32,7 @@ class SettingsDialogFragment : DialogFragment(), View.OnClickListener, SeekBar.O
         binding.buttonSettingsClose.setOnClickListener(this)
 
         // SeekBar
-        binding.seekBarBrightness.max = MAX_BRIGHTNESS_INDEX
+        binding.seekBarBrightness.max = maxBrightnessIndex
         viewModel.active?.let {
             binding.seekBarBrightness.progress = it.brightnessIndex
             binding.switchVolumeLed.isChecked = it.volumeLed == 1

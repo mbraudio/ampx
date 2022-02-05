@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import com.mbr.ampx.R
 import com.mbr.ampx.listener.IGaugeViewListener
 import com.mbr.ampx.utilities.Constants
-import java.lang.Math.pow
 import java.lang.Math.toDegrees
 import kotlin.math.*
 
@@ -172,6 +171,9 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         inputText = GaugeText(context.getColor(android.R.color.white), centerValueTextHeight / 2f, false)
         sampleRateText = GaugeText(context.getColor(android.R.color.white), centerValueTextHeight / 2f, false)
 
+        inputText.text = "DIGITAL"
+        sampleRateText.text = "96kHz"
+
         bitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         bitmapPaint.style = Paint.Style.FILL
 
@@ -256,8 +258,8 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         adjustGaugeText(valueText, distanceY)
         // Dac texts
         val radiusHalf = radius / 2f
-        adjustGaugeText(inputText, radiusHalf + (centerValueTextHeight / 2f))
-        adjustGaugeText(sampleRateText, radiusHalf + centerValueTextHeight)
+        adjustGaugeText(inputText, radiusHalf + (centerValueTextHeight / 2f) + 6f)
+        adjustGaugeText(sampleRateText, radiusHalf + centerValueTextHeight + 10f)
 
         bitmap?.let {
             bitmapX = centerX - (it.width / 2f)
@@ -358,10 +360,10 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         }
 
         valueText.draw(canvas)
-        if (isEnabled) {
+        //if (isEnabled) {
             inputText.draw(canvas)
             sampleRateText.draw(canvas)
-        }
+        //}
 
         bitmap?.let {
             canvas.drawBitmap(it, bitmapX, bitmapY, bitmapPaint)
@@ -431,7 +433,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     private fun distanceFromCenter(x: Float, y: Float): Float {
         val xd = abs(x - centerX).toDouble()
         val yd = abs(y - centerY).toDouble()
-        return sqrt(pow(xd, 2.0) + pow(yd, 2.0)).toFloat()
+        return sqrt(xd.pow(2.0) + yd.pow(2.0)).toFloat()
     }
 
     private fun updateTargetAngle() {

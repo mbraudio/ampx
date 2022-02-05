@@ -5,6 +5,8 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import com.mbr.ampx.R
+import kotlin.math.abs
+import kotlin.math.min
 
 class ModernButton : View {
 
@@ -145,7 +147,7 @@ class ModernButton : View {
             val textBounds = Rect()
             textWidth = textPaint.measureText(it)
             textPaint.getTextBounds(text, 0, it.length, textBounds)
-            textHeight = Math.abs(textBounds.top + textBounds.bottom).toFloat()
+            textHeight = abs(textBounds.top + textBounds.bottom).toFloat()
         }
 
         textWidthHalf = textWidth / 2f
@@ -161,10 +163,10 @@ class ModernButton : View {
         centerX = (bounds.left + bounds.right) / 2f
         if (text == null || text == "") {
             centerY = (bounds.top + bounds.bottom) / 2f
-            radius = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
+            radius = min(bounds.right - bounds.left, bounds.bottom - bounds.top) / 2f
         } else {
             centerY = (bounds.top + bounds.bottom - textHeight - circleToTextDistance) / 2f
-            radius = Math.min(bounds.right - bounds.left, bounds.bottom - bounds.top - (textHeight * 2f) - circleToTextDistance) / 2f
+            radius = min(bounds.right - bounds.left, bounds.bottom - bounds.top - (textHeight * 2f) - circleToTextDistance) / 2f
         }
     }
 
