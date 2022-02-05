@@ -324,6 +324,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
         val index = data[Constants.SYSTEM_INDEX_INPUT]
         inputGroup.select(index)
+        inputGroup.setEnabled(true)
         setInputType(index)
 
         binding.buttonSettings.setActive(true)
@@ -333,25 +334,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         setupTemperatureViews()
     }
 
-    private fun setDacSampleRate(sampleRate: Int) {
-        binding.gaugeViewVolume.setDacSampleRate(Utilities.getDacSampleRateString(sampleRate))
-    }
-
-    private fun setInputType(index: Int) {
-        val digital = Utilities.isDigital(index)
-        val input = if (index == 0) Constants.PCM9211_INPUT_RXIN_2 else Constants.PCM9211_INPUT_RXIN_4
-        val text = if (digital) getString(R.string.digital) else getString(R.string.analog)
-        binding.gaugeViewVolume.setInputType(text)
-        if (digital) {
-            binding.viewModel?.let {
-                val rate = it.dac.getSampleRate(input)
-                binding.gaugeViewVolume.setDacSampleRate(Utilities.getDacSampleRateString(rate))
-            }
-        } else {
-            binding.gaugeViewVolume.setDacSampleRate("")
-        }
-    }
-
     private fun deselect() {
         binding.buttonPower.setActive(false)
         //binding.buttonPower.isEnabled = false
@@ -359,6 +341,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.gaugeViewVolume.setCurrentValue(0, 0)
         binding.gaugeViewVolume.setActive(false)
         binding.gaugeViewVolume.isEnabled = false
+        binding.gaugeViewVolume.setDacSampleRate("")
+        binding.gaugeViewVolume.setInputType("")
 
         binding.gaugeViewBass.setCurrentValue(GaugeViewSimple.DEFAULT_VALUE_HALF, 0)
         binding.gaugeViewBass.isEnabled = false
@@ -382,6 +366,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.buttonSpeakersB.isEnabled = false
 
         inputGroup.select(-1)
+        inputGroup.setEnabled(false)
 
         binding.buttonSettings.setActive(false)
         binding.buttonSettings.isEnabled = false
@@ -402,6 +387,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         } else {
             binding.temperatureViewLeft.visibility = View.INVISIBLE
             binding.temperatureViewRight.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun setDacSampleRate(sampleRate: Int) {
+        binding.gaugeViewVolume.setDacSampleRate(Utilities.getDacSampleRateString(sampleRate))
+    }
+
+    private fun setInputType(index: Int) {
+        val digital = Utilities.isDigital(index)
+        val input = if (index == 0) Constants.PCM9211_INPUT_RXIN_2 else Constants.PCM9211_INPUT_RXIN_4
+        val text = if (digital) getString(R.string.digital) else getString(R.string.analog)
+        binding.gaugeViewVolume.setInputType(text)
+        if (digital) {
+            binding.viewModel?.let {
+                val rate = it.dac.getSampleRate(input)
+                binding.gaugeViewVolume.setDacSampleRate(Utilities.getDacSampleRateString(rate))
+            }
+        } else {
+            binding.gaugeViewVolume.setDacSampleRate("")
         }
     }
 

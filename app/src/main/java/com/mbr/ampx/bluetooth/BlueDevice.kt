@@ -219,7 +219,10 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
                     addAction(DescriptorAction(rxCharacteristic!!))
                     addAction(DescriptorAction(txCharacteristic!!))
                     addAction(MtuAction(MTU_MAX_AVAILABLE))
-                    requestSystemData()
+                    addAction(RunnableAction(handler, {
+                        actionActive = false // Must disable this here since this is double action
+                        requestSystemData()
+                    }, 1000))
                 } else {
                     Log.e(tag, "ERROR: Service and Characteristics not found!")
                     disconnect()
@@ -262,8 +265,10 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         }
 
         override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
-            resolveMtu(mtu)
-            nextAction()
+            handler.post {
+                resolveMtu(mtu)
+                nextAction()
+            }
         }
 
         override fun onServiceChanged(gatt: BluetoothGatt) {
@@ -279,6 +284,7 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
 
     // SEND / RECEIVE
     private fun requestSystemData() {
+        Log.e(tag, "REQUEST SYSTEM DATA")
         val data = byteArrayOf(Commands.COMMAND_SYSTEM_DATA.toByte(), Commands.COMMAND_SYSTEM_DATA.toByte())
         val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
@@ -305,7 +311,7 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
 
-    // When using only 2 same bytes, crc calc is not needed! :)
+    // When using only 2 same bytes, crc calc is not needed. Second byte is crc! :)
     fun toggleDirect() {
         val data = byteArrayOf(Commands.COMMAND_TOGGLE_DIRECT.toByte(), Commands.COMMAND_TOGGLE_DIRECT.toByte())
         val buffer = COBS.encode(data)
@@ -336,7 +342,6 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
-
 
     fun requestCalibration(channel: Byte, delay: Byte) {
         val crc: Byte = (Commands.COMMAND_CALIBRATION.toByte() + channel + delay).toByte()

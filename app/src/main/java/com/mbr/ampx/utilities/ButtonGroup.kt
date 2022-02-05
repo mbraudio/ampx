@@ -33,4 +33,10 @@ class ButtonGroup(count: Int) {
             current.setOnClickListener(listener)
         }
     }
+
+    fun setEnabled(enabled: Boolean) {
+        for (current in buttons) {
+            current.isEnabled = enabled
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.mbr.ampx.bluetooth
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattDescriptor
+import android.os.Handler
 import com.mbr.ampx.utilities.Constants
 
 abstract class BluetoothAction {
@@ -49,13 +50,13 @@ class DescriptorAction(private val characteristic: BluetoothGattCharacteristic) 
         }
     }
 }
-/*
-class RunnableAction(private var handler: Handler, private var runnable: Runnable) : BluetoothAction() {
+
+class RunnableAction(private var handler: Handler, private var runnable: Runnable, private var delay: Long) : BluetoothAction() {
     override fun execute(gatt: BluetoothGatt) {
-        handler.post(runnable)
+        handler.postDelayed(runnable, delay)
     }
 }
-*/
+
 class MtuAction(private val mtu: Int) : BluetoothAction() {
     override fun execute(gatt: BluetoothGatt) {
         gatt.requestMtu(mtu)
