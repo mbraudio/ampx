@@ -94,7 +94,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
 
     private lateinit var valueText: GaugeText
     private lateinit var inputText: GaugeText
-    private lateinit var sampleRateText: GaugeText
+    private lateinit var dacText: GaugeText
 
     // Gestures and Touches
     private var ignoreTouches = false
@@ -169,10 +169,10 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
 
         valueText = GaugeText(context.getColor(android.R.color.white), centerValueTextHeight, valueTextBold)
         inputText = GaugeText(context.getColor(android.R.color.white), centerValueTextHeight / 2f, false)
-        sampleRateText = GaugeText(context.getColor(android.R.color.white), centerValueTextHeight / 2f, false)
+        dacText = GaugeText(context.getColor(android.R.color.white), centerValueTextHeight / 2f, false)
 
         inputText.text = "DIGITAL"
-        sampleRateText.text = "96kHz"
+        dacText.text = "96kHz"
 
         bitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         bitmapPaint.style = Paint.Style.FILL
@@ -259,7 +259,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         // Dac texts
         val radiusHalf = radius / 2f
         adjustGaugeText(inputText, radiusHalf + (centerValueTextHeight / 2f) + 6f)
-        adjustGaugeText(sampleRateText, radiusHalf + centerValueTextHeight + 10f)
+        adjustGaugeText(dacText, radiusHalf + centerValueTextHeight + 10f)
 
         bitmap?.let {
             bitmapX = centerX - (it.width / 2f)
@@ -362,7 +362,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         valueText.draw(canvas)
         //if (isEnabled) {
             inputText.draw(canvas)
-            sampleRateText.draw(canvas)
+            dacText.draw(canvas)
         //}
 
         bitmap?.let {
@@ -387,8 +387,8 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         invalidate()
     }
 
-    fun setDacData(sampleRate: String) {
-        sampleRateText.text = sampleRate
+    fun setDacData(text: String) {
+        dacText.text = text
         invalidate()
     }
 
