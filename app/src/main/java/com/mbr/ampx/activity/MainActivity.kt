@@ -293,7 +293,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
                 a.dacFilter = data[Constants.SYSTEM_INDEX_DAC_FILTER]
             }
         }
-
+        
         // States
         binding.buttonPower.setActive(true)
 
@@ -372,7 +372,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
         binding.buttonSettings.setActive(false)
         binding.buttonSettings.isEnabled = false
-        binding.buttonSettings.isEnabled = true // TODO: Remove this
 
         // TEMPERATURE
         binding.temperatureViewLeft.visibility = View.INVISIBLE
