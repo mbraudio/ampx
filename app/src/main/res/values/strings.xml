@@ -49,7 +49,7 @@
     <string name="speakers_b">SPEAKERS B</string>
     <string name="temp_zero">0°</string>
     <string name="volume_led">VOLUME LED</string>
-    <string name="show_temperature">SHOW TEMPERATURE</string>
+    <string name="temperature">TEMPERATURE</string>
 
 
     <string name="out_of_range">\???</string>
@@ -71,8 +71,5 @@
 
     <string name="RXIN2">RXIN2</string>
     <string name="RXIN4">RXIN4</string>
-
-    <string name="analog">ANALOG</string>
-    <string name="digital">DIGITAL</string>
 
 </resources>

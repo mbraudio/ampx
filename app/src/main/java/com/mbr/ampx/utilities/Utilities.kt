@@ -40,7 +40,6 @@ object Utilities {
         Log.e("SYSTEM", "POWER: " + getPowerString(data[Constants.SYSTEM_INDEX_STATE_POWER]))
         Log.e("SYSTEM", "MUTE: " + if (data[Constants.SYSTEM_INDEX_STATE_MUTE] == 1) "ON" else "OFF")
         Log.e("SYSTEM", "VOLUME KNOB LED: " + if (data[Constants.SYSTEM_INDEX_VOLUME_KNOB_LED] == 1) "ON" else "OFF")
-        Log.e("SYSTEM", "DAC INPUT: ${getDacInputString(data[Constants.SYSTEM_INDEX_DAC_INPUT])} ")
         Log.e("SYSTEM", "DAC DATA: ${getDacData(data[Constants.SYSTEM_INDEX_DAC_SAMPLE_RATE], data[Constants.SYSTEM_INDEX_DAC_FORMAT])} ")
     }
 
@@ -91,18 +90,10 @@ object Utilities {
         text = when (format) {
             Constants.DAC_FORMAT_24B_I2S, Constants.DAC_FORMAT_24B_LJ, Constants.DAC_FORMAT_24B_RJ -> "$text @ 24bit"
             Constants.DAC_FORMAT_16B_RJ -> "$text @ 16bit"
-            else  -> "$text @ ??bit"
+            else -> "$text @ ??bit"
         }
 
         return text
-    }
-
-    fun getDacInputString(input: Int): String {
-        when (input) {
-            Constants.PCM9211_INPUT_RXIN_2 -> return resources.getString(R.string.RXIN2)
-            Constants.PCM9211_INPUT_RXIN_4 -> return resources.getString(R.string.RXIN4)
-        }
-        return resources.getString(R.string.unknown)
     }
 
 /*

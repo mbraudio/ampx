@@ -51,10 +51,10 @@ object Constants {
     const val PCM9211_FREQUENCY_128kHz = 13
     const val PCM9211_FREQUENCY_176kHz = 14
     const val PCM9211_FREQUENCY_192kHz = 15
-    // DIGITAL INPUT
+    // DIGITAL INPUTS
     const val PCM9211_INPUT_RXIN_2 = 0x02
     const val PCM9211_INPUT_RXIN_4 = 0x04
-    // BITRATE
+    // FORMATS
     const val DAC_FORMAT_24B_I2S = 0x00
     const val DAC_FORMAT_24B_LJ = 0x01
     const val DAC_FORMAT_24B_RJ = 0x02

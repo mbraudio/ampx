@@ -93,7 +93,6 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
     private var texts = ArrayList<GaugeText>()
 
     private lateinit var valueText: GaugeText
-    private lateinit var inputText: GaugeText
     private lateinit var dacText: GaugeText
 
     // Gestures and Touches
@@ -168,11 +167,9 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         scaleTextPaint.typeface = Typeface.SERIF //ResourcesCompat.getFont(context, R.font.orbitron)
 
         valueText = GaugeText(context.getColor(android.R.color.white), centerValueTextHeight, valueTextBold)
-        inputText = GaugeText(context.getColor(android.R.color.white), centerValueTextHeight / 2f, false)
         dacText = GaugeText(context.getColor(android.R.color.white), centerValueTextHeight / 2f, false)
 
-        inputText.text = "DIGITAL"
-        dacText.text = "96kHz"
+        dacText.text = "48kHz @ 24bit"
 
         bitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         bitmapPaint.style = Paint.Style.FILL
@@ -258,8 +255,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         adjustGaugeText(valueText, distanceY)
         // Dac texts
         val radiusHalf = radius / 2f
-        adjustGaugeText(inputText, radiusHalf + (centerValueTextHeight / 2f) + 6f)
-        adjustGaugeText(dacText, radiusHalf + centerValueTextHeight + 10f)
+        adjustGaugeText(dacText, radiusHalf + (centerValueTextHeight / 2f) + 6f)
 
         bitmap?.let {
             bitmapX = centerX - (it.width / 2f)
@@ -360,10 +356,9 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         }
 
         valueText.draw(canvas)
-        //if (isEnabled) {
-            inputText.draw(canvas)
+        if (isEnabled) {
             dacText.draw(canvas)
-        //}
+        }
 
         bitmap?.let {
             canvas.drawBitmap(it, bitmapX, bitmapY, bitmapPaint)
@@ -389,11 +384,6 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
 
     fun setDacData(text: String) {
         dacText.text = text
-        invalidate()
-    }
-
-    fun setInputType(inputType: String) {
-        inputText.text = inputType
         invalidate()
     }
 

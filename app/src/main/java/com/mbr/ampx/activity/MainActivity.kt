@@ -236,7 +236,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
                 if (Utilities.isDigital(data[2])) {
                     setDacData(data[2], data[3])
                 }
-                Log.e(tag, "DAC UPDATE -> INPUT: ${Utilities.getDacInputString(data0)} | DATA: ${Utilities.getDacData(data[2], data[3])}")
+                Log.e(tag, "DAC DATA: ${Utilities.getDacData(data[2], data[3])}")
             }
 
             Commands.COMMAND_CALIBRATION_DATA_1 -> {
@@ -343,7 +343,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.gaugeViewVolume.setActive(false)
         binding.gaugeViewVolume.isEnabled = false
         binding.gaugeViewVolume.setDacData("")
-        binding.gaugeViewVolume.setInputType("")
 
         binding.gaugeViewBass.setCurrentValue(GaugeViewSimple.DEFAULT_VALUE_HALF, 0)
         binding.gaugeViewBass.isEnabled = false
@@ -398,8 +397,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
     private fun setInputType(index: Int) {
         val digital = Utilities.isDigital(index)
         val input = if (index == 0) Constants.PCM9211_INPUT_RXIN_2 else Constants.PCM9211_INPUT_RXIN_4
-        val text = if (digital) getString(R.string.digital) else getString(R.string.analog)
-        binding.gaugeViewVolume.setInputType(text)
         if (digital) {
             binding.viewModel?.let {
                 val data: DacInput? = it.dac.getData(input)
