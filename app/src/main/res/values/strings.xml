@@ -50,7 +50,7 @@
     <string name="temp_zero">0°</string>
     <string name="volume_led">VOLUME LED</string>
     <string name="temperature">TEMPERATURE</string>
-
+    <string name="dac_digital_filter">DAC DIGITAL FILTER</string>
 
     <string name="out_of_range">\???</string>
     <string name="kHz8">8kHz</string>
@@ -71,5 +71,10 @@
 
     <string name="RXIN2">RXIN2</string>
     <string name="RXIN4">RXIN4</string>
+    <string name="response_1">RESPONSE 1</string>
+    <string name="response_2">RESPONSE 2</string>
+    <string name="response_3">RESPONSE 3</string>
+    <string name="response_4">RESPONSE 4</string>
+    <string name="response_5">RESPONSE 5</string>
 
 </resources>

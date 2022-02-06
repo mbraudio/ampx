@@ -36,18 +36,35 @@ class SettingsDialogFragment : DialogFragment(), View.OnClickListener, SeekBar.O
         viewModel.active?.let {
             binding.seekBarBrightness.progress = it.brightnessIndex
             binding.switchVolumeLed.isChecked = it.volumeLed == 1
-        }
 
+            when (it.dacFilter) {
+                0 -> binding.radioButtonResponse1.isChecked = true
+                1 -> binding.radioButtonResponse2.isChecked = true
+                2 -> binding.radioButtonResponse3.isChecked = true
+                3 -> binding.radioButtonResponse4.isChecked = true
+                4 -> binding.radioButtonResponse5.isChecked = true
+            }
+        }
         binding.seekBarBrightness.setOnSeekBarChangeListener(this)
+
+        // Volume LED
         binding.switchVolumeLed.setOnCheckedChangeListener { _, b ->
             val state = if (b) 1 else 0
             viewModel.active?.enableVolumeKnobLed(state.toByte())
         }
 
+        // Temperature
         binding.switchTemperature.isChecked = viewModel.showTemperature.value == true
         binding.switchTemperature.setOnCheckedChangeListener { _, b ->
             viewModel.setShowTemperature(b)
         }
+
+        // DAC Filter
+        binding.radioButtonResponse1.setOnClickListener(this)
+        binding.radioButtonResponse2.setOnClickListener(this)
+        binding.radioButtonResponse3.setOnClickListener(this)
+        binding.radioButtonResponse4.setOnClickListener(this)
+        binding.radioButtonResponse5.setOnClickListener(this)
 
         // Dialog
         val dialog = builder.create()
@@ -57,9 +74,21 @@ class SettingsDialogFragment : DialogFragment(), View.OnClickListener, SeekBar.O
 
     // OnClickListener
     override fun onClick(view: View?) {
-        view?.let {
+        view?.let { it ->
             if (it.id == R.id.buttonSettingsClose) {
                 dismiss()
+            } else {
+                var filter: Byte = 0
+                when (it.id) {
+                    R.id.radioButtonResponse2 -> filter = 1
+                    R.id.radioButtonResponse3 -> filter = 2
+                    R.id.radioButtonResponse4 -> filter = 3
+                    R.id.radioButtonResponse5 -> filter = 4
+                }
+                binding.viewModel?.active?.let { a ->
+                    a.dacFilter = filter.toInt()
+                    a.setDacFilter(filter)
+                }
             }
         }
     }

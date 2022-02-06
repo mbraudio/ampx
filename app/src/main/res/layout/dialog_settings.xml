@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -8,36 +8,48 @@
             type="com.mbr.ampx.viewmodel.GlobalViewModel" />
     </data>
 
-    <LinearLayout
-        android:orientation="vertical"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/vertical_margin"
             android:layout_marginBottom="@dimen/vertical_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:text="@string/settings"
+            android:textColor="@android:color/white"
             android:textSize="22sp"/>
 
         <TextView
+            android:id="@+id/brightness"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"
             android:text="@string/brightness"/>
         <SeekBar
             android:id="@+id/seekBarBrightness"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/brightness"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:layout_marginEnd="@dimen/horizontal_margin"
             android:layout_marginTop="@dimen/vertical_margin"/>
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/volumeLed"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/seekBarBrightness"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:layout_marginTop="32dp"
             android:text="@string/volume_led"/>
@@ -45,21 +57,78 @@
             android:id="@+id/switchVolumeLed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/horizontal_margin"
+            app:layout_constraintTop_toBottomOf="@+id/volumeLed"
+            app:layout_constraintStart_toStartOf="@+id/volumeLed"
             android:layout_marginTop="16dp" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/temperature"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/horizontal_margin"
+            app:layout_constraintTop_toBottomOf="@+id/seekBarBrightness"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/horizontal_margin"
             android:layout_marginTop="32dp"
             android:text="@string/temperature"/>
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchTemperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/horizontal_margin"
+            app:layout_constraintTop_toBottomOf="@+id/temperature"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/horizontal_margin"
             android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/digitalFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@+id/switchVolumeLed"
+            android:text="@string/dac_digital_filter"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/digitalFilter"
+            android:layout_marginStart="@dimen/horizontal_margin">
+
+            <RadioButton
+                android:id="@+id/radioButtonResponse1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/response_1"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/radioButtonResponse2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/response_2"/>
+
+            <RadioButton
+                android:id="@+id/radioButtonResponse3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/response_3"/>
+
+            <RadioButton
+                android:id="@+id/radioButtonResponse4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/response_4"/>
+
+            <RadioButton
+                android:id="@+id/radioButtonResponse5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/response_5"/>
+
+        </RadioGroup>
 
         <Button
             android:id="@+id/buttonSettingsClose"
@@ -67,10 +136,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:layout_marginEnd="@dimen/horizontal_margin"
-            android:layout_marginTop="64dp"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="32dp"
             android:layout_marginBottom="8dp"
             android:text="@string/close" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -289,6 +289,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
                 a.brightnessIndex = data[Constants.SYSTEM_INDEX_BRIGHTNESS_INDEX]
                 // Volume led enabled
                 a.volumeLed = data[Constants.SYSTEM_INDEX_VOLUME_KNOB_LED]
+                // DAC Filter
+                a.dacFilter = data[Constants.SYSTEM_INDEX_DAC_FILTER]
             }
         }
 

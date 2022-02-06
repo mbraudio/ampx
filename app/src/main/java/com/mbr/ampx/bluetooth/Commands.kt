@@ -19,6 +19,7 @@ class Commands {
         const val COMMAND_BRIGHTNESS_INDEX = 15
         const val COMMAND_SET_VOLUME_KNOB_LED = 16
         const val COMMAND_UPDATE_DAC_DATA = 17
+        const val COMMAND_SET_DAC_FILTER = 18
 
         const val COMMAND_CALIBRATION = 100
         const val COMMAND_CALIBRATION_DATA_1 = 101

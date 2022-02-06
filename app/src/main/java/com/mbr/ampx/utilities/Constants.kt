@@ -25,6 +25,7 @@ object Constants {
     const val SYSTEM_INDEX_DAC_INPUT = 11
     const val SYSTEM_INDEX_DAC_SAMPLE_RATE = 12
     const val SYSTEM_INDEX_DAC_FORMAT = 13
+    const val SYSTEM_INDEX_DAC_FILTER = 14
 
     // POWER
     // STATES
