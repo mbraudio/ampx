@@ -387,7 +387,7 @@ class GaugeViewEx : View, GestureDetector.OnGestureListener {
         invalidate()
     }
 
-    fun setDacSampleRate(sampleRate: String) {
+    fun setDacData(sampleRate: String) {
         sampleRateText.text = sampleRate
         invalidate()
     }

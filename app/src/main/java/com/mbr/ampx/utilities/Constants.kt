@@ -2,6 +2,8 @@ package com.mbr.ampx.utilities
 
 object Constants {
 
+    const val REQUEST_DELAY = 500L //ms
+
     // BLUETOOTH
     const val MODE_WRITE = 0
     const val MODE_READ = 1
@@ -21,7 +23,8 @@ object Constants {
     const val SYSTEM_INDEX_STATE_POWER = 9
     const val SYSTEM_INDEX_STATE_MUTE = 10
     const val SYSTEM_INDEX_DAC_INPUT = 11
-    const val SYSTEM_INDEX_DAC_RATE = 12
+    const val SYSTEM_INDEX_DAC_SAMPLE_RATE = 12
+    const val SYSTEM_INDEX_DAC_FORMAT = 13
 
     // POWER
     // STATES
@@ -51,5 +54,10 @@ object Constants {
     // DIGITAL INPUT
     const val PCM9211_INPUT_RXIN_2 = 0x02
     const val PCM9211_INPUT_RXIN_4 = 0x04
+    // BITRATE
+    const val DAC_FORMAT_24B_I2S = 0x00
+    const val DAC_FORMAT_24B_LJ = 0x01
+    const val DAC_FORMAT_24B_RJ = 0x02
+    const val DAC_FORMAT_16B_RJ = 0x03
 
 }

@@ -3,6 +3,7 @@ package com.mbr.ampx.utilities
 import android.content.res.Resources
 import android.util.Log
 import com.mbr.ampx.R
+import com.mbr.ampx.viewmodel.DacInput
 
 object Utilities {
 
@@ -40,7 +41,7 @@ object Utilities {
         Log.e("SYSTEM", "MUTE: " + if (data[Constants.SYSTEM_INDEX_STATE_MUTE] == 1) "ON" else "OFF")
         Log.e("SYSTEM", "VOLUME KNOB LED: " + if (data[Constants.SYSTEM_INDEX_VOLUME_KNOB_LED] == 1) "ON" else "OFF")
         Log.e("SYSTEM", "DAC INPUT: ${getDacInputString(data[Constants.SYSTEM_INDEX_DAC_INPUT])} ")
-        Log.e("SYSTEM", "DAC RATE: ${getDacSampleRateString(data[Constants.SYSTEM_INDEX_DAC_RATE])} ")
+        Log.e("SYSTEM", "DAC RATE: ${getDacSampleRateString(data[Constants.SYSTEM_INDEX_DAC_SAMPLE_RATE])} ")
     }
 
     private fun getInputString(input: Int): String {
@@ -85,6 +86,37 @@ object Utilities {
             Constants.PCM9211_FREQUENCY_192kHz -> return resources.getString(R.string.kHz196)
         }
         return resources.getString(R.string.out_of_range)
+    }
+
+    fun getDacData(sampleRate: Int, format: Int): String {
+        var text: String
+        when (sampleRate) {
+            Constants.PCM9211_FREQUENCY_OUT_OF_RANGE -> text = resources.getString(R.string.out_of_range)
+            Constants.PCM9211_FREQUENCY_8kHz -> text = resources.getString(R.string.kHz8)
+            Constants.PCM9211_FREQUENCY_11kHz -> text = resources.getString(R.string.kHz11)
+            Constants.PCM9211_FREQUENCY_12kHz -> text = resources.getString(R.string.kHz12)
+            Constants.PCM9211_FREQUENCY_16kHz -> text = resources.getString(R.string.kHz16)
+            Constants.PCM9211_FREQUENCY_22kHz -> text = resources.getString(R.string.kHz22)
+            Constants.PCM9211_FREQUENCY_24kHz -> text = resources.getString(R.string.kHz24)
+            Constants.PCM9211_FREQUENCY_32kHz -> text = resources.getString(R.string.kHz32)
+            Constants.PCM9211_FREQUENCY_44kHz -> text = resources.getString(R.string.kHz44)
+            Constants.PCM9211_FREQUENCY_48kHz -> text = resources.getString(R.string.kHz48)
+            Constants.PCM9211_FREQUENCY_64kHz -> text = resources.getString(R.string.kHz64)
+            Constants.PCM9211_FREQUENCY_88kHz -> text = resources.getString(R.string.kHz88)
+            Constants.PCM9211_FREQUENCY_96kHz -> text = resources.getString(R.string.kHz96)
+            Constants.PCM9211_FREQUENCY_128kHz -> text = resources.getString(R.string.kHz128)
+            Constants.PCM9211_FREQUENCY_176kHz -> text = resources.getString(R.string.kHz176)
+            Constants.PCM9211_FREQUENCY_192kHz -> text = resources.getString(R.string.kHz196)
+            else -> text = resources.getString(R.string.out_of_range)
+        }
+
+        text = when (format) {
+            Constants.DAC_FORMAT_24B_I2S, Constants.DAC_FORMAT_24B_LJ, Constants.DAC_FORMAT_24B_RJ -> "$text @ 24bit"
+            Constants.DAC_FORMAT_16B_RJ -> "$text @ 16bit"
+            else  -> "$text @ ??bit"
+        }
+
+        return text
     }
 
     fun getDacInputString(input: Int): String {

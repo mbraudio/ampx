@@ -220,9 +220,9 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
                     addAction(DescriptorAction(txCharacteristic!!))
                     addAction(MtuAction(MTU_MAX_AVAILABLE))
                     addAction(RunnableAction(handler, {
-                        actionActive = false // Must disable this here since this is double action
+                        actionActive = false // Must disable this here since this is a double action
                         requestSystemData()
-                    }, 1000))
+                    }, Constants.REQUEST_DELAY))
                 } else {
                     Log.e(tag, "ERROR: Service and Characteristics not found!")
                     disconnect()

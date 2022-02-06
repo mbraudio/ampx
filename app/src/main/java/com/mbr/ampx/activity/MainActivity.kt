@@ -25,6 +25,7 @@ import com.mbr.ampx.utilities.Utilities
 import com.mbr.ampx.utilities.Utilities.printSystemData
 import com.mbr.ampx.view.GaugeViewSimple
 import com.mbr.ampx.view.ModernButton
+import com.mbr.ampx.viewmodel.DacInput
 import com.mbr.ampx.viewmodel.GlobalViewModel
 import java.lang.Exception
 
@@ -230,12 +231,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
 
             Commands.COMMAND_UPDATE_DAC_DATA -> {
                 // Set new DAC sample rate from device and store it, needed for input changes
-                binding.viewModel?.dac?.setSampleRate(data0, data[2])
+                binding.viewModel?.dac?.setData(data0, data[2], data[3])
                 // If digital input, update sample rate
                 if (Utilities.isDigital(data[2])) {
-                    setDacSampleRate(data[2])
+                    setDacData(data[2], data[3])
                 }
-                Log.e(tag, "DAC UPDATE -> INPUT: ${Utilities.getDacInputString(data0)} | SAMPLE RATE: ${Utilities.getDacSampleRateString(data[2])}")
+                Log.e(tag, "DAC UPDATE -> INPUT: ${Utilities.getDacInputString(data0)} | DATA: ${Utilities.getDacData(data[2], data[3])}")
             }
 
             Commands.COMMAND_CALIBRATION_DATA_1 -> {
@@ -282,7 +283,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
     private fun select(data: IntArray) {
         binding.viewModel?.let {
             // Set DAC sample rate from device and store it, needed for input changes
-            it.dac.setSampleRate(data[Constants.SYSTEM_INDEX_DAC_INPUT], data[Constants.SYSTEM_INDEX_DAC_RATE])
+            it.dac.setData(data[Constants.SYSTEM_INDEX_DAC_INPUT], data[Constants.SYSTEM_INDEX_DAC_SAMPLE_RATE], data[Constants.SYSTEM_INDEX_DAC_FORMAT])
             it.active?.let { a ->
                 // Brightness index
                 a.brightnessIndex = data[Constants.SYSTEM_INDEX_BRIGHTNESS_INDEX]
@@ -299,7 +300,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.gaugeViewVolume.isEnabled = true
 
         // DAC
-        setDacSampleRate(data[Constants.SYSTEM_INDEX_DAC_RATE])
+        setDacData(data[Constants.SYSTEM_INDEX_DAC_SAMPLE_RATE], data[Constants.SYSTEM_INDEX_DAC_FORMAT])
 
         binding.gaugeViewBass.isEnabled = true
         binding.gaugeViewTreble.isEnabled = true
@@ -341,7 +342,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.gaugeViewVolume.setCurrentValue(0, 0)
         binding.gaugeViewVolume.setActive(false)
         binding.gaugeViewVolume.isEnabled = false
-        binding.gaugeViewVolume.setDacSampleRate("")
+        binding.gaugeViewVolume.setDacData("")
         binding.gaugeViewVolume.setInputType("")
 
         binding.gaugeViewBass.setCurrentValue(GaugeViewSimple.DEFAULT_VALUE_HALF, 0)
@@ -390,8 +391,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         }
     }
 
-    private fun setDacSampleRate(sampleRate: Int) {
-        binding.gaugeViewVolume.setDacSampleRate(Utilities.getDacSampleRateString(sampleRate))
+    private fun setDacData(sampleRate: Int, format: Int) {
+        binding.gaugeViewVolume.setDacData(Utilities.getDacData(sampleRate, format))
     }
 
     private fun setInputType(index: Int) {
@@ -401,11 +402,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.gaugeViewVolume.setInputType(text)
         if (digital) {
             binding.viewModel?.let {
-                val rate = it.dac.getSampleRate(input)
-                binding.gaugeViewVolume.setDacSampleRate(Utilities.getDacSampleRateString(rate))
+                val data: DacInput? = it.dac.getData(input)
+                data?.let { d ->
+                    binding.gaugeViewVolume.setDacData(Utilities.getDacData(d.sampleRate, d.format))
+                }
             }
         } else {
-            binding.gaugeViewVolume.setDacSampleRate("")
+            binding.gaugeViewVolume.setDacData("")
         }
     }
 
