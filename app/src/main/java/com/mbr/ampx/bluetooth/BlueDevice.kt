@@ -343,6 +343,7 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
+    */
 
     fun requestCalibration(channel: Byte, delay: Byte) {
         val crc: Byte = (Commands.COMMAND_CALIBRATION.toByte() + channel + delay).toByte()
@@ -350,7 +351,6 @@ class BlueDevice(var device: BluetoothDevice?, var listener: IBlueDeviceListener
         val buffer = COBS.encode(data)
         addAction(CharacteristicAction(Constants.MODE_WRITE, txCharacteristic!!, buffer))
     }
-    */
 
     fun setVolume(value: Byte) {
         val crc = (Commands.COMMAND_UPDATE_VOLUME_VALUE.toByte() + value).toByte()

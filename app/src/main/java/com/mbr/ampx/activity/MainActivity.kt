@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.buttonSettings.setOnClickListener {
             SettingsDialogFragment().show(supportFragmentManager, "settings")
             //it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
-            //binding.viewModel!!.active?.requestCalibration(1, 62)
+            //binding.viewModel!!.active?.requestCalibration(0, 62)
         }
 
         // INPUT BUTTONS
@@ -204,21 +204,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
                 //buttonPowerAmpDirect.setActive(enabled)
             }
 
-            Commands.COMMAND_UPDATE_VOLUME_VALUE -> {
-                binding.gaugeViewVolume.setCurrentValue(data0, data[2])
-                //Log.e(tag, "VOLUME: $data0")
-            }
-
-            Commands.COMMAND_UPDATE_BASS_VALUE -> {
-                binding.gaugeViewBass.setCurrentValue(data0, data[2])
-            }
-
-            Commands.COMMAND_UPDATE_TREBLE_VALUE -> {
-                binding.gaugeViewTreble.setCurrentValue(data0, data[2])
-            }
-
-            Commands.COMMAND_UPDATE_BALANCE_VALUE -> {
-                binding.gaugeViewBalance.setCurrentValue(data0, data[2])
+            Commands.COMMAND_UPDATE_POTENTIOMETERS -> {
+                try {
+                    binding.gaugeViewVolume.setCurrentValue(data[1], data[2])
+                    binding.gaugeViewBass.setCurrentValue(data[3], data[4])
+                    binding.gaugeViewTreble.setCurrentValue(data[5], data[6])
+                    binding.gaugeViewBalance.setCurrentValue(data[7], data[8])
+                } catch (ex: Exception)  { }
             }
 
             Commands.COMMAND_UPDATE_TEMPERATURE -> {

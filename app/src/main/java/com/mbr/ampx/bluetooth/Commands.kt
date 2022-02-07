@@ -15,11 +15,12 @@ class Commands {
         const val COMMAND_UPDATE_BASS_VALUE = 11
         const val COMMAND_UPDATE_TREBLE_VALUE = 12
         const val COMMAND_UPDATE_BALANCE_VALUE = 13
-        const val COMMAND_UPDATE_TEMPERATURE = 14
-        const val COMMAND_BRIGHTNESS_INDEX = 15
-        const val COMMAND_SET_VOLUME_KNOB_LED = 16
-        const val COMMAND_UPDATE_DAC_DATA = 17
-        const val COMMAND_SET_DAC_FILTER = 18
+        const val COMMAND_UPDATE_POTENTIOMETERS = 14
+        const val COMMAND_UPDATE_TEMPERATURE = 15
+        const val COMMAND_BRIGHTNESS_INDEX = 16
+        const val COMMAND_SET_VOLUME_KNOB_LED = 17
+        const val COMMAND_UPDATE_DAC_DATA = 18
+        const val COMMAND_SET_DAC_FILTER = 19
 
         const val COMMAND_CALIBRATION = 100
         const val COMMAND_CALIBRATION_DATA_1 = 101
