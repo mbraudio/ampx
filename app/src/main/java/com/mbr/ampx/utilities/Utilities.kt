@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.util.Log
 import com.mbr.ampx.R
 import com.mbr.ampx.viewmodel.DacInput
+import java.lang.Exception
 
 object Utilities {
 
@@ -31,16 +32,19 @@ object Utilities {
     }
 
     fun printSystemData(data: IntArray) {
-        Log.e("SYSTEM", "APD: " + if (data[Constants.SYSTEM_INDEX_APD] == 1) "ON" else "OFF")
-        Log.e("SYSTEM", "DIRECT: " + if (data[Constants.SYSTEM_INDEX_DIRECT] == 1) "ON" else "OFF")
-        Log.e("SYSTEM", "LOUDNESS: " + if (data[Constants.SYSTEM_INDEX_LOUDNESS] == 1) "ON" else "OFF")
-        Log.e("SYSTEM", "SPEAKERS_A: " + if (data[Constants.SYSTEM_INDEX_SPEAKERS_A] == 1) "ON" else "OFF")
-        Log.e("SYSTEM", "SPEAKERS_B: " + if (data[Constants.SYSTEM_INDEX_SPEAKERS_B] == 1) "ON" else "OFF")
-        Log.e("SYSTEM", "INPUT: " + getInputString(data[Constants.SYSTEM_INDEX_INPUT]))
-        Log.e("SYSTEM", "POWER: " + getPowerString(data[Constants.SYSTEM_INDEX_STATE_POWER]))
-        Log.e("SYSTEM", "MUTE: " + if (data[Constants.SYSTEM_INDEX_STATE_MUTE] == 1) "ON" else "OFF")
-        Log.e("SYSTEM", "VOLUME KNOB LED: " + if (data[Constants.SYSTEM_INDEX_VOLUME_KNOB_LED] == 1) "ON" else "OFF")
-        Log.e("SYSTEM", "DAC DATA: ${getDacData(data[Constants.SYSTEM_INDEX_DAC_SAMPLE_RATE], data[Constants.SYSTEM_INDEX_DAC_FORMAT])} ")
+        try {
+            Log.e("SYSTEM", "APD: " + if (data[Constants.SYSTEM_INDEX_APD] == 1) "ON" else "OFF")
+            Log.e("SYSTEM", "DIRECT: " + if (data[Constants.SYSTEM_INDEX_DIRECT] == 1) "ON" else "OFF")
+            Log.e("SYSTEM", "LOUDNESS: " + if (data[Constants.SYSTEM_INDEX_LOUDNESS] == 1) "ON" else "OFF")
+            Log.e("SYSTEM", "SPEAKERS_A: " + if (data[Constants.SYSTEM_INDEX_SPEAKERS_A] == 1) "ON" else "OFF")
+            Log.e("SYSTEM", "SPEAKERS_B: " + if (data[Constants.SYSTEM_INDEX_SPEAKERS_B] == 1) "ON" else "OFF")
+            Log.e("SYSTEM", "INPUT: " + getInputString(data[Constants.SYSTEM_INDEX_INPUT]))
+            Log.e("SYSTEM", "POWER: " + getPowerString(data[Constants.SYSTEM_INDEX_STATE_POWER]))
+            Log.e("SYSTEM", "MUTE: " + if (data[Constants.SYSTEM_INDEX_STATE_MUTE] == 1) "ON" else "OFF")
+            Log.e("SYSTEM", "VOLUME KNOB LED: " + if (data[Constants.SYSTEM_INDEX_VOLUME_KNOB_LED] == 1) "ON" else "OFF")
+            Log.e("SYSTEM", "DAC DATA: ${getDacData(data[Constants.SYSTEM_INDEX_DAC_SAMPLE_RATE], data[Constants.SYSTEM_INDEX_DAC_FORMAT])} ")
+        } catch (ex: Exception) { }
+
     }
 
     private fun getInputString(input: Int): String {

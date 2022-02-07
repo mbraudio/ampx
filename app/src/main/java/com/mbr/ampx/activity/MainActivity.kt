@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         binding.buttonSettings.setOnClickListener {
             SettingsDialogFragment().show(supportFragmentManager, "settings")
             //it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
-            //binding.viewModel!!.active?.requestCalibration(0, 62)
+            //binding.viewModel!!.active?.requestCalibration(0, 70) //0, 62
         }
 
         // INPUT BUTTONS
