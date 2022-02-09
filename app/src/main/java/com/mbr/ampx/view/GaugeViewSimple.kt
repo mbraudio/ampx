@@ -17,7 +17,7 @@ class GaugeViewSimple : View, GestureDetector.OnGestureListener {
 
         // DEFAULT VALUES
         private const val DEFAULT_MAXIMUM_VALUE = 255
-        const val DEFAULT_VALUE_HALF = 127
+        const val DEFAULT_VALUE_HALF = 128
         private const val DEFAULT_CENTER_VALUE_TEXT_HEIGHT = 50.0f
 
         // ADJUSTMENTS
